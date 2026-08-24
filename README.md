@@ -35,7 +35,7 @@ As your supervisor, you can expect me to:
 
 - Help you clearly define your ML problem.
 - Advise on suitable ML methods, tools, and resources.
-- **Meet with you weekly in the group meeting**, where you can present your progress and get feedback on work in progress.
+- **Be available weekly in the [MSc Thesis Garage](Garage.md)**, where you can present your progress and get feedback on work in progress.
 - Guide you through thesis writing and evaluation.
 - Give feedback on **complete, polished drafts** and on your self-assessment.
 - Offer the opportunity to discuss your self-assessment before submission.
@@ -47,8 +47,8 @@ As your supervisor, you can expect me to:
 As a thesis student, you are expected to:
 
 - Take ownership of your research and drive progress independently.
-- **Attend the weekly group meetings and present your progress regularly** — a result, a plot, or a problem you are stuck on. These meetings are the main place you get feedback on work in progress.
-- Come to every meeting prepared with concrete questions or results.
+- **Drop by the weekly [MSc Thesis Garage](Garage.md) and present your progress regularly** — a result, a plot, or a problem you are stuck on. This is the main place you get feedback on work in progress.
+- Come prepared with concrete questions or results.
 - Speak up early — tell me as soon as you are stuck or falling behind schedule.
 - Use high-quality scientific references (peer-reviewed journals, reputable conferences, established textbooks).
 - Follow the writing and typesetting conventions described in this guide.
@@ -199,9 +199,9 @@ L(\theta) = \frac{1}{n} \sum_{i=1}^n \ell(f(x_i;\theta), y_i).
 - Start serious writing with the **literature review** or **methodology** chapters. These settle earliest and rarely need rewriting when your results change.
 - Hold off on the **results** and **discussion** chapters until your experiments have settled — these chapters often change a lot, so writing them up too early wastes effort.
 - Write the **abstract last**. It is the shortest section but depends on everything else being settled.
-- **Get feedback as you go through the weekly group meetings.** These meetings — not written draft review — are where you get feedback on work in progress. Present your progress regularly: a result, a plot, a problem you are stuck on, or a short section you want reactions to. Bring specific questions. This is the fastest way to correct course early, and it is available every week; a finished written draft is not a prerequisite for it.
-- Also draw on feedback from peers and, where appropriate, LLM-based tools for quick checks between meetings.
-- Keep in mind that detailed **written** feedback from me comes only on a **complete, polished draft** you consider finished (see [What to Expect from Your Supervisor](#what-to-expect-from-your-supervisor)). Use the weekly meetings for everything before that stage.
+- **Get feedback as you go through the weekly [MSc Thesis Garage](Garage.md).** The garage — not written draft review — is where you get feedback on work in progress. Present your progress regularly: a result, a plot, a problem you are stuck on, or a short section you want reactions to. Bring specific questions. This is the fastest way to correct course early, and it is available every week; a finished written draft is not a prerequisite for it.
+- Also draw on feedback from peers and, where appropriate, LLM-based tools for quick checks between garage sessions.
+- Keep in mind that detailed **written** feedback from me comes only on a **complete, polished draft** you consider finished (see [What to Expect from Your Supervisor](#what-to-expect-from-your-supervisor)). Use the weekly garage sessions for everything before that stage.
 - Expect and budget for multiple revision rounds before submission.
 
 ---
@@ -257,7 +257,7 @@ After completing the thesis manuscript:
 - Complete the detailed self-assessment ([evaluation form](material/Statement_template_CCIS.docx)), with explicit references to sections of your thesis.
 - Review the [grade characterisation PDF](material/GradeCharact.pdf) to understand what constitutes a high-quality thesis.
 - Optionally, request a meeting to discuss your self-assessment before submission.
-- Prepare your thesis presentation — either live during a group meeting or as a recorded video ([see examples](https://youtube.com/playlist?list=PLrbn2dGrLJK8xt7j0tvaL0uMCdrtQ7JY2)).
+- Prepare your thesis presentation — either live during a garage session or as a recorded video ([see examples](https://youtube.com/playlist?list=PLrbn2dGrLJK8xt7j0tvaL0uMCdrtQ7JY2)).
 
 ---
 

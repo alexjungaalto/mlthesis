@@ -41,7 +41,7 @@
 | 19 | E. Kohvakka | [The role of analyst sentiment in excess return forecasting, and its implications for investors](https://urn.fi/URN:NBN:fi:aalto-202506174917) | Apr. 2025 |  |  |
 | 20 | A. Sarkima | [Graph-based anomaly detection: Evaluating Logs2Graphs with non-benchmark logs](https://urn.fi/URN:NBN:fi:aalto-202505203903) | Mar. 2025 |  |  |
 | 21 | J. Naveed | [Optimized code generation in BIM with retrieval-augmented LLMs](https://urn.fi/URN:NBN:fi:aalto-202505203933) | Feb. 2025 |  |  |
-| 22 | P. Wiwatphonthana | [Machine Learning Assisted Dynamic Scheduling for Energy Efficient Serverless Cloud Workloads](https://urn.fi/URN:NBN:fi:aalto-202501282068) | Jan. 2025 | Ericsson Oy |  |
+| 22 | P. Wiwatphonthana | [Machine Learning Assisted Dynamic Scheduling for Energy Efficient Serverless Cloud Workloads](https://urn.fi/URN:NBN:fi:aalto-202501282068) | Jan. 2025 | Ericsson |  |
 | 23 | Q. Luong | [Proof of Concept for FedRelax on Kubernetes: An Implementation Guide](https://urn.fi/URN:NBN:fi:aalto-202501282110) | Jan. 2025 |  |  |
 | 24 | P. Dang | [Model-Agnostic Personalized Federated Learning using Adaptive Client Selection](https://urn.fi/URN:NBN:fi:aalto-202501302237) | Jan. 2025 |  | [video](https://youtu.be/JiAhFSQ-8yY) |
 | 25 | L. Loukamo | [The effect of language on perceived ability to understand machine learning concepts](https://urn.fi/URN:NBN:fi:aalto-202502072365) | Dec. 2024 |  |  |
@@ -65,43 +65,43 @@
 | 43 | T. Kulokoski | [How well can Machine Learning teach Humans about Machine Learning?](https://urn.fi/URN:NBN:fi:aalto-202403172727) | Mar. 2024 |  | [video](https://youtu.be/EcJCq9cXDA4) |
 | 44 | S. Facchini | [Prediction of fuel usage consumption in the airline industry](https://urn.fi/URN:NBN:fi:aalto-202403172740) | Mar. 2024 | Finnair |  |
 | 45 | L. Veneranta | [Optimization of Web Page Advertisements using Contextual Bandits](https://urn.fi/URN:NBN:fi:aalto-202401282006) | Jan. 2024 | Sanoma Media |  |
-| 46 | J. Li | [Empirical Emissions Modeling using Machine Learning](https://urn.fi/URN:NBN:fi:aalto-202401281970) | Jan. 2024 | aurobay.com |  |
+| 46 | J. Li | [Empirical Emissions Modeling using Machine Learning](https://urn.fi/URN:NBN:fi:aalto-202401281970) | Jan. 2024 | Aurobay |  |
 | 47 | K. Izadi Garmaseh | [Frequency Offset Estimation Using Deep Learning](https://urn.fi/URN:NBN:fi:aalto-202401282059) | Jan. 2024 | Nokia |  |
 | 48 | S. Chowdhury | [Computer vision-assisted safety alert system for industrial settings in private 5G networks](https://urn.fi/URN:NBN:fi:aalto-202401282114) | Jan. 2024 | TietoEVRY Oyj |  |
 | 49 | T. Kontola | [Predicting User Web Behaviour with Machine Learning Methods](https://urn.fi/URN:NBN:fi:aalto-202401282008) | Jan. 2024 | Columbia Road Oy |  |
 | 50 | R. Siljander | [Extreme gradient boosting methods for covariate forecasting of housing market demand in Finnish postal code areas](https://urn.fi/URN:NBN:fi:aalto-202312187385) | Dec. 2023 | Alma Talent Oy |  |
 | 51 | J. Jäkärä | [From Candles to Ticks - Improving financial backtesting accuracy](https://urn.fi/URN:NBN:fi:aalto-202312187389) | Dec. 2023 | Aekos Trading Oy |  |
 | 52 | X. Landa Oregi | [MLOps data ingestion pipeline for reciprocal benefit between customer and provider](https://urn.fi/URN:NBN:fi:aalto-202401071333) | Nov. 2023 | Huawei |  |
-| 53 | T. Brumani | [Microservices-based autonomous anomaly detection for mobile network observability](https://aaltodoc.aalto.fi/items/747916fb-98a1-4195-93a6-841cf0b6be71) | Sept. 2023 | Ericsson Oy | [video](https://youtu.be/nod42G_KHok) |
-| 54 | G. Rivi | [Software Defined Networking Controlled Energy Optimization through Traffic Prediction on Microwave Access Network](https://aaltodoc.aalto.fi/items/f3545faf-7aec-4453-b123-6be572a0ac80) | Sept. 2023 | Ericsson Finland | [video](https://youtu.be/jq5Xg8Hmn9s) |
-| 55 | Á. García Gutierrez | [Anomaly Detection on Osmosis Trades](https://aaltodoc.aalto.fi/items/0c0526a5-b55e-432f-9d03-f265f0df63d1) | Sep. 2023 | Numia Data |  |
+| 53 | T. Brumani | [Microservices-based autonomous anomaly detection for mobile network observability](https://aaltodoc.aalto.fi/items/747916fb-98a1-4195-93a6-841cf0b6be71) | Sept. 2023 | Ericsson | [video](https://youtu.be/nod42G_KHok) |
+| 54 | G. Rivi | [Software Defined Networking Controlled Energy Optimization through Traffic Prediction on Microwave Access Network](https://aaltodoc.aalto.fi/items/f3545faf-7aec-4453-b123-6be572a0ac80) | Sept. 2023 | Ericsson | [video](https://youtu.be/jq5Xg8Hmn9s) |
+| 55 | Á. García Gutierrez | [Anomaly Detection on Osmosis Trades](https://aaltodoc.aalto.fi/items/0c0526a5-b55e-432f-9d03-f265f0df63d1) | Sept. 2023 | Numia Data |  |
 | 56 | Z. Liu | [Deep Learning based method for Fire Detection](https://aaltodoc.aalto.fi/items/e721634e-004a-4a29-b018-1d41a17d33e8) | Sept. 2023 | Detectium |  |
 | 57 | M. Bogdanova | [Contextual bandits for staffing in consulting companies: An exploration of personalized decision making](https://aaltodoc.aalto.fi/items/041f9210-3920-43fa-b4b7-dda5de9079f7) | Sept. 2023 |  |  |
 | 58 | Z. Zhou | [Building information modeling connection recommendation based on machine learning using multimodal information](https://aaltodoc.aalto.fi/items/38769eb0-f6f4-4392-9ca0-a4cfab7e031f) | Aug. 2023 |  | [video](https://youtu.be/8lOAhhuWqr0) |
-| 59 | Y. Sarcheshmehpour | [Application of Reinforcement Learning in Electrical Machine Design](https://aaltodoc.aalto.fi/handle/123456789/122863) | Aug. 2023 | ABB Oy | [video](https://youtu.be/a6RJawYzyJM) |
+| 59 | Y. Sarcheshmehpour | [Application of Reinforcement Learning in Electrical Machine Design](https://aaltodoc.aalto.fi/handle/123456789/122863) | Aug. 2023 | ABB | [video](https://youtu.be/a6RJawYzyJM) |
 | 60 | L. Garcia Tejada | [Applying Machine Learning to Forecast Formula 1 Race Outcomes](https://aaltodoc.aalto.fi/handle/123456789/122937) | Aug. 2023 |  | [video](https://youtu.be/q01GzbSDsSg) |
 | 61 | C. Segercrantz | [Experimental evaluation of record linkage algorithms in a secure banking environment](https://aaltodoc.aalto.fi/handle/123456789/123205) | Aug. 2023 | Nordea Bank Oyj |  |
 | 62 | H. Wang | [Material Capture and Generative Rendering with Phenomenological Reflectance Models](https://aaltodoc.aalto.fi/handle/123456789/122900) | Aug. 2023 | Huawei |  |
-| 63 | G. Jiang | [Parallel Training of Neural Networks in 6G L1](https://aaltodoc.aalto.fi/handle/123456789/122835) | Aug. 2023 | Nokia Oy |  |
+| 63 | G. Jiang | [Parallel Training of Neural Networks in 6G L1](https://aaltodoc.aalto.fi/handle/123456789/122835) | Aug. 2023 | Nokia |  |
 | 64 | K. Lasocki | [Deep learning for continuous symbolic melody generation conditioned on lyrics and initial melodies](https://www.finna.fi/Record/aaltodoc.123456789_122794) | Aug. 2023 |  |  |
 | 65 | T. Vanhala | [Data-driven xVA exposure calculation for a portfolio of interest rate swaps](https://aaltodoc.aalto.fi/handle/123456789/120932) | May 2023 | Nordea Markets |  |
 | 66 | A. Agisheva | [Ethics in machine learning publications: Peer-review analysis using NLP methods](https://aaltodoc.aalto.fi/handle/123456789/120999) | May 2023 |  |  |
 | 67 | R. Tikkanen | [Clustering fitness tracker data to correct interdevice differences in energy expenditure estimation](https://urn.fi/URN:NBN:fi:aalto-202305213241) | May 2023 | Fjuul |  |
 | 68 | H. Vu | [Deep learning-based Mammography Image Segmentation](https://aaltodoc.aalto.fi/handle/123456789/120211) | Mar. 2023 | Planmed |  |
 | 69 | S. Johansson | [Classification of Purchase Invoices to Analytic Accounts with Machine Learning](https://aaltodoc.aalto.fi/handle/123456789/119486) | Jan. 2023 | SprintIT | [video](https://youtu.be/dL_Z5GzU4Ms) |
-| 70 | T. Sormunen | [Pallet Detection in Warehouse Environment](https://aaltodoc.aalto.fi/handle/123456789/119397) | Jan. 2023 | Wartsila |  |
+| 70 | T. Sormunen | [Pallet Detection in Warehouse Environment](https://aaltodoc.aalto.fi/handle/123456789/119397) | Jan. 2023 | Wärtsilä |  |
 | 71 | J. Himanen | [Towards a data-driven circular economy: predicting material streams in the construction industry](https://aaltodoc.aalto.fi/handle/123456789/119342) | Jan. 2023 |  |  |
 | 72 | B. Fazekas | [Distractive driver behaviour detection with spiked neural networks](https://urn.fi/URN:NBN:fi:aalto-202211136499) | Nov. 2022 |  |  |
 | 73 | T. Rahman | [Intrusion Detection system based on Deep Learning](https://aaltodoc.aalto.fi/handle/123456789/116391) | Aug. 2022 |  |  |
-| 74 | T. Gyabaah | [Artificial intelligence to support NFTs creation: Comparison of Machine learning algorithms to detect fraud in artwork](https://aaltodoc.aalto.fi/handle/123456789/116504) | Jul. 2022 |  |  |
-| 75 | J. Lillfors | [Networked Federated Learning](https://aaltodoc.aalto.fi/handle/123456789/116275) | Jul. 2022 |  |  |
-| 76 | Á. C. Barcsa-Szabó | [Feature-based Approaches for Ethical News Personalization](https://aaltodoc.aalto.fi/handle/123456789/116478) | Jul. 2022 | Sanoma Media Finland |  |
-| 77 | C. Molinero Ranera | [Multi-label classification of a hydraulic system using Machine Learning](https://aaltodoc.aalto.fi/handle/123456789/116308) | Jul. 2022 |  | [video](https://youtu.be/1HTsaSqvsz0) |
-| 78 | V. Petrutiu | [Exploring Transformers and Degradation Methods in the Super Resolution Field](https://aaltodoc.aalto.fi/handle/123456789/118298) | Jul. 2022 | Huawei |  |
-| 79 | P. Truong | [Crown-of-Thorns Starfish detection by state-of-the-art YOLOv5](https://aaltodoc.aalto.fi/handle/123456789/116281) | Jul. 2022 |  |  |
+| 74 | T. Gyabaah | [Artificial intelligence to support NFTs creation: Comparison of Machine learning algorithms to detect fraud in artwork](https://aaltodoc.aalto.fi/handle/123456789/116504) | July 2022 |  |  |
+| 75 | J. Lillfors | [Networked Federated Learning](https://aaltodoc.aalto.fi/handle/123456789/116275) | July 2022 |  |  |
+| 76 | Á. C. Barcsa-Szabó | [Feature-based Approaches for Ethical News Personalization](https://aaltodoc.aalto.fi/handle/123456789/116478) | July 2022 | Sanoma Media |  |
+| 77 | C. Molinero Ranera | [Multi-label classification of a hydraulic system using Machine Learning](https://aaltodoc.aalto.fi/handle/123456789/116308) | July 2022 |  | [video](https://youtu.be/1HTsaSqvsz0) |
+| 78 | V. Petrutiu | [Exploring Transformers and Degradation Methods in the Super Resolution Field](https://aaltodoc.aalto.fi/handle/123456789/118298) | July 2022 | Huawei |  |
+| 79 | P. Truong | [Crown-of-Thorns Starfish detection by state-of-the-art YOLOv5](https://aaltodoc.aalto.fi/handle/123456789/116281) | July 2022 |  |  |
 | 80 | Y. Huang | [Text analysis of novel coronavirus pneumonia based on federal deep learning](https://aaltodoc.aalto.fi/handle/123456789/115546) | June 2022 |  |  |
 | 81 | C. Ozen | [A collaborative approach for large-scale Electricity consumption using Federated Learning](https://aaltodoc.aalto.fi/handle/123456789/115282) | June 2022 |  |  |
-| 82 | P. Prinsén | [Robust Gas pressure control using Neural Networks](https://aaltodoc.aalto.fi/handle/123456789/112627) | Jan. 2022 | Wartsila Finland Oy |  |
+| 82 | P. Prinsén | [Robust Gas pressure control using Neural Networks](https://aaltodoc.aalto.fi/handle/123456789/112627) | Jan. 2022 | Wärtsilä |  |
 | 83 | E. Hattula | [Transfer Learning Technology for Building Extraction from Orthophotos and Open-Source Data](https://aaltodoc.aalto.fi/handle/123456789/112450) | Jan. 2022 | National Land Survey of Finland |  |
 | 84 | A. Channabasaiah | [Applying machine learning methods to predict taxi pickups using historical taxi data](https://aaltodoc.aalto.fi/handle/123456789/112871) | Jan. 2022 |  | [video](https://youtu.be/rCsalSR1u1Y) |
 | 85 | R. Hellström | [Aspect Based Sentiment Analysis in Finnish](https://aaltodoc.aalto.fi/handle/123456789/112857) | Jan. 2022 | Crowst Oy |  |
@@ -127,14 +127,14 @@
 | 105 | T. Valentijn | [The Practical Applicability of a CNN for Automated Building Damage Assessment](https://aaltodoc.aalto.fi/handle/123456789/44991) | June 2020 | Red Cross NL |  |
 | 106 | T. Hämmäinen | [Clustering IoT devices for network intrusion detection systems](https://aaltodoc.aalto.fi/handle/123456789/44266) | May 2020 | Ericsson |  |
 | 107 | J. Moisala | [Optimizing the mark-up of foreign exchange derivative contracts using machine learning](https://aaltodoc.aalto.fi/handle/123456789/44353) | May 2020 |  |  |
-| 108 | J. Nieminen | [Framework for application of machine learning algorithms in telecommunications](https://aaltodoc.aalto.fi/handle/123456789/43572) | Mar. 2020 | Nokia Oy |  |
+| 108 | J. Nieminen | [Framework for application of machine learning algorithms in telecommunications](https://aaltodoc.aalto.fi/handle/123456789/43572) | Mar. 2020 | Nokia |  |
 | 109 | L. Kolehmainen | [A web scraping system for extracting news articles](https://aaltodoc.aalto.fi/handle/123456789/41693) | Dec. 2019 | Vainu Finland Oy |  |
 | 110 | M. Torres Porta | [Anti-Money Laundering system based on customer behavior](https://aaltodoc.aalto.fi/handle/123456789/39938) | Aug. 2019 |  |  |
 | 111 | T. Wiro | [Market influence on purchase prices in procurement](https://aaltodoc.aalto.fi/handle/123456789/39059) | June 2019 | Sievo |  |
 | 112 | D. Baad | [Automatic Job Skill Taxonomy Generation For Recruitment Systems](https://aaltodoc.aalto.fi/handle/123456789/38986) | June 2019 | VXT Research Oy |  |
 | 113 | J. Eskonen | [Deep Reinforcement Learning in Automated User Interface Testing](https://aaltodoc.aalto.fi/handle/123456789/37895) | May 2019 | Ericsson |  |
 | 114 | A. Moskalev | [Demand forecasting for fast-moving products in grocery retail](https://aaltodoc.aalto.fi/handle/123456789/37915) | May 2019 | Relex |  |
-| 115 | K. Karapetyan | [Process Mining of Automation Services with Long Short-Term Memory Neural Networks](https://aaltodoc.aalto.fi/handle/123456789/37178) | March 2019 | Posti Group Oyj |  |
+| 115 | K. Karapetyan | [Process Mining of Automation Services with Long Short-Term Memory Neural Networks](https://aaltodoc.aalto.fi/handle/123456789/37178) | Mar. 2019 | Posti Group Oyj |  |
 | 116 | H. Ambos | [Semi-Supervised Learning over Complex Networks](https://aaltodoc.aalto.fi/handle/123456789/37130) | Mar. 2019 |  |  |
 | 117 | J. Kahles Bastida | [Applying Machine Learning to Root Cause Analysis in Agile CI/CD Software Testing Environments](https://aaltodoc.aalto.fi/handle/123456789/36347) | Jan. 2019 | Ericsson |  |
 | 118 | A. Shehata | [Cellular Network Average User Throughput-Downlink Prediction by Machine Learning](https://aaltodoc.aalto.fi/handle/123456789/35471) | Dec. 2018 | Nokia |  |
