@@ -444,13 +444,15 @@ python3 bibliography_linter.py thesis.pdf          # verify references
 
 | Instruction | Linter | How |
 |---|---|---|
-| Problem formulation: data points,<br>features, labels defined | `thesis_checklist_llm.py` | verdict `problem-formulation`<br>with quoted evidence |
+| Problem formulation: data points,<br>features, labels defined | `thesis_checklist_llm.py`<br>`erm_clarity_lint_llm.py` | verdict `problem-formulation`<br>with quoted evidence<br>per ERM object (data point / features /<br>label): `CLEAR` / `PARTIAL` / `UNCLEAR` /<br>`MISSING`, plus the input/output-boundary<br>and data-point-identity checks |
+| Abstract readable from elementary<br>(Dictionary) concepts alone | `abstract_selfcontained_lint_llm.py` | grade `GOOD` / `FAIR` / `POOR`; per term<br>`UNDEFINED` / `AMBIGUOUS` /<br>`COMPOUND-JARGON` gaps, each with the<br>naive-reader question and an inline fix |
 | Research scope/questions well-posed<br>(clear, focused, specific, complex,<br>feasible, relevant, self-contained) | `rq_quality_lint_llm.py` | per-question criteria verdicts<br>+ scope checks (gap,<br>delimitations, alignment) |
 | Identify data sources and evaluation criteria | `thesis_checklist_llm.py` | verdict `data-sources-eval` |
 | Training loss and validation/test<br>loss explicitly stated | `thesis_checklist_llm.py` | verdict `loss-functions` |
 | Per studied method: training,<br>validation and test set construction<br>described, and the method diagnosed<br>on that split | `data_split_lint_llm.py` | enumerates the trained methods,<br>then per method: `train-set`,<br>`validation-set`, `test-set`,<br>`diagnosis-on-split` verdicts |
 | Numerical results answer the<br>research questions | `research_questions_lint_llm.py`<br>`thesis_checklist_llm.py` | per-question tracing<br>global verdict `results-discussed` |
 | Each claimed contribution is backed<br>by a result (theorem, experiment,<br>analysis) that actually supports it | `contribution_support_lint_llm.py` | per claim: `SUPPORTED` / `PARTIAL` /<br>`UNSUPPORTED` / `ASSERTED` with the<br>backing result located and a why/gap |
+| Stated contribution faithfully<br>presented (not over- or under-sold) | `contribution_faithfulness_lint_llm.py` | actual main contribution vs. the claim:<br>`FAITHFUL` / `OVERSTATED` /<br>`UNDERSTATED` / `MISALIGNED` / `UNCLEAR` |
 | Use appropriate baselines or benchmarks | `thesis_checklist_llm.py` | verdict `baselines` |
 | Chapter/section introductions | `section_intro_lint_llm.py`<br>`thesis_checklist_llm.py`<br>`prose_lint_llm.py` | intro maps its subsections<br>verdict `section-intros`<br>`unmotivated-section` |
 | Reference all numbered equations using `\eqref{}` | `math_typeset_lint.py` | `REF-NOT-EQREF` (LaTeX) |
@@ -460,7 +462,14 @@ python3 bibliography_linter.py thesis.pdf          # verify references
 | Figures clear, labelled,<br>informative captions | `figure_lint_llm.py`<br>`caption_lint.py`<br>`caption_lint_llm.py`<br>`thesis_checklist_llm.py` | rendered figures scored against the<br>PLOS Ten Simple Rules (figures × rules<br>matrix; pixels + vision LLM)<br>`SHORT-CAPTION`, `NO-CAPTION`<br>`WEAK-CAPTION` (per-caption LLM)<br>verdict `captions-informative` |
 | References formatted per IEEE guidelines | `citation_style_lint.py` | style/entry/citation checks (LaTeX + PDF) |
 | Terms from the Aalto<br>Dictionary of ML | `terminology_lint.py` | `NON-DICTIONARY`, `TERM-MIX`<br>(dictionary term first per cluster) |
+| Central concepts given a source<br>(provenance of the load-bearing ideas) | `central_concept_citation_lint_llm.py` | per central concept: `CITED` /<br>`OWN-COINAGE` / `ELEMENTARY` /<br>`UNCITED` / `ATTR-VAGUE`, with the fix |
 | Every chapter/section has zero<br>or >= 2 subdivisions | `structure_lint.py` | `LONE-CHILD` (LaTeX + PDF) |
+
+### Suite self-check
+
+| Purpose | Linter | How |
+|---|---|---|
+| Does the automated suite catch what a<br>human reviewer flagged? (find blind spots) | `annotation_coverage_lint_llm.py` | cross-checks the reviewer's PDF margin<br>annotations against the suite's own<br>output: `COVERED` / `PARTIAL` / `UNCAUGHT` |
 
 ### Typesetting mathematical texts
 
