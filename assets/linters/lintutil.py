@@ -114,8 +114,22 @@ def tex_lines(paths: List[str]) -> List[Line]:
     return lines
 
 
+def txt_lines(path: str) -> List[Line]:
+    """Load a plain-text extract (e.g. a PDF converted with pdf_to_txt.py).
+    Location is 'L<lineno>' since a flat .txt carries no page structure."""
+    try:
+        raw = Path(path).read_text(encoding="utf-8", errors="replace")
+    except OSError as e:
+        sys.exit(f"Cannot read {path}: {e}")
+    return [(f"L{i}", ln) for i, ln in enumerate(raw.splitlines(), start=1)]
+
+
 def load_lines(paths: List[str]) -> Tuple[List[Line], str]:
-    """Load input files; returns (lines, mode) with mode 'pdf' or 'tex'."""
+    """Load input files; returns (lines, mode) with mode 'pdf' or 'tex'.
+    A single .txt extract is loaded as plain text but reported as 'pdf' mode,
+    since it is the extracted prose of a PDF (no LaTeX markup to parse)."""
+    if len(paths) == 1 and paths[0].lower().endswith(".txt"):
+        return txt_lines(paths[0]), "pdf"
     if len(paths) == 1 and paths[0].lower().endswith(".pdf"):
         return pdf_lines(paths[0]), "pdf"
     if any(p.lower().endswith(".pdf") for p in paths):

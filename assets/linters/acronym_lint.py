@@ -24,6 +24,7 @@ Exit status: 0 clean, 1 findings (WARN or worse), 2 usage error.
 import argparse
 import re
 import sys
+from collections import deque
 from typing import Dict, List, Tuple
 
 from lintutil import Report, is_toc_line, load_lines
@@ -54,12 +55,6 @@ MATH_RE = re.compile(r"\$[^$]*\$|\\\[[^\]]*\\\]|\\\(.*?\\\)")
 
 
 def clean_line(text: str, mode: str) -> str:
-    """Strip noise that would create phantom acronyms before scanning.
-
-    In LaTeX mode: drop reference/label macros, inline math, and any
-    remaining `\\command` tokens. In PDF mode: drop `[12]`-style numeric
-    citations. Removed spans become a space so word boundaries survive.
-    """
     if mode == "tex":
         text = TEX_STRIP_RE.sub(" ", text)
         text = MATH_RE.sub(" ", text)
@@ -69,9 +64,26 @@ def clean_line(text: str, mode: str) -> str:
     return text
 
 
+def join_dehyphen(segments: List[str]) -> str:
+    """Join cleaned line segments into one stream, merging soft hyphenation
+    ("predic-\\ntion" -> "prediction"). Used so that an inline expansion whose
+    long form is wrapped across a PDF line break -- e.g. "numerical weather /
+    prediction (NWP)" -- is still recognised."""
+    buf = ""
+    for seg in segments:
+        seg = seg.strip()
+        if not seg:
+            continue
+        if buf.endswith("-"):
+            buf = buf[:-1] + seg
+        elif buf:
+            buf = buf + " " + seg
+        else:
+            buf = seg
+    return buf
+
+
 def is_heading_or_caption(text: str) -> bool:
-    """True if the line starts like a caption or structural heading
-    (Figure/Table/Algorithm/Listing/Chapter/Appendix)."""
     t = text.strip()
     return bool(re.match(r"^(Figure|Fig\.|Table|Tab\.|Algorithm|Listing|"
                          r"Chapter|Appendix)\b", t))
@@ -107,24 +119,35 @@ def main(argv: List[str] = None) -> int:
     expansions: Dict[str, List[Tuple[int, str, str]]] = {}  # acro -> [(seq, where, long)]
     seq = 0
     in_references = False
+    # Cleaned text of the previous few lines, so an expansion whose long form
+    # is wrapped across PDF line breaks is still matched (attributed to the
+    # line that carries the parenthesised acronym).
+    prev_clean: deque = deque(maxlen=3)
     for where, raw in lines:
         if is_toc_line(raw):
+            continue
+        # Headings and figure/table captions are not prose: an acronym first
+        # introduced (or re-expanded) there should not be counted as the
+        # canonical first use, and skipping them also keeps such lines out of
+        # the cross-line dehyphenation context window below.
+        if is_heading_or_caption(raw):
             continue
         t = raw.strip()
         if re.match(r"^(References|Bibliography)\s*$", t, re.I):
             in_references = True
         if in_references:
             continue
-        # Caption/heading lines (e.g. "Figure 3: ...") float out of reading
-        # order, so an acronym's first appearance there is not a reliable
-        # "first use" — skip them, as the module docstring promises.
-        if is_heading_or_caption(raw):
-            continue
         text = clean_line(raw, mode)
         seq += 1
-        for m in EXPANSION_RE.finditer(text):
+        context = join_dehyphen(list(prev_clean) + [text])
+        for m in EXPANSION_RE.finditer(context):
             long_form, acro = m.group(1), m.group(2)
             key = acro.rstrip("s")
+            # Attribute the expansion to the current line only when the
+            # parenthesised acronym itself is on this line; otherwise a later
+            # line would double-count expansions carried in the context window.
+            if not re.search(r"\(\s*" + re.escape(acro) + r"\s*\)", text):
+                continue
             # Plausibility: expansion words should roughly supply the
             # acronym's letters (first letters of words vs acronym letters).
             initials = "".join(w[0] for w in re.split(r"[ \-]", long_form)
@@ -142,6 +165,7 @@ def main(argv: List[str] = None) -> int:
             if key in WHITELIST or len(re.sub(r"[^A-Z]", "", key)) < 2:
                 continue
             uses.setdefault(key, []).append((seq, where))
+        prev_clean.append(text)
 
     # Pass 2: findings.
     for acro, exps in sorted(expansions.items()):

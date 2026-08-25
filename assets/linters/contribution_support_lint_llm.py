@@ -9,6 +9,10 @@ that support chain per claim — which result is meant to back each contribution
 WHERE it is, and whether it actually does the job — so a gap between what is
 claimed and what is shown is easy to see.
 
+Complements contribution_faithfulness_lint_llm.py: that linter gives one
+holistic verdict on whether the headline contribution is over/under-sold; this
+one is the per-claim, located support chain behind such a verdict.
+
 For every claimed contribution it reports:
   * type      -- what KIND of claim it is (theoretical / empirical /
                  methodological / analysis / dataset), i.e. what backing it

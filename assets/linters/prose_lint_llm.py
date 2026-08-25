@@ -81,16 +81,23 @@ SYSTEM_PROMPT = (
     "antecedent is genuinely ambiguous to a careful reader.\n"
     "  vague-quantifier: 'significantly', 'very', 'a lot', 'much better' "
     "etc. with no number, percentage, or statistical test anywhere near.\n"
-    "  jargon: colloquial or evaluative ML-speak in place of a defined, "
-    "measured property — e.g. 'smoothest convergence', 'the model "
-    "struggles', 'training is stable', 'degrades gracefully', 'performs "
-    "well'. Flag when the claimed property (smoothness, stability, "
-    "speed of convergence) is never defined or measured in the text, OR "
-    "when a technical term is misused in an informal sense (in the Aalto "
-    "Dictionary of ML, 'smooth' means differentiable — 'smooth "
-    "convergence' for a low-noise training curve misuses it). A nearby "
-    "number (e.g. a hyperparameter value) does NOT count as support for "
-    "the claimed property itself.\n"
+    "  jargon: an evaluative or colloquial claim that asserts a PROPERTY "
+    "(smoothness, stability, speed of convergence, importance, salience, "
+    "robustness, expressiveness) which is never DEFINED or MEASURED in the "
+    "chunk — e.g. 'smoothest convergence', 'the model struggles', "
+    "'training is stable', 'degrades gracefully', 'performs well', "
+    "'important coordinates', 'salient overlap'. Also flag a technical "
+    "term misused in an informal sense (in the Aalto Dictionary of ML "
+    "'smooth' means differentiable, so 'smooth convergence' for a "
+    "low-noise curve misuses it). Two hard gates — flag ONLY if BOTH "
+    "hold: (1) name the exact property being claimed, and (2) that "
+    "property has no accompanying definition, metric, formula, or number "
+    "anywhere in this chunk (a hyperparameter value or an unrelated number "
+    "nearby does NOT count as measuring the claimed property). In the "
+    "explanation, name the property and the single metric/definition that "
+    "would earn the claim. Distinct from empty-buzzword: jargon makes a "
+    "measurable CLAIM with no metric; a buzzword is a word with no "
+    "content at all.\n"
     "  synonym-switch: within this chunk, two different terms are used "
     "for the SAME concept (e.g. 'data point' vs 'sample', 'label' vs "
     "'target', 'loss' vs 'cost').\n"
@@ -106,9 +113,11 @@ SYSTEM_PROMPT = (
     "idiomatic, and do not flag domain terms of art.\n"
     "  informal-register: colloquial or conversational phrasing out of "
     "place in a thesis — e.g. 'a bunch of', 'way better', 'stuff', "
-    "'pretty good', 'huge', contractions ('don't', \"it's\"). Do not "
-    "double-report phrases already flagged as vague-quantifier or "
-    "jargon.\n"
+    "'pretty good', 'kind of', 'sort of', 'plug in', 'get rid of', "
+    "phrasal verbs like 'assumes away'/'boils down to', contractions "
+    "('don't', \"it's\"). Give the formal rewrite as the replacement. Do "
+    "not double-report a phrase already covered by vague-quantifier, "
+    "jargon, or empty-buzzword (see precedence).\n"
     "  category-error: a technically precise, correctly-spelled term "
     "placed in a conceptually wrong ROLE — a type mismatch a domain "
     "expert would call simply wrong, not merely unconventional. Examples: "
@@ -121,23 +130,42 @@ SYSTEM_PROMPT = (
     "mismatches; do NOT flag correct-but-unusual usage, informal "
     "shorthand, or anything you are not confident is a genuine error. "
     "State the expected category vs. the one used in the explanation.\n"
-    "  empty-buzzword: an inflated or hype word used where it carries no "
-    "specific meaning a reader can pin down — 'framework', 'solution', "
-    "'ecosystem', 'landscape', 'paradigm', 'synergy' with no clear "
-    "referent; 'leverage'/'utilize' in place of plain 'use'; "
-    "'robust'/'novel'/'seamless'/'holistic'/'cutting-edge'/'state-of-the-art' "
-    "as unearned praise not backed by a definition or result. Flag ONLY "
-    "when removing or replacing the word would lose no information. Do "
-    "NOT flag it when the word names a real, defined thing in the text "
+    "  empty-buzzword: an inflated or hype word that survives the DELETION "
+    "TEST — cross it out (or swap for the plain word) and the sentence "
+    "loses no information a reader could act on. Two families: (a) "
+    "content-free nouns — 'framework', 'solution', 'ecosystem', "
+    "'landscape', 'paradigm', 'synergy', 'pipeline', 'mechanism' with no "
+    "concrete referent; (b) unearned praise / inflation — "
+    "'novel', 'robust', 'seamless', 'holistic', 'cutting-edge', "
+    "'state-of-the-art', 'powerful', 'efficient', 'lightweight', "
+    "'scalable', 'principled', 'comprehensive' asserted without a "
+    "definition, metric, or result that earns it; and 'leverage', "
+    "'utilize', 'employ', 'facilitate', 'in order to' for plain "
+    "'use'/'to'. Do NOT flag when the word names a real, defined thing "
     "(the FACT framework, a theoretical framework, an optimization "
-    "problem's 'solution', a proven 'robust' estimator) or is an "
-    "established term of art. Quote the phrase and name a plainer "
-    "replacement in the explanation.\n\n"
+    "problem's 'solution', an estimator PROVEN robust, a method MEASURED "
+    "as efficient) or is an established term of art. The replacement is "
+    "the plain word, or '(delete)' if the sentence reads cleanly without "
+    "it.\n\n"
+    "SEVERITY: rate every finding high | medium | low. high = a genuine "
+    "defect a careful editor would certainly cut (content-free buzzword "
+    "adjacent to an unearned claim; a category-error; jargon whose "
+    "undefined property is load-bearing for a contribution). medium = "
+    "worth fixing but defensible. low = borderline / stylistic. Be "
+    "conservative — when unsure whether it is a defect at all, use low or "
+    "omit it.\n"
+    "PRECEDENCE (report each span under ONE category only): "
+    "category-error > jargon > empty-buzzword > vague-quantifier > "
+    "informal-register. E.g. 'leverage a robust framework' → one "
+    "empty-buzzword finding, not three; 'the model struggles' → jargon, "
+    "not informal-register.\n"
     "Be precise and conservative: only report defects a human editor "
-    "would definitely mark. Each finding needs an exact short quote "
-    "(<=25 words) from the text. Respond with STRICT JSON:\n"
-    '{"findings": [{"category": "...", "quote": "...", '
-    '"explanation": "..."}]}'
+    "would definitely mark, and prefer FEWER, sharper findings over a long "
+    "noisy list. Each finding needs an exact short quote (<=25 words) from "
+    "the text, the plainer REPLACEMENT (or '(delete)'), and a severity. "
+    "Respond with STRICT JSON:\n"
+    '{"findings": [{"category": "...", "severity": "high|medium|low", '
+    '"quote": "...", "replacement": "...", "explanation": "..."}]}'
 )
 
 
@@ -187,6 +215,11 @@ def main(argv: List[str] = None) -> int:
                     help="PDF mode: page range, e.g. '9-60'.")
     ap.add_argument("--checks", default=",".join(CHECKS),
                     help=f"Comma-separated subset of: {', '.join(CHECKS)}")
+    ap.add_argument("--min-severity", choices=["high", "medium", "low"],
+                    default="low",
+                    help="Drop findings below this model-assigned severity "
+                         "(high->ERROR, medium->WARN, low->INFO). Default low "
+                         "(keep all). Use 'medium' for a sharper, terser list.")
     ap.add_argument("--chunk-chars", type=int, default=9000,
                     help="Approximate characters per LLM call "
                          "(default 9000).")
@@ -249,6 +282,10 @@ def main(argv: List[str] = None) -> int:
                  about="LLM self-editing pass: uncited claims, tense drift, "
                        "jargon, informal register, category errors, empty "
                        "buzzwords, and more.")
+    # Model severity -> shared report tag; --min-severity gates on the rank.
+    SEV_TAG = {"high": "ERROR", "medium": "WARN", "low": "INFO"}
+    SEV_RANK = {"high": 2, "medium": 1, "low": 0}
+    floor = SEV_RANK[args.min_severity]
     total_tokens = 0
     with concurrent.futures.ThreadPoolExecutor(
             max_workers=max(1, args.concurrency)) as ex:
@@ -262,10 +299,17 @@ def main(argv: List[str] = None) -> int:
                 cat = str(f.get("category", "")).strip()
                 if cat not in checks:
                     continue
+                sev = str(f.get("severity", "medium")).strip().lower()
+                if sev not in SEV_RANK:
+                    sev = "medium"
+                if SEV_RANK[sev] < floor:
+                    continue
                 quote = str(f.get("quote", "")).strip()
                 expl = str(f.get("explanation", "")).strip()
-                rep.add("WARN", cat.upper(), where,
-                        f"\"{quote[:100]}\" — {expl[:140]}")
+                repl = str(f.get("replacement", "")).strip()
+                tail = f" [-> {repl[:40]}]" if repl else ""
+                rep.add(SEV_TAG[sev], cat.upper(), where,
+                        f"\"{quote[:100]}\" — {expl[:140]}{tail}")
 
     print(rep.render())
     print(f"\nTotal tokens used: {total_tokens}")

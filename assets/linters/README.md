@@ -249,10 +249,63 @@ endpoint such as OpenRouter — override the endpoint and model either way:
   through `run_all_linters.py`, picks them up. A flag, when given, wins
   over the matching env var.
 
-The exact model names on offer (GPT-5 family, e.g.
-`gpt-5-mini-2025-08-07`) are listed on the
-[Aalto AI APIs | Aalto University](https://www.aalto.fi/en/services/ai-apis-in-aalto)
-page (Aalto login required).
+### Choosing the LLM model
+
+You pick the model with **`--model <id>`** (or the **`LLM_MODEL`** env var);
+`--vision-model` / `LLM_VISION_MODEL` sets the model `figure_lint_llm.py` uses
+for figure images. The valid `<id>` values depend on which endpoint you point
+at (`--base-url` / `LLM_BASE_URL`, above). Leave `--model` off and each endpoint
+uses a sensible default.
+
+**Which ids are valid changes over time** — always confirm against the Aalto
+sources below. The values here were current in August 2026.
+
+**Aalto AI API** (the default endpoint) — the OpenAI GPT-5 family, with dated
+ids. The full catalogue and your subscription key are on the
+[Aalto AI APIs](https://www.aalto.fi/en/services/aalto-ai-apis) page (Aalto
+login required):
+
+| Model id | Notes |
+|---|---|
+| `gpt-5-mini-2025-08-07` | **suite default** — fast, cheap, strong enough for the linters |
+| `gpt-5-2025-08-07` | most capable; slower and more expensive |
+| `gpt-5-nano-2025-08-07` | smallest/cheapest; use for quick, cheap passes |
+
+```sh
+python3 run_all_linters.py thesis.pdf --llm --model gpt-5-2025-08-07
+```
+
+**Aalto LLM Gateway** (open-weight models on Aalto hardware; needs the Aalto
+VPN and a key made at <https://llm-gateway.k8s.aalto.fi/>). Point `--base-url`
+at it, then choose a `--model`. The **authoritative, current** list is a
+one-liner against its `/models` endpoint:
+
+```sh
+curl -s https://llm-gateway.k8s.aalto.fi/api/v1/models \
+     -H "Authorization: Bearer $AALTO_LLM_KEY" | python3 -m json.tool
+```
+
+As of August 2026 it serves (pass the id verbatim to `--model`):
+`RedHatAI/gemma-4-31B-it-FP8-Dynamic` (Aalto's recommended starter),
+`openai/gpt-oss-120b`, `Qwen/Qwen3-30B-A3B-Instruct-2507-FP8`,
+`Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8`,
+`Qwen/Qwen3-VL-30B-A3B-Instruct-FP8` (vision, for `--vision-model`),
+`Qwen/Qwen3-VL-30B-A3B-Thinking-FP8`, `Qwen/Qwen3.8-27B-FP8`,
+`google/gemma-4-E4B-it`, `google/codegemma-7b-it`. Gateway models "scale to
+zero": the first request to a cold model can take a few minutes (the client
+retries the 503s for you). See
+[Local LLM web APIs](https://scicomp.aalto.fi/aalto/llm-web-apis/) for details.
+
+```sh
+export AALTO_LLM_KEY=...     # from https://llm-gateway.k8s.aalto.fi/
+python3 run_all_linters.py thesis.pdf --llm \
+    --base-url https://llm-gateway.k8s.aalto.fi/api/v1 \
+    --model RedHatAI/gemma-4-31B-it-FP8-Dynamic \
+    --vision-model Qwen/Qwen3-VL-30B-A3B-Instruct-FP8
+```
+
+(For a **local** on-device model, see the `mlx_lm.server` example under
+[Data handling](#data-handling) below — same `--base-url` / `--model` idea.)
 
 ### Data handling
 
@@ -425,6 +478,48 @@ without re-running anything; `--body-only` emits just the page markup (a
 `<style>` block plus the cards) for embedding in a host that supplies the
 document shell; `--open` launches the result in your default browser.
 
+## Augmenting a run with an annotated PDF
+
+If you have a PDF of your manuscript carrying **margin annotations** —
+highlights and typed comments, e.g. from a supervisor's read-through, or your
+own notes-to-self added in any PDF reader — the suite can use them. Point
+`run_all_linters.py` at the annotated PDF with `--annotations`:
+
+```sh
+python3 run_all_linters.py thesis.pdf --llm \
+    --annotations thesis_annotated.pdf
+```
+
+Two things happen. First, the margin comments are **folded into every semantic
+LLM linter's context**, so each one weighs what the human flagged in the area
+it checks (annotations are advisory — a linter still stays within its own
+remit). Second, after the run, `annotation_coverage_lint_llm.py` **cross-checks
+each annotation against everything the suite flagged** and reports, per note,
+whether the automated linters caught the same concern:
+
+- `COVERED` — a linter clearly flags the same issue (it names which one);
+- `PARTIAL` — a linter touches the area but misses the specific point;
+- `UNCAUGHT` — no linter addresses it (a genuine gap, or simply outside any
+  linter's remit).
+
+It ends with a short list of **coverage gaps** — classes of concern the suite
+systematically misses — so an annotated draft doubles as a way to see where the
+automated checks fall short. Because the coverage check is itself an LLM linter,
+`--annotations` is most useful together with `--llm`.
+
+Under the hood, `--annotations` accepts either the annotated **PDF** (it
+extracts the notes for you via `extract_annotations.py`) or a
+pre-extracted **annotations JSON**. To extract once and reuse:
+
+```sh
+python3 extract_annotations.py thesis_annotated.pdf --out thesis_annos.json
+python3 run_all_linters.py thesis.pdf --llm --annotations thesis_annos.json
+```
+
+The extracted JSON is a plain list of `{page, type, comment, quoted}` entries
+and never leaves your machine except as part of the LLM linter calls you opted
+into with `--llm`.
+
 ## Typical workflow for a new thesis PDF
 
 ```sh
@@ -544,20 +639,33 @@ extras. A short prose note on each linter follows the table.
 | [`research_questions_lint_llm.py`](research_questions_lint_llm.py) | each stated research question:<br>answered? where? on what evidence? | `.pdf` | Aalto AI API |
 | [`rq_quality_lint_llm.py`](rq_quality_lint_llm.py) | how well-posed are research questions<br>and scope (university criteria)? | `.pdf` | Aalto AI API |
 | [`contribution_support_lint_llm.py`](contribution_support_lint_llm.py) | per claimed contribution: which result<br>(theorem/proof, experiment, analysis)<br>backs it, and does it? | `.pdf` | Aalto AI API |
+| [`contribution_faithfulness_lint_llm.py`](contribution_faithfulness_lint_llm.py) | one holistic verdict: is the headline<br>contribution over- or under-sold? | `.pdf` | Aalto AI API |
+| [`abstract_selfcontained_lint_llm.py`](abstract_selfcontained_lint_llm.py) | is the abstract self-contained from<br>elementary (Aalto Dictionary) concepts?<br>(paper profile) | `.pdf` | Aalto AI API |
+| [`central_concept_citation_lint_llm.py`](central_concept_citation_lint_llm.py) | are the paper's central concepts sourced<br>(cited / own-coinage / elementary /<br>uncited)? (paper profile) | `.pdf` | Aalto AI API |
+| [`erm_clarity_lint_llm.py`](erm_clarity_lint_llm.py) | is the learning task stated clearly as<br>empirical risk minimisation (data points,<br>features, labels, model, loss)?<br>(paper profile) | `.pdf` | Aalto AI API |
+| [`annotation_coverage_lint_llm.py`](annotation_coverage_lint_llm.py) | cross-checks reviewer PDF annotations<br>against what the suite flagged<br>(`COVERED`/`PARTIAL`/`UNCAUGHT`) | run output<br>+ annotations | Aalto AI API |
 | [`figure_lint_llm.py`](figure_lint_llm.py) | figures scored against the PLOS<br>Ten Simple Rules for Better Figures<br>(figures × ten-rules matrix) | `.pdf` | PyMuPDF<br>(+ Aalto AI API<br>unless `--no-llm`) |
 | [`section_intro_lint_llm.py`](section_intro_lint_llm.py) | does each chapter/section intro map<br>its subsections and tie them together? | `.pdf` | PyMuPDF +<br>Aalto AI API |
 | [`type_consistency_lint_llm.py`](type_consistency_lint_llm.py) | formal claims well-typed: relations over<br>same-type operands, values in range,<br>dimensionless quantities unit-free<br>(`TYPE-MISMATCH`, `RANGE`, `DIMENSION`,<br>`BRIDGE-LOOSE`) | `.pdf` | Aalto AI API |
 | [`flow_lint_llm.py`](flow_lint_llm.py) | narrative flow: section openers that<br>stand alone, no paragraph-to-paragraph<br>discontinuities | `.pdf` | PyMuPDF +<br>Aalto AI API |
 | [`prose_lint_llm.py`](prose_lint_llm.py) | LLM self-editing pass (uncited<br>claims, tense drift, jargon, …) | `.tex`, `.pdf` | Aalto AI API |
-| [`run_all_linters.py`](run_all_linters.py) | runs everything above; `--dashboard`<br>renders + opens an HTML report | either | — |
+| [`run_all_linters.py`](run_all_linters.py) | runs everything above; `--dashboard`<br>renders + opens an HTML report;<br>`--annotations` folds in reviewer PDF notes | either | — |
 | [`dashboard.py`](dashboard.py) | renders a run as a self-contained HTML<br>dashboard (`--open` to launch in a browser) | either | — |
 
 Shared modules: `lintutil.py` (text extraction, report format),
 `aalto_llm.py` (Aalto AI API client; also used by the `*_llm` linters).
+`extract_annotations.py` (a helper, not a linter) pulls a PDF's margin
+highlights and comments into a JSON list — see
+[Augmenting a run with an annotated PDF](#augmenting-a-run-with-an-annotated-pdf).
 
-Maintainer note: this directory (`assets/linters/` in the masterthesis
-repo) is the single source of truth for the linter suite; edit here,
-then commit and push this repo to deploy to ml-theses.org.
+Maintainer note: the linter scripts in this directory are **published from a
+single upstream linter suite** and verified against the shipped `SHA256SUMS`.
+Do not hand-edit an individual linter here — the next sync overwrites it, and
+until then the change fails the site build's `SHA256SUMS` gate. Edit upstream
+and re-sync. The non-`.py` assets (this `README.md`, the demo dashboard) are
+maintained in this repo. The upstream suite ships one extra reviewer-only
+linter (`own_work_relation_lint_llm.py`) that is intentionally not published
+here.
 
 ### Notes on individual linters
 

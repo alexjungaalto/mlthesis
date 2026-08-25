@@ -1,4 +1,4 @@
-<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Example linter dashboard &mdash; ml-theses.org</title><style>
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Linter report &mdash; flowbasedclustering</title><style>
 :root{
   --paper:#F4F6F8; --surface:#FFFFFF; --ink:#1A2230; --muted:#5B6474;
   --hair:#DDE2EA; --accent:#345BD6; --accent-soft:#E7ECFB;
@@ -113,744 +113,758 @@ footer{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--hair);
   color:var(--muted);font-size:.82rem}
 footer a{color:var(--accent)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
-</style></head><body><div class='wrap'><header class='top'><p class='eyebrow'>Live demo &middot; ml-theses.org linter suite</p><h1 class='serif'>Example thesis linter dashboard</h1><p class='byline'>Every card below is a <b>real check run on a real document</b> &mdash; an MSc thesis topic proposal &mdash; by the ml-theses.org linter suite. Click any card to expand its findings. The figure, caption, and section-intro checks are omitted here because a short proposal has no figures or subsections to analyse; on a full thesis they add cards too.</p></header><div class='tiles'><div class='tile'><div class='n'>22</div><div class='l'>Checks run</div></div><div class='tile ok'><div class='n'>11</div><div class='l'>Clean</div></div><div class='tile warn'><div class='n'>11</div><div class='l'>With findings</div></div><div class='tile err'><div class='n'>0</div><div class='l'>Errors</div></div></div><div class='bar' role='img' aria-label='11 clean, 11 findings, 0 errors'><span class='s-ok' style='width:50.0000%'></span><span class='s-warn' style='width:50.0000%'></span><span class='s-err' style='width:0.0000%'></span></div><div class='controls'><span class='desc'>Show:</span><button data-mode='all' aria-pressed='true'>All checks</button><button data-mode='attn' aria-pressed='false'>Needs attention</button></div><section class='group'><h2>Structure &amp; completeness</h2><details class='card s-clean'><summary><span class='name mono'>structure_lint.py</span><span class='desc'>required chapters present and in a sensible order</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Structure lint report
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+</style></head><body><div class='wrap'><header class='top'><p class='eyebrow'>Thesis linter report</p><h1 class='serif'>flowbasedclustering</h1><p class='byline'>&nbsp;</p></header><div class='tiles'><div class='tile'><div class='n'>27</div><div class='l'>Checks run</div></div><div class='tile ok'><div class='n'>12</div><div class='l'>Clean</div></div><div class='tile warn'><div class='n'>15</div><div class='l'>With findings</div></div><div class='tile err'><div class='n'>0</div><div class='l'>Errors</div></div></div><div class='bar' role='img' aria-label='12 clean, 15 findings, 0 errors'><span class='s-ok' style='width:44.4444%'></span><span class='s-warn' style='width:55.5556%'></span><span class='s-err' style='width:0.0000%'></span></div><div class='controls'><span class='desc'>Show:</span><button data-mode='all' aria-pressed='true'>All checks</button><button data-mode='attn' aria-pressed='false'>Needs attention</button></div><section class='group'><h2>Structure &amp; completeness</h2><details class='card s-clean'><summary><span class='name mono'>structure_lint.py</span><span class='desc'>required chapters present and in a sensible order</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Structure lint report
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 Flags sectioning units with exactly one subdivision (a lone subsection cannot articulate its parent heading).
 
 No findings.
 
-12 sectioning unit(s) checked (via PDF outline).
+9 sectioning unit(s) checked (via PDF outline).
 
 ==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>unreferenced_entity_linter.py</span><span class='desc'>every numbered figure/table/equation is referenced in the text</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>Checks that every numbered equation, table, and figure is referred to at least once in the text (and, in LaTeX mode, that each has a \label). Each line below is one unreferenced entity.
 
 
-[pdf] proposal.pdf: 0 numbered entit(ies) found (0 equations, 0 floats), 0 finding(s)
+[pdf] flowbasedclustering.pdf: 8 numbered entit(ies) found (6 equations, 2 floats), 0 finding(s)
 
 ==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>crossref_forward_lint.py</span><span class='desc'>no cross-reference points far ahead of where the float is defined</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Cross-reference forward-reference lint report
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 What this checks: a reference to a float (a figure, table, or algorithm — LaTeX floats them to wherever they fit) that sits many pages before the float itself, e.g. &quot;as in Figure 7&quot; on page 3 when Figure 7 is on page 21.
-Lines scanned: 307
-Floats defined: 0
+Lines scanned: 2003
+Floats defined: 13
 Threshold: &gt;1.00 pages ahead
 Forward references flagged: 0
-Unresolved references (no matching float found): 3
+Unresolved references (no matching float found): 1
 
 No forward cross-references exceeding the threshold were found.
 
 == Unresolved references (could not locate a definition)
-  * section 4  (first seen on page 1)
   * section 3  (first seen on page 3)
 
 
 ==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>forward_ref_lint.py</span><span class='desc'>concepts are not used pages before they are introduced (regex)</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Forward-reference lint report
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 What this checks: a passage that uses a term whose definition appears only on a LATER page — a &quot;forward reference&quot; the reader meets before it is introduced.
 Heuristic, so expect false positives: an ordinary word can be mistaken for a defined term. For fewer, more reliable hits re-run with --min-term-words 2; add --list-concepts to see what was treated as a term.
 
-Paragraphs scanned: 98
-Concepts registered: 15
-Forward references found: 18
+Paragraphs scanned: 113
+Concepts registered: 23
+Forward references found: 2
 
 Each finding — the page where the term is used, the term, and the page where it is first defined:
 
-  * page 1: uses &#x27;target&#x27; — first defined on page 3
-    context: …e no separate “attacks,” only different targets — the whole function, a restriction, or…
-
-  * page 2: uses &#x27;restricted&#x27; — first defined on page 5
-    context: …ntified by SVD — subspace probing under restricted output access.
-
-  * page 2: uses &#x27;restricted&#x27; — first defined on page 5
-    context: A central practical theme is how these restricted oracles degrade the recovery guarantees…
-
-  * page 2: uses &#x27;restricted&#x27; — first defined on page 5
-    context: 4 Core Theoretical Object: Restricted Isometry over F via Point Evaluation
-
-  * page 2: uses &#x27;empirical&#x27; — first defined on page 4
-    context: contexts c1, . . . , cm ∼D and form the empirical evaluation seminorm d ∥f∥ 2 = 1
-
-  * page 2: uses &#x27;restricted&#x27; — first defined on page 5
-    context: …isely when the evaluation operator is a restricted isometry over the difference set F −F.
-
-  * page 3: uses &#x27;empirical&#x27; — first defined on page 4
-    context: …ric entropy. The uniform isometry is an empirical-process state- ment; the required m is …
-
-  * page 3: uses &#x27;empirical&#x27; — first defined on page 4
-    context: …ometry of Condition 1 still requires an empirical-process argument over F −F.
-
-  * page 3: uses &#x27;target&#x27; — first defined on page 3
-    context: 5 Recoverable Targets
-
-  * page 3: uses &#x27;target&#x27; — first defined on page 3
-    context: …le regime is recovery of low-complexity targets derived from fθ, all under the single e…
-
-  * page 3: uses &#x27;empirical&#x27; — first defined on page 4
-    context: …-coordinate. Carlini et al. [15] is the empirical existence proof and the controlled benc…
-  * page 3: uses &#x27;restricted&#x27; — first defined on page 5
-    context: …) from O(d) full-logit queries; under a restricted top-k/logit-bias API the cost rises to …
-
-  * page 3: uses &#x27;restricted&#x27; — first defined on page 5
-    context: …uch a functional is recoverable under a restricted isometry on the relevant quotient of F,…
-
-  * page 3: uses &#x27;restricted&#x27; — first defined on page 5
-    context: …the point-evaluation operator satisfy a restricted isometry over the transformer- realizab…
-
-  * page 4: uses &#x27;restricted&#x27; — first defined on page 5
-    context: …opy / sampling numbers of the relevant (restricted or quotiented) class, and does it match…
-
-  * page 4: uses &#x27;restricted&#x27; — first defined on page 5
-    context: RQ3. How do the restricted oracles of Section 3 — top-k truncation…
-
-  * page 4: uses &#x27;restricted&#x27; — first defined on page 5
-    context: … matching packing lower bounds; analyse restricted oracles as perturbations of the isometr…
-
-  * page 4: uses &#x27;restricted&#x27; — first defined on page 5
-    context: …oint evaluation, recovery governed by a restricted isometry over the function class.
+  * page 2: uses &#x27;ideal case&#x27; — first defined on page 3
+    context: The Ideal Case. To develop some intuition for the use-…
+  * page 2: uses &#x27;general&#x27; — first defined on page 3
+    context: … different clusters C(c′) with c′ ̸= c. General Case. In general, the empirical graph w…
 
 
-==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>unresolved_reference_lint.py</span><span class='desc'>no uncited appeals to companion studies; label-code schemes are defined</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Unresolved-reference lint report
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>unresolved_reference_lint.py</span><span class='desc'>no uncited appeals to companion studies; label-code schemes are defined</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Unresolved-reference lint report
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 Flags appeals to uncited companion/forthcoming studies and label-code schemes (R1, T6, ...) used without a definition in the text.
 
-How to read: [ERROR] almost certainly a defect, fix it · [WARN] worth reviewing, sometimes a false positive · [INFO] optional check, usually fine.
+No findings.
 
-[WARN] UNDEFINED-CODE     p3           code scheme &#x27;RQ*&#x27; used but not defined in the text: RQ1, RQ2, RQ3 (3 use(s); defined members: none) — define each at first use, e.g. &#x27;RQ1 (…)&#x27;.
-[WARN] UNDEFINED-CODE     p4           code scheme &#x27;T*&#x27; used but not defined in the text: T2, T3 (10 use(s); defined members: T1) — define each at first use, e.g. &#x27;T2 (…)&#x27;.
+==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>paper_checklist_llm.py</span><span class='desc'>the paper meets the reviewer-facing content checklist</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Paper checklist report (LLM, gpt-5-mini-2025-08-07; venue=ieee)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 
-2 finding(s): 0 error, 2 warning, 0 info.
-
-==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>thesis_checklist_llm.py</span><span class='desc'>the thesis meets the ml-theses.org content checklist</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Thesis checklist report (LLM, gpt-5-mini-2025-08-07)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
-
+[FAIL] contribution-stated
+        &quot;We propose and study a novel graph clustering method...&quot; (Abstract, p.1) — no enumerated or explicit bullet list in the introduction stating concrete contributions is provided.
+        fix: Add an explicit, enumerated &#x27;Contributions&#x27; paragraph in the introduction that lists the paper&#x27;s main novel points (e.g., algorithm, theoretical results, experiments) and points to the sections that substantiate each claim.
 [PASS] problem-formulation
-        &quot;We model a language model as a single deterministic nonlinear function fθ : V^L → R^V, c ↦ z = fθ(c), mapping a context window c ... to the logit vector z over the next token.&quot; (page 1)
-[PASS] data-sources-eval
-        &quot;On open-weight models where fθ is fully known (Pythia, Qwen, Llama across scales) ...&quot; and &quot;Evaluation: Recovery accuracy... Query efficiency; Isometry diagnostics; Robustness.&quot; (pages 4–5)
-[FAIL] loss-functions
-        Missing training loss specification: the text lists evaluation metrics (&quot;Recovery accuracy: subspace/parameter error (T1), function-approximation error on S (T2), functional error (T3).&quot;) but does not state a training loss. (page 4)
-        fix: Explicitly state the loss used for any training/estimation procedures (e.g. cross-entropy for next-token prediction or least-squares for logit reconstruction) and separately list the validation/test metrics used to evaluate performance.
-[FAIL] results-discussed
-        No numerical results are presented; the manuscript describes an empirical track and deliverables (&quot;empirically estimate the evaluation-isometry... recover targets... empirical query-complexity scaling curves&quot;) but contains no experimental numbers or discussions. (pages 4–5)
-        fix: Include concrete numerical experiments (tables/figures) with quantitative results and a detailed discussion linking those numbers to the research questions, including error bars, comparisons to theory, and interpretation of failure modes.
-[FAIL] baselines
-        Only a single prior is mentioned as a benchmark (&quot;Carlini et al. [15] is the empirical existence proof and the controlled benchmark.&quot;) and a general &quot;benchmark harness&quot; is promised, but no explicit list of baselines or comparative methods is given. (page 3, 5)
-        fix: Specify concrete baselines to compare against (e.g. random probing, Tramèr et al. model-stealing methods, the Carlini coordinate-reconstruction method, simple SVD/low-rank reconstructions) and describe how each baseline will be evaluated.
-[PASS] pseudocode
-        &quot;There are no separate &#x27;attacks,&#x27; only different targets — the whole function, a restriction, or a functional of it — recovered through one evaluation operator.&quot; (page 1) (no new algorithmic method is proposed that would require pseudocode)
-[PASS] model-diagnosis
-        &quot;Empirical track. ... (i) empirically estimate the evaluation-isometry constant for different probe designs; (ii) recover targets T1–T3 and compare achieved query counts against the theory; (iii) stress-test under simulated top-k and sampling oracles.&quot; (pages 4–5)
-[PASS] section-intros
-        Sections begin with intros: e.g. &quot;1 The Abstraction: We model a language model as a single deterministic...&quot; and &quot;2 Why Compressed Sensing Applies: A generic function V^L → R^V is unrecoverable from few samples — ...&quot; (pages 1–2)
-[PASS] captions-informative
-        No figures or tables appear in the provided manuscript text, so no captions are present to evaluate across pages 1–8.
+        &quot;We represent networked data using an undirected &#x27;empirical&#x27; graph G = (V, E, A)... Every node i ∈ V = {1, . . . , n} of the empirical graph represents a data point.&quot; (II. PROBLEM FORMULATION, p.1)
+[PASS] novelty-positioned
+        &quot;What sets our approach apart from spectral clustering is that we do not use the eigenvectors of a graph Laplacian to construct the feature vectors. Instead, we use the solutions of total variation minimization problems...&quot; (Abstract / Intro, p.1)
+[PASS] claims-supported
+        &quot;As shown in Figure 3, our method significantly outperforms spectral clustering.&quot; (VI-A, p.4) — claims in the abstract/introduction are followed by methods (Sections IV–V) and experiments (Section VI) that demonstrate them.
+[PASS] baselines
+        Figures and text compare the proposed method directly to spectral clustering: &quot;the right one is the clustering result of spectral clustering [6].&quot; (Fig.3 caption / VI, p.4)
+[FAIL] results-answer-claims
+        Experiments are presented mainly as qualitative figures and statements (e.g. &quot;As shown in Figure 3, our method significantly outperforms spectral clustering.&quot;, p.4) but no quantitative metrics, tables, or statistical comparisons are reported.
+        fix: Provide quantitative evaluation (e.g., accuracy, ARI, NMI) across multiple datasets and random seeds, include tables comparing to baselines, and report statistical significance or variance to substantiate the claimed improvements.
+[FAIL] reproducibility
+        &quot;The source code for the above experiments can be found at https://github.com/YuTian8328/.&quot; and &quot;Parameters used for Algorithm 2 are α = 0.005, λ = 0.01, η = 50, and d = 12.&quot; (VI, p.4) — but hardware/compute details and complete hyperparameter choices and random seeds are not reported.
+        fix: State the compute environment (CPU/GPU, runtime), provide full hyperparameter lists and random seeds used for experiments, and point to datasets/splits so results are reproducible.
+[FAIL] limitations
+        There is no dedicated limitations or threats-to-validity section; only a brief remark that &quot;condition (6) is not useful in practice as it involves the size of the clusters which we would like to determine.&quot; (IV, p.3) but no systematic discussion of limitations is given.
+        fix: Add a short &#x27;Limitations&#x27; or &#x27;Threats to Validity&#x27; section discussing sensitivity to seed selection and parameter tuning, scalability (runtime/complexity), failure cases, and assumptions on graph models.
 
-3 FAIL, 0 UNCLEAR, 6 PASS.  (tokens: 9511)
+4 FAIL, 0 UNCLEAR, 4 PASS.  (tokens: 11039)
+
+==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>section_intro_lint_llm.py</span><span class='desc'>each chapter/section intro maps its subsections</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Section-introduction lint report (LLM, gpt-5-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+
+[WARN] WEAK-INTRO     Numerical Experiments
+        The intro explains a heuristic for seed selection and how empirical graphs are constructed, but it does not forward-point to the upcoming subsections or outline the structure of the experiments section.
+        not reflected: Experiments with Synthetic data, Image Segmentation / Pixel Clustering
+        fix: Add explicit forward-pointing framing that maps to the subsections, e.g., “First, Section VI.1 presents experiments on synthetic data, detailing the dataset, setup, and results. Then, Section VI.2 evaluates the method on image segmentation/pixel clustering, describing graph construction from pixels, experimental settings, and outcomes.” Also add a brief sentence connecting these parts (e.g., both assess performance under controlled and real-image conditions) to tie the unit together.
+
+1 unit(s) judged: 0 good, 1 weak/missing.  (tokens: 1853)
 
 ==========================================================================</pre></div></details></section><section class='group'><h2>Contribution &amp; claims</h2><details class='card s-findings'><summary><span class='name mono'>contribution_support_lint_llm.py</span><span class='desc'>each claimed contribution is backed by a theorem/experiment/analysis</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Contribution-support lint (LLM, gpt-5-mini-2025-08-07)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 
-SUMMARY: 4 claim(s): 1 supported, 1 partial, 0 unsupported, 2 asserted
+SUMMARY: 4 claim(s): 1 supported, 3 partial, 0 unsupported, 0 asserted
 
 How to read: for each claimed contribution — the result meant to back it, where it is, and whether it does.
 
-[ASSERTED]  C3  A robustness theory relating realistic API oracles (top‑k truncation, sampling noise, finite precision, rate limits, logit‑bias probes) to the evaluation‑isometry constant, with provable separations between benign defenses and those that destroy recoverability.
-    type:     analysis
-    backing:  none
-    evidence: Measurement model: oracle hierarchy (Section 3, p2); Research question RQ3 and related discussion (p3–4); Methodology: analyse restricted oracles as perturbations of the isometry (p4)
-    gap:      The manuscript identifies the oracle types and frames the question (RQ3) but provides no theorems, analyses, or empirical results that quantify how these oracles change the RIP constant or separate benign vs. recovery‑destroying defenses; the work is proposed but not carried out in the document (pp.2–4).
-
-[ASSERTED]  C4  An open, reproducible empirical harness and empirical scaling laws (query budget vs recoverable structure) validated on open‑weight models.
-    type:     empirical
-    backing:  none
-    evidence: Empirical track and deliverables described (Methodology, p4); Evaluation metrics and planned experiments (Section 8, p4–5); Timeline listing empirical milestones (p5–6)
-    gap:      The proposal spells out an empirical plan, target models, and evaluation criteria but contains no implemented experiments, datasets, code, or empirical results in the manuscript to substantiate the claimed harness or scaling laws (pp.4–6).
-
-[PARTIAL]  C2  Query‑complexity upper bounds (via metric entropy and sampling numbers) and matching packing lower bounds for recovering codomain structure, structured sub‑domain restrictions, and general functionals.
+[PARTIAL]  C2  Provide a theoretical characterization (duality) showing that a solution of the TV minimization admits a network-flow interpretation (i.e., existence of a flow vector satisfying conditions equivalent to optimality).
     type:     theoretical
-    backing:  analysis
-    evidence: Sample complexity via metric entropy (p3); Sampling numbers / point evaluation discussion and citations (p3); Lower bounds via packing (p3); Recoverable targets T1–T3 (p3–4)
-    gap:      The proposal sketches the route (metric‑entropy bounds, sampling‑number results, Fano/packing) and cites the relevant literature, but it contains no specialised theorems, formal statements, or proofs applying these tools to the transformer‑realisable class or proving matching upper/lower bounds for the listed targets; the needed derivations are planned but not given (pp.3–4).
+    backing:  theorem (sketch)
+    evidence: Theorem 1 (p3); Optimality condition (5) (p3)
+    gap:      Theorem 1 (p3) states the duality and gives the optimality conditions (5), but the proof is only sketched/indicated by reference to Fenchel duality and prior work (&#x27;see [10, Sec. 3]&#x27;), so the theoretical claim is presented but the full proof is deferred/not provided in the manuscript.
 
-[SUPPORTED]  C1  A single compressed‑sensing formalism for black‑box LLMs: view the model as one nonlinear function, query access as point evaluation, and recovery governed by a restricted isometry (Evaluation‑RIP) over the function class.
+[PARTIAL]  C3  Flow-based features better reflect cluster geometry (bottlenecks) and can handle graph structures that are challenging for spectral clustering (e.g., chain graphs or clusters with very different sizes).
+    type:     analysis
+    backing:  analysis+experiments
+    evidence: Derivation of piecewise-constant TV solution for chain graph: conditions (6) and explicit form (7) (p3); Figure 1 and Figure 2 (chain graph illustration) (p2–3); Discussion of spectral failure on chain graph (p2)
+    gap:      The manuscript analytically derives a piecewise-constant TV solution for the chain-graph special case (eqs. (6),(7) on p3) and shows illustrative plots (Figs.1–2), but the argument is limited to that special configuration and depends on parameter choices (λ, α) and cluster sizes (not practicably available); thus the claim is supported for the demonstrated cases but not established broadly.
+
+[PARTIAL]  C4  Empirically, the proposed flow-based clustering outperforms spectral clustering on the presented synthetic dataset and on image segmentation examples.
+    type:     empirical
+    backing:  experiment
+    evidence: Synthetic experiment and comparison to spectral clustering (VI-A, Fig.3) (p4); Image segmentation example and comparison to spectral clustering (VI-B, Fig.4) (pp.4–5); Code link for experiments (p5)
+    gap:      The paper includes visual comparisons for one synthetic dataset (Fig.3) and image segmentation examples (Fig.4) showing better results than spectral clustering, but results are limited to a few visual examples without quantitative metrics, statistical evaluation, or broader baselines, so empirical support is suggestive but not comprehensive.
+
+[SUPPORTED]  C1  Introduce a flow-based graph clustering method that constructs Euclidean node features from solutions of total-variation (TV) minimization (for multiple seed sets) and then clusters those features with standard methods (e.g., k-means).
     type:     methodological
     backing:  construction
-    evidence: Measurement model (Section 3, p2); Core theoretical object: Evaluation‑RIP (Condition 1, p2–3); Discussion assembling the framework (pp.1–4)
-    why:      The manuscript explicitly defines the measurement model and gives Condition 1 (Evaluation‑RIP) and surrounding discussion that formalise the proposed compressed‑sensing viewpoint, so the claimed formalism is actually presented.
+    evidence: Algorithm 2 (p4); Algorithm 1 (p3); Feature definition (8) (p4)
+    why:      Algorithms 1 and 2 (pp.3–4) explicitly define the TV-based feature construction and the overall clustering pipeline (run TV minimization for multiple seeds, form feature vectors (8), apply k-means), so the paper provides the concrete method needed to establish the claim.
 
-Overall: The document is a research proposal that successfully formalises the compressed‑sensing viewpoint for black‑box LLMs (supported by an explicit measurement model and Evaluation‑RIP definition). The principal theoretical and empirical claims (query‑complexity bounds with matching lower bounds; a robustness theory for restricted oracles; and an open empirical harness with scaling laws) are only sketched and supported by citations to prior work, but no new theorems, proofs, or experimental results are presented here; those contributions are therefore partial or asserted pending the planned developments.
+Overall: PARTIAL — The paper presents a concrete methodological contribution (flow-based clustering algorithms) and a stated duality (Theorem 1) plus illustrative analyses and experiments, but the theoretical proof is only sketched/referred elsewhere and the empirical validation is limited (few datasets, visual comparisons, no quantitative/robust evaluation), so claims are only partially substantiated.
 
-4 claim(s): 1 supported, 1 partial, 0 unsupported, 2 asserted.  (tokens: 7730)
+4 claim(s): 1 supported, 3 partial, 0 unsupported, 0 asserted.  (tokens: 10203)
 
 ==========================================================================</pre></div></details></section><section class='group'><h2>References</h2><details class='card s-findings'><summary><span class='name mono'>citation_style_lint.py</span><span class='desc'>citations follow a consistent IEEE-style format</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Citation style lint report (IEEE)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 Checks that the reference list and in-text citations follow the IEEE style used in the thesis guide.
 
 How to read: [ERROR] almost certainly a defect, fix it · [WARN] worth reviewing, sometimes a false positive · [INFO] optional check, usually fine.
 
-[WARN] ENTRY-STYLE        p5           [1] title not in quotation marks (&quot;Title,&quot;): &quot;Emmanuel J. Candès and Terence Tao. Decoding by linear programming. IEEE Transactions on I…&quot;
-[WARN] ENTRY-STYLE        p5           [2] title not in quotation marks (&quot;Title,&quot;): &quot;David L. Donoho. Compressed sensing. IEEE Transactions on Information Theory, 52(4): 1289–…&quot;
-[WARN] ENTRY-STYLE        p5           [3] title not in quotation marks (&quot;Title,&quot;): &quot;Emmanuel J. Candès and Terence Tao. Near-optimal signal recovery from random projec- tions…&quot;
-[WARN] ENTRY-STYLE        p5           [4] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Florian Tramèr, Fan Zhang, Ari Juels, Michael K. Reiter, and Thomas Ristenpart. Steal- ing…&quot;
-[WARN] ENTRY-STYLE        p6           [5] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Ł…&quot;
-[WARN] ENTRY-STYLE        p6           [6] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Zhilin Yang, Zihang Dai, Ruslan Salakhutdinov, and William W. Cohen. Breaking the softmax …&quot;
-[WARN] ENTRY-STYLE        p6           [7] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Hyunjik Kim, George Papamakarios, and Andriy Mnih. The Lipschitz constant of self- attenti…&quot;
-[WARN] ENTRY-STYLE        p6           [8] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Valentin Castin, Pierre Ablin, and Gabriel Peyré. How smooth is attention? In Proceedings …&quot;
-[WARN] ENTRY-STYLE        p6           [9] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;James Vuckovic, Aristide Baratin, and Rémi Tachet des Combes. On the regularity of attenti…&quot;
-[WARN] ENTRY-STYLE        p6           [10] title not in quotation marks (&quot;Title,&quot;): &quot;Andrei N. Kolmogorov and Vladimir M. Tikhomirov. ε-entropy and ε-capacity of sets in funct…&quot;
-[WARN] ENTRY-STYLE        p6           [11] authors not in IEEE &#x27;A. B. Surname&#x27; form: &quot;Martin Anthony and Peter L. Bartlett. Neural Network Learning: Theoretical Foundations. Ca…&quot;
-[WARN] ENTRY-STYLE        p6           [12] title not in quotation marks (&quot;Title,&quot;): &quot;Benjamin L. Edelman, Surbhi Goel, Sham Kakade, and Cyril Zhang. Inductive biases and varia…&quot;
-[WARN] ENTRY-STYLE        p6           [13] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Jacob Trauger and Ambuj Tewari. Sequence length independent norm-based generalization boun…&quot;
-[WARN] ENTRY-STYLE        p6           [14] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Dennis Elbrächter, Dmytro Perekrestenko, Philipp Grohs, and Helmut Bölcskei. Deep neural n…&quot;
-[WARN] ENTRY-STYLE        p6           [15] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Nicholas Carlini, Daniel Paleka, Krishnamurthy Dj Dvijotham, Thomas Steinke, Jonathan Haya…&quot;
-[WARN] ENTRY-STYLE        p6           [16] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Clemens Hutter, Recep Gül, and Helmut Bölcskei. Metric entropy limits on recurrent neu- ra…&quot;
-[WARN] ENTRY-STYLE        p6           [17] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;David Krieg and Mario Ullrich. Function values are enough for L2 -approximation. Founda- t…&quot;
-[WARN] ENTRY-STYLE        p6           [18] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;David Krieg and Mario Ullrich. Function values are enough for L2 -approximation: Part II. …&quot;
-[WARN] ENTRY-STYLE        p7           [19] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Erich Novak and Henryk Woźniakowski. Tractability of Multivariate Problems, Volume II: Sta…&quot;
-[WARN] ENTRY-STYLE        p7           [20] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Matthieu Dolbeault, David Krieg, and Mario Ullrich. A sharp upper bound for sampling numbe…&quot;
-[WARN] ENTRY-STYLE        p7           [21] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Yuhong Yang and Andrew Barron. Information-theoretic determination of minimax rates of con…&quot;
-[WARN] ENTRY-STYLE        p7           [22] authors not in IEEE &#x27;A. B. Surname&#x27; form; title not in quotation marks (&quot;Title,&quot;): &quot;Shivam Garg, Dimitris Tsipras, Percy Liang, and Gregory Valiant. What can transformers lea…&quot;
+[WARN] NO-REFS-SECTION    -            could not locate a References/Bibliography section.
 
-22 finding(s): 0 error, 22 warning, 0 info.
+1 finding(s): 0 error, 1 warning, 0 info.
 
 ==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>related_work_faithfulness_llm.py</span><span class='desc'>each cited related work is described as its own abstract does</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Related-work faithfulness report (LLM, gpt-5-mini-2025-08-07; discover=internal)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 
-Draft: Compressed Sensing of LLMs: Query-Efficient Recovery of a Black-Box Next-Token Function
-Contribution: Formulate black-box LLM auditing as a compressed-sensing problem (evaluation-RIP over a transformer-realizable function class), and give query-complexity upper/lower bounds and robustness analyses for recovering codomain subspaces, restricted sub-domains, and general functionals under realistic API oracles.
+Draft: FLOW-BASED CLUSTERING AND SPECTRAL CLUSTERING: A COMPARISON
+Contribution: Proposes a flow-based graph clustering method that constructs Euclidean node features from total-variation (TV) minimization solutions (with seed nodes) instead of Laplacian eigenvectors, yielding more local features that better handle graph bottlenecks and cases where spectral clustering fails.
 
-[INFO] UNVERIFIABLE        p3     Stealing part of a production language model
-        related: An empirical demonstration of logit-reconstruction via adaptive logit-bias queries and a benchmark for subspace/codomain recovery in production LLMs — directly addresses the same practical target (recovering logits/subspace) under restricted APIs.
-        draft says: &quot;Adaptive logit-bias oracle: query-time perturbations (Carlini et al. [15]) act as designed measurement vectors that reconstruct individual logit coordinates through a top-k API...&quot;; and &quot;Carlini et al. [15] is the empirical existence proof and the controlled benchmark.&quot;
-        abstract shows: The provided abstract describes InstructGPT: fine-tuning GPT-3 with human feedback (supervised + RLHF) to improve alignment, truthfulness, and reduce toxicity.
-        Abstract discusses collecting demonstrations and ranked outputs to fine-tune GPT-3 (InstructGPT) and reports improvements in preference, truthfulness, and toxicity.
-        fix: Either replace this citation with Carlini et al.&#x27;s logit-bias/top-k attack paper if you mean adaptive logit-bias attacks, or change the related-work text to reflect that the cited InstructGPT paper is about RLHF and not logit-bias/top-k attack techniques.
-
-[INFO] FAITHFUL            p1     Stealing machine learning models via prediction APIs
-        related: A seminal model-stealing / prediction-API attack paper that originally framed model extraction from query access; provides the classical API-threat baseline the thesis builds on and contrasts with.
-        draft says: &quot;...and that earlier underpinned prediction-API model stealing [4]:&quot; (cited as antecedent motivating compressibility priors and recovery from prediction-API traces).
-        abstract shows: The abstract presents black-box model-extraction attacks on prediction APIs, demonstrating efficient attacks against logistic regression, neural nets, and decision trees and discussing the (in)effectiveness of omitting confidence values.
-        Abstract explains attacks that duplicate model functionality from query access, demonstrations against BigML/Amazon services, and notes confidence-omission still allows extraction.
-
-[INFO] UNVERIFIABLE        p3     Metric entropy limits on recurrent neural network learning of linear d
-        related: Identified by the draft as the closest prior for recovering systems from input–output traces in a metric-entropy-optimal manner; represents closest theoretical antecedent linking metric entropy to IO-based recovery.
-        draft says: &quot;The closest prior on recovering a system from input–output traces in a metric-entropy-optimal manner is Hutter et al. [16].&quot;
-        abstract shows: No abstract was provided, so the content and claims of this work cannot be assessed here.
+[INFO] UNVERIFIABLE        p2     A tutorial on spectral clustering
+        related: Spectral clustering (using Laplacian eigenvectors to form node features) is the primary baseline approach the paper compares against and departs from.
+        draft says: &quot;Before we detail our construction of the feature vectors x(i) let us briefly review the construction used by spectral graph clustering methods [9]. ... The most basic variant of spectral clustering constructs the node feature vectors using the eigenvectors of the graph Laplacian matrix L = D − A [9].&quot; (Section III)
+        abstract shows: No abstract provided, so the tutorial&#x27;s precise scope and claims cannot be verified here.
         note: no abstract retrieved for this title — verdict is unverified against the real work.
-        The abstract field is missing, preventing verification of what results or settings (metric-entropy, RNNs, LDS) the cited work actually establishes.
-        fix: Include the paper&#x27;s abstract or a concise summary of its main theorems and assumptions; if claiming to extend it, state which specific results or assumptions you generalize and cite exact sections or theorem numbers.
+        The abstract is missing (&#x27;no abstract retrieved&#x27;), preventing validation of whether the draft&#x27;s summary of spectral clustering matches the tutorial.
+        fix: Provide the tutorial&#x27;s abstract or cite a canonical source and briefly summarize its description of Laplacian-eigenvector-based feature construction so the relation can be verified.
 
-3 related work(s) checked; 0 warning(s).  (tokens: 9965)
+[INFO] FAITHFUL            p4     Fundamental Limitations of Spectral Clustering
+        related: Provides prior analysis/demonstrations of cases where spectral clustering fails (e.g., chain graphs, clusters with widely varying sizes); the draft uses such examples/datasets to motivate and compare the proposed method.
+        draft says: The draft cites [28] when discussing empirical examples and failure modes: &quot;There are certain types of empirical graphs that are challenging for spectral clustering methods ... For example, spectral methods tend to fail for datasets that consist of clusters with significantly varying sizes (see Section VI-A).&quot; In VI-A the dataset of [28] is used to compare methods.
+        abstract shows: Shows that spectral methods fail on datasets with structures at different scales and provides synthetic and real examples plus a diffusion-based coherence measure.
+        The abstract states eigenvectors cannot cluster datasets with different scales, presents examples where spectral clustering fails, and proposes a diffusion-based measure that finds expected clusters.
 
-==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>bibliography_linter.py</span><span class='desc'>cited works exist with the right authors, title, and venue</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>[1] Emmanuel J. Candès and Terence Tao. Decoding by linear programming. IEEE Transactions on I
-../../topics/compressed-sensing-llms/proposal.pdf:[1]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[2] David L. Donoho. Compressed sensing. IEEE Transactions on Information Theory, 52(4): 1289–
-../../topics/compressed-sensing-llms/proposal.pdf:[2]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[3] Emmanuel J. Candès and Terence Tao. Near-optimal signal recovery from random projec- tions
-../../topics/compressed-sensing-llms/proposal.pdf:[3]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[4] Florian Tramèr, Fan Zhang, Ari Juels, Michael K. Reiter, and Thomas Ristenpart. Steal- ing
-../../topics/compressed-sensing-llms/proposal.pdf:[4]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[5] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Ł
-../../topics/compressed-sensing-llms/proposal.pdf:[5]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[6] Zhilin Yang, Zihang Dai, Ruslan Salakhutdinov, and William W. Cohen. Breaking the softmax 
-../../topics/compressed-sensing-llms/proposal.pdf:[6]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[7] Hyunjik Kim, George Papamakarios, and Andriy Mnih. The Lipschitz constant of self- attenti
-../../topics/compressed-sensing-llms/proposal.pdf:[7]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[8] Valentin Castin, Pierre Ablin, and Gabriel Peyré. How smooth is attention? In Proceedings 
-../../topics/compressed-sensing-llms/proposal.pdf:[8]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[9] James Vuckovic, Aristide Baratin, and Rémi Tachet des Combes. On the regularity of attenti
-../../topics/compressed-sensing-llms/proposal.pdf:[9]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[10] Andrei N. Kolmogorov and Vladimir M. Tikhomirov. ε-entropy and ε-capacity of sets in funct
-../../topics/compressed-sensing-llms/proposal.pdf:[10]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[11] Martin Anthony and Peter L. Bartlett. Neural Network Learning: Theoretical Foundations. Ca
-../../topics/compressed-sensing-llms/proposal.pdf:[11]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[12] Benjamin L. Edelman, Surbhi Goel, Sham Kakade, and Cyril Zhang. Inductive biases and varia
-../../topics/compressed-sensing-llms/proposal.pdf:[12]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[13] Jacob Trauger and Ambuj Tewari. Sequence length independent norm-based generalization boun
-../../topics/compressed-sensing-llms/proposal.pdf:[13]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[14] Dennis Elbrächter, Dmytro Perekrestenko, Philipp Grohs, and Helmut Bölcskei. Deep neural n
-../../topics/compressed-sensing-llms/proposal.pdf:[14]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[15] Nicholas Carlini, Daniel Paleka, Krishnamurthy Dj Dvijotham, Thomas Steinke, Jonathan Haya
-../../topics/compressed-sensing-llms/proposal.pdf:[15]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[16] Clemens Hutter, Recep Gül, and Helmut Bölcskei. Metric entropy limits on recurrent neu- ra
-../../topics/compressed-sensing-llms/proposal.pdf:[16]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[17] David Krieg and Mario Ullrich. Function values are enough for L2 -approximation. Founda- t
-../../topics/compressed-sensing-llms/proposal.pdf:[17]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[18] David Krieg and Mario Ullrich. Function values are enough for L2 -approximation: Part II. 
-../../topics/compressed-sensing-llms/proposal.pdf:[18]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[19] Erich Novak and Henryk Woźniakowski. Tractability of Multivariate Problems, Volume II: Sta
-../../topics/compressed-sensing-llms/proposal.pdf:[19]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[20] Matthieu Dolbeault, David Krieg, and Mario Ullrich. A sharp upper bound for sampling numbe
-../../topics/compressed-sensing-llms/proposal.pdf:[20]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[21] Yuhong Yang and Andrew Barron. Information-theoretic determination of minimax rates of con
-../../topics/compressed-sensing-llms/proposal.pdf:[21]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
-[22] Shivam Garg, Dimitris Tsipras, Percy Liang, and Gregory Valiant. What can transformers lea
-../../topics/compressed-sensing-llms/proposal.pdf:[22]: [INFO] INCOMPLETE: no title could be parsed; entry cannot be verified (check completeness of the entry)
+[INFO] FAITHFUL            p3     Local Graph Clustering With Network Lasso
+        related: Presents prior work by the authors on the duality between TV minimization and network flow / local graph clustering; the present paper builds directly on that duality and uses it to derive the proposed algorithms.
+        draft says: &quot;We have recently explored the duality between TV minimization (3) and network flow optimization [10]. This duality allows to characterize the solution û of (3) in terms of network flows.&quot; (page 3)
+        abstract shows: Analyzes network Lasso (nLasso) which minimizes total variation and characterizes clusters via network flows between cluster boundaries and seed nodes; handles chain-like clusters.
+        The abstract explicitly links nLasso to network flows and TV minimization, notes its effectiveness on chain-like clusters, and discusses primal-dual optimization methods.
 
-checked 22 entr(ies): 0 verified, 0 error(s), 0 warning(s), 22 unverifiable/skipped   (cache: ../../topics/compressed-sensing-llms/.bibcheck_cache.json)</pre></div></details></section><section class='group'><h2>Language &amp; prose</h2><details class='card s-findings'><summary><span class='name mono'>acronym_lint.py</span><span class='desc'>every acronym is expanded at first use</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Acronym lint report
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+3 related work(s) checked; 0 warning(s).  (tokens: 12833)
+
+==========================================================================</pre></div></details></section><section class='group'><h2>Language &amp; prose</h2><details class='card s-findings'><summary><span class='name mono'>acronym_lint.py</span><span class='desc'>every acronym is expanded at first use</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Acronym lint report
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 Checks that every acronym is expanded at its first use and not re-expanded later. The location points at the first offending use.
 
 How to read: [ERROR] almost certainly a defect, fix it · [WARN] worth reviewing, sometimes a false positive · [INFO] optional check, usually fine.
 
-[WARN] NEVER-EXPANDED     p1           &#x27;LLM&#x27; used 4 time(s) but never expanded (first use at p1).
-[WARN] NEVER-EXPANDED     p1           &#x27;RL&#x27; used 2 time(s) but never expanded (first use at p1).
-[WARN] NEVER-EXPANDED     p1           &#x27;RV&#x27; used 5 time(s) but never expanded (first use at p1).
-[WARN] NEVER-EXPANDED     p1           &#x27;WU&#x27; used 4 time(s) but never expanded (first use at p1).
-[WARN] NEVER-EXPANDED     p2           &#x27;RIP&#x27; used 5 time(s) but never expanded (first use at p2).
-[WARN] NEVER-EXPANDED     p2           &#x27;SVD&#x27; used 2 time(s) but never expanded (first use at p2).
+[WARN] NEVER-EXPANDED     p1           &#x27;BASED&#x27; used 2 time(s) but never expanded (first use at p1).
+[WARN] NEVER-EXPANDED     p1           &#x27;FLOW&#x27; used 2 time(s) but never expanded (first use at p1).
+[WARN] USED-BEFORE-EXPANSION p2           &#x27;TV&#x27; used at p2 before its expansion &quot;with solutions of total variation (TV)&quot; at p2 (2 early use(s)).
+[WARN] NEVER-EXPANDED     p5           &#x27;CRC&#x27; used 2 time(s) but never expanded (first use at p5).
+[WARN] NEVER-EXPANDED     p5           &#x27;MIT&#x27; used 3 time(s) but never expanded (first use at p5).
+[INFO] EXPANDED-ONCE-UNUSED p1           &#x27;GMM&#x27; expanded as &quot;such as k-means or Gaussian mixture model&quot; but never used afterwards — consider dropping the acronym.
 
-6 finding(s): 0 error, 6 warning, 0 info.
+6 finding(s): 0 error, 5 warning, 1 info.
 
 ==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>prose_lint.py</span><span class='desc'>prose defects: dangling references, vague quantifiers (regex)</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Prose lint report (self-editing pass)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 Flags self-editing prose issues: vague quantifiers without a number, colloquial/undefined claims, forward-looking cue phrases, and dangling references.
 
 How to read: [ERROR] almost certainly a defect, fix it · [WARN] worth reviewing, sometimes a false positive · [INFO] optional check, usually fine.
 
-[INFO] DANGLING-REFERENCE p3           sentence opens with bare &#x27;This is&#x27; — check the antecedent: &quot;This is a functional of fθ , recoverable as numerical- rank / subspace recovery (SVD of st…&quot;
+[INFO] DANGLING-REFERENCE p4           sentence opens with bare &#x27;It is&#x27; — check the antecedent: &quot;It is instructive to interpret Algorithm 1 as a message pass-      1: initialize S := ∅ (r…&quot;
 
 1 finding(s): 0 error, 0 warning, 1 info.
 
 ==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>terminology_lint.py</span><span class='desc'>terminology matches the Aalto ML dictionary</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Terminology lint report (Aalto Dictionary of ML)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 Flags synonym switching between equivalent terms; each cluster lists the Aalto Dictionary of ML term to standardise on first.
 
-How to read: [ERROR] almost certainly a defect, fix it · [WARN] worth reviewing, sometimes a false positive · [INFO] optional check, usually fine.
-
-[INFO] NON-DICTIONARY     p1           uses &#x27;sample&#x27; x5 consistently; the Aalto Dictionary term is &#x27;data point&#x27;.
-[INFO] NON-DICTIONARY     p1           uses &#x27;target&#x27; x9 consistently; the Aalto Dictionary term is &#x27;label&#x27;.
-
-2 finding(s): 0 error, 0 warning, 2 info.
+No findings.
 
 ==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>flow_lint_llm.py</span><span class='desc'>paragraph-to-paragraph flow and leaf-section openers</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Narrative flow lint report (LLM)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 LLM check: do section openers stand alone (read at the heading), and do consecutive paragraphs follow without narrative jumps?
 
 How to read: [ERROR] almost certainly a defect, fix it · [WARN] worth reviewing, sometimes a false positive · [INFO] optional check, usually fine.
 
-[WARN] OPAQUE-OPENER      p1           Why Compressed Sensing Applies: the Compressibility Priors: opens &quot;A generic function VL →RV is unrecoverable from few samples — the domain has siz&quot; — The sentence &#x27;Recovery is possible only because fθ is not generic.&#x27; uses fθ without introducing what it denotes; the referent is defined earlier, not here. || rewrite: A generic function V^L → R^V is unrecoverable from few samples—the domain has size |V|^L. Recovery is possible only because the specific mapping we study, fθ: V^L → R^V, is not generic and exhibits compressible structure.
-[WARN] OPAQUE-OPENER      p3           Research Questions: opens &quot;RQ1. When does the point-evaluation operator satisfy a restricted isometry over &quot; — Unresolved references to previously defined notation and assumptions: &quot;the transformer-realizable class F&quot; and &quot;the four compressibility priors (P1–P4)&quot; depend on earlier definitions not given here. || rewrite: RQ1. When does the point-evaluation operator satisfy a restricted isometry over the class F of functions realizable by the transformer architectures studied in this thesis, and how do the four compressibility priors examined here influence the isometry constant?
-[WARN] OPAQUE-OPENER      p4           Evaluation: opens &quot;-RIP condition for F; import metric-entropy bounds for transformer-type classes &quot; — Telegraphic list with unresolved references (e.g., undefined F and “the isometry”) and no complete sentence framing the Evaluation; opener depends on prior context. || rewrite: This section evaluates our contributions on both theory and practice. On the theoretical side, we establish a Restricted Isometry Property (RIP) for the feature operator F defined in Section 3.1, import metric-entropy bounds for transformer-type hypothesis classes together with sampling-number results to derive query‑complexity upper bounds, prove matching packing-based lower bounds, and analyze restricted oracles as perturbations of the underlying isometry in the RIP condition; on the empirical side, we present experiments that validate these predictions.
-[WARN] OPAQUE-OPENER      p5           Risks and Contingencies: opens &quot;• The point-evaluation operator may resist a clean RIP for the full class. Mitig&quot; — References to an undefined function class F, unspecified &#x27;full class,&#x27; and prior-defined targets T1–T3 make the opener depend on earlier context. || rewrite: Risk 1: For the function class F considered in this thesis, the point-evaluation operator E_x may fail to satisfy a clean restricted isometry property (RIP) over the entire class. Contingency: Because we assume smoothness of F, we instead work in the sampling-numbers regime; when a global RIP is unavailable, we restrict analysis to the target families T1–T3 introduced earlier, whose quotient classes have small metric entropy and admit (near-)isometries. Risk 2: The restricted oracles defined in our setting may preclude any access to logits.
-[WARN] OPAQUE-OPENER      p5           Indicative Timeline (6 months): opens &quot;Month Milestone 1 Formalise the function/measurement model; consolidate metric-e&quot; — The opener relies on undefined labels and shorthands—particularly T1, T2, T3 (task references) and “def”—which presume prior definitions and make the timeline read like a continuation rather than a self-contained start. || rewrite: This section outlines a six-month plan: Month 1 will formalize the function/measurement model and consolidate metric-entropy and sampling-number tools; Month 2 will develop evaluation-RIP theory and introduce Task T1 (codomain recovery) along with a benchmarking harness; Month 3 will empirically validate T1 and conduct an oracle-robustness study; Month 4 will address Task T2 (sub-domain restriction) and Task T3 (functional estimation) by deriving upper and lower complexity bounds; Month 5 will run T2/T3 experiments to characterize query-complexity scaling laws; Month 6 will synthesize results and complete thesis writing and defense.
+[WARN] FLOW-BREAK         p5           &quot;[14] A. Jung, A O. Hero, A. Mara, S. Jahromi, A. Heimowitz, and Y.C. Eldar.&quot; — Non-sequitur: P11 consists of bibliography entries and a figure caption fragment, abruptly replacing the body text about Algorithm 2/Fig.3 in P10. Nothing in P1
 
-5 finding(s): 0 error, 5 warning, 0 info.
+1 finding(s): 0 error, 1 warning, 0 info.
 
-11 opener(s) and 43 transition(s) judged.  (tokens: 28299)
+8 opener(s) and 11 transition(s) judged.  (tokens: 15834)
 
 ==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>prose_lint_llm.py</span><span class='desc'>self-editing pass: uncited claims, category errors, buzzwords</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Prose lint report (LLM self-editing pass, gpt-5-mini-2025-08-07)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 LLM self-editing pass: uncited claims, tense drift, jargon, informal register, category errors, empty buzzwords, and more.
 
 How to read: [ERROR] almost certainly a defect, fix it · [WARN] worth reviewing, sometimes a false positive · [INFO] optional check, usually fine.
 
-[WARN] BROKEN-IDIOM       p1           &quot;essentiallyPas powerful as optimal linear measurements&quot; — Phrase appears garbled; likely intended &#x27;essentially as powerful&#x27;. This is a non-standard/mangled idiom that should be corrected for clarity
-[WARN] VAGUE-QUANTIFIER   p1           &quot;far fewer queries than full recovery&quot; — &#x27;Far fewer&#x27; is a vague comparative quantifier with no numeric scale or bound. State a quantitative factor, asymptotic rate, or justify with 
-[WARN] VAGUE-QUANTIFIER   p1           &quot;When it holds with small δ&quot; — &#x27;Small δ&#x27; is imprecise here. Give a numeric range, asymptotic regime, or a formal definition of what &#x27;small&#x27; means for the isometry constant
-[WARN] UNMOTIVATED-SECTION p1           &quot;4    Core Theoretical Object: Restricted Isometry over F via Point Evaluation&quot; — The section immediately begins with a technical definition (&#x27;Fix a context distribution D...&#x27;) without a brief sentence saying what the sect
-[WARN] JARGON             p1           &quot;point evaluations are informative&quot; — &#x27;Informative&#x27; is used as an evaluative property but is not defined or measured here. Replace with a precise statement (e.g. &#x27;preserve norm u
-[WARN] UNMOTIVATED-SECTION p4           &quot;7    Methodology Theory track.&quot; — The &#x27;Methodology&#x27; heading is followed immediately by terse task bullets without an introductory sentence that states what the section will c
-[WARN] UNMOTIVATED-SECTION p4           &quot;8    Evaluation • Recovery accuracy:&quot; — The &#x27;Evaluation&#x27; heading jumps straight into metric bullets with no opening sentence describing the evaluation goals, scope, or rationale fo
-[WARN] SYNONYM-SWITCH     p4           &quot;compare achieved query counts against the theory; measured m vs predicted complexity; query budget&quot; — The text uses multiple terms (&#x27;achieved query counts&#x27;, &#x27;measured m&#x27;, &#x27;query budget&#x27;) to refer to the same quantity (number of queries). Pick
-[WARN] JARGON             p4           &quot;stress-test under simulated top-k and sampling oracles&quot; — &#x27;stress-test&#x27; is informal ML-speak that obscures the exact evaluation being performed. Replace with a precise description of the experiments
-[WARN] VAGUE-QUANTIFIER   p4           &quot;small metric entropy&quot; — The adjective &#x27;small&#x27; is qualitative here; give a quantitative bound or rate (e.g., entropy ≤ C·log(1/ε) or an explicit covering-number boun
+[ERROR] CATEGORY-ERROR     p1           &quot;such as k-means of soft clustering [29],&quot; — k-means is a hard (crisp) clustering algorithm, not a soft clustering method. The sentence presents k-means as an instance of &quot;soft clusteri [-&gt; such as k-means or GMM-based soft cluste]
+[ERROR] JARGON             p1           &quot;better reflect the cluster geometry of G in terms of bottlenecks for network flows between different&quot; — The claim that the proposed feature vectors &#x27;better reflect the cluster geometry&#x27; asserts a comparative property (&#x27;better&#x27;) without any defi [-&gt; better reflect the cluster geometry of G]
+[ERROR] JARGON             p4           &quot;empirical graph is forced to be sparse&quot; — The property named is &#x27;sparsity&#x27; but the chunk gives no definition or metric for it (e.g. target average degree, edge-density, or fraction o [-&gt; empirical graph is made sparse (define s]
+[WARN] EMPTY-BUZZWORD     p1           &quot;novel graph clustering method&quot; — The adjective &#x27;novel&#x27; is an unearned, content-free qualifier here. Either provide a precise statement of what is new, or drop &#x27;novel&#x27; and de [-&gt; a graph clustering method]
+[WARN] VAGUE-QUANTIFIER   p1           &quot;clusters with significantly varying sizes&quot; — &#x27;significantly&#x27; is qualitative. For an empirical or comparative claim about performance on imbalanced clusters, state a quantitative thresho [-&gt; clusters with varying sizes (specify the]
+[WARN] VAGUE-QUANTIFIER   p1           &quot;the weight Ao of the single boundary edge is slightly smaller.&quot; — &#x27;slightly smaller&#x27; is imprecise. Give a numerical difference or parameter (e.g., Ao = 1 − ε with ε &gt; 0) so the effect can be reproduced or a [-&gt; the weight Ao of the single boundary edg]
+[WARN] VAGUE-QUANTIFIER   p3           &quot;As shown in Figure 3, our method significantly outperforms spectral clustering.&quot; — The comparative claim uses the vague quantifier &#x27;significantly&#x27; but gives no numerical result, metric name, confidence interval, or statisti [-&gt; As shown in Figure 3, our method achieve]
+[WARN] VAGUE-QUANTIFIER   p3           &quot;sufficiently large such that the output of Algorithm 1 can be considered a (numeric) solution to (3)&quot; — The phrase &#x27;sufficiently large&#x27; is a vague quantifier about the number of iterations R. For clarity and reproducibility the authors should r [-&gt; large enough to satisfy a specified conv]
+[WARN] UNMOTIVATED-SECTION p3           &quot;VI. NUMERICAL EXPERIMENTS&quot; — The section heading is immediately followed by dataset and implementation details without an opening sentence stating the goals and evaluati [-&gt; VI. Numerical experiments. In this secti]
+[WARN] VAGUE-QUANTIFIER   p4           &quot;the algorithm can accurately detect which pixels belong to the object&quot; — &#x27;accurately&#x27; is a vague performance qualifier. A numerical metric (e.g. IoU, pixel accuracy, or precision/recall with values) or statistical [-&gt; the algorithm detects which pixels belon]
+[WARN] VAGUE-QUANTIFIER   p4           &quot;have a sufficiently large number of common neighbours with i0&quot; — &#x27;sufficiently large&#x27; leaves a critical threshold unspecified. Give the numeric threshold or an explicit selection rule so the procedure is r [-&gt; have at least k common neighbours with i]
+[WARN] VAGUE-QUANTIFIER   p4           &quot;out-performs spectral clustering&quot; — A comparative performance claim is made with no numeric results or test. Provide the evaluation metric, numeric scores, and, if appropriate, [-&gt; out-performs spectral clustering (report]
+[INFO] SYNONYM-SWITCH     p4           &quot;clustering result ... segmentation result&quot; — The text uses &#x27;clustering result&#x27; and &#x27;segmentation result&#x27; seemingly interchangeably for the image output. Pick one term and use it consist [-&gt; use a single consistent term (either &#x27;cl]
 
-10 finding(s): 0 error, 10 warning, 0 info.
+13 finding(s): 3 error, 9 warning, 1 info.
 
-Total tokens used: 12930
+Total tokens used: 24072
 
 ==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>forward_ref_lint_llm.py</span><span class='desc'>concepts used before they are introduced (LLM)</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Forward-reference lint report (LLM judge)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
-Paragraphs scanned: 98
-Concepts introduced (cumulative): 45
-Forward references found: 150
-Total tokens used: 111228
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+Paragraphs scanned: 113
+Concepts introduced (cumulative): 38
+Forward references found: 100
+Total tokens used: 141798
 
 == Paragraph 0 (page 1)
-  * text: Compressed Sensing of LLMs
-  * forward-ref: &#x27;Compressed Sensing&#x27;
-  * forward-ref: &#x27;LLMs&#x27;
-
-== Paragraph 1 (page 1)
-  * text: Query-Efficient Recovery of a Black-Box Next-Token Function
-  * forward-ref: &#x27;next-token function&#x27;
+  * text: FLOW-BASED CLUSTERING AND SPECTRAL CLUSTERING: A COMPARISON
+  * forward-ref: &#x27;FLOW-BASED CLUSTERING&#x27;
+  * forward-ref: &#x27;SPECTRAL CLUSTERING&#x27;
 
 == Paragraph 3 (page 1)
-  * text: MSc in Computer Science / Machine Learning, Data Science and Artificial Intelligence 30 ECTS · Supervisor: Prof. A. Jung Department of Computer Science, Aalto University
-  * forward-ref: &#x27;MSc&#x27;
-  * forward-ref: &#x27;ECTS&#x27;
-
-== Paragraph 5 (page 1)
-  * text: We model a language model as a single deterministic nonlinear function
-  * forward-ref: &#x27;language model&#x27;
-
-== Paragraph 6 (page 1)
-  * text: fθ : VL →RV, c 7→z = fθ(c),
-  * forward-ref: &#x27;VL&#x27;
-  * forward-ref: &#x27;RV&#x27;
-  * forward-ref: &#x27;c&#x27;
-  * also introduces here: &#x27;fθ&#x27;, &#x27;z&#x27;
-
-== Paragraph 7 (page 1)
-  * text: mapping a context window c (a token sequence of length up to L) to the logit vector z over the next token, where V is the vocabulary. Auditing a closed LLM can be framed as a funct…
-  * forward-ref: &#x27;closed LLM&#x27;
-  * forward-ref: &#x27;function recovery problem&#x27;
-  * forward-ref: &#x27;compressed-sensing&#x27;
-  * forward-ref: &#x27;m&#x27;
-  * forward-ref: &#x27;evaluation operator&#x27;
-  * forward-ref: &#x27;query designs&#x27;
-  * also introduces here: &#x27;c&#x27;, &#x27;L&#x27;, &#x27;V&#x27;
-
-== Paragraph 8 (page 1)
-  * text: 2 Why Compressed Sensing Applies: the Compressibility Priors
-  * forward-ref: &#x27;Compressed Sensing&#x27;
-  * forward-ref: &#x27;Compressibility Priors&#x27;
+  * text: ABSTRACT We propose and study a novel graph clustering method for data with an intrinsic network structure. Similar to spectral clustering, we exploit an intrinsic network structur…
+  * forward-ref: &#x27;spectral clustering&#x27;
+  * forward-ref: &#x27;graph Laplacian&#x27;
+  * forward-ref: &#x27;total variation minimization&#x27;
+  * forward-ref: &#x27;seed nodes&#x27;
+  * forward-ref: &#x27;k-means&#x27;
+  * forward-ref: &#x27;soft clustering&#x27;
+  * also introduces here: &#x27;Gaussian mixture model (GMM)&#x27;
 
 == Paragraph 9 (page 1)
-  * text: A generic function VL →RV is unrecoverable from few samples — the domain has size |V|L. Recovery is possible only because fθ is not generic. Four structural facts play the role tha…
-  * forward-ref: &#x27;sparsity&#x27;
-  * forward-ref: &#x27;compressed sensing&#x27;
-  * forward-ref: &#x27;prediction-API model stealing&#x27;
+  * text: i′ Ai,i′ for each node i. The graph Laplacian matrix L := D −A is instrumental for spectral clustering methods (see Section III). There are also vector spaces naturally associated …
+  * forward-ref: &#x27;spectral clustering&#x27;
+  * forward-ref: &#x27;cut-size&#x27;
+  * also introduces here: &#x27;graph Laplacian matrix L&#x27;, &#x27;Rn&#x27;, &#x27;R_{→E}&#x27;, &#x27;clustering assumption&#x27;, &#x27;cluster&#x27;
 
-== Paragraph 11 (page 1)
-  * text: and un-embedding WU ∈RV×d, d ≪|V| [5]. Hence range(fθ) lies in a d-dimensional subspace, and since softmax(z + c1) = softmax(z) the next-token distribution identifies z only modulo…
-  * forward-ref: &#x27;un-embedding&#x27;
-  * forward-ref: &#x27;softmax&#x27;
-  * forward-ref: &#x27;next-token distribution&#x27;
-  * forward-ref: &#x27;span{1}&#x27;
-  * forward-ref: &#x27;softmax bottleneck&#x27;
+== Paragraph 10 (page 2)
+  * text: of cluster [9]. By the maxﬂow/mincut duality, requiring a small cut is equivalent to requiring a minimum amount of network ﬂow that can be routed from the nodes inside a cluster th…
+  * forward-ref: &#x27;maxflow/mincut duality&#x27;
+  * forward-ref: &#x27;cut&#x27;
+  * forward-ref: &#x27;network flow&#x27;
+  * also introduces here: &#x27;feature vectors x(i)&#x27;
 
-== Paragraph 13 (page 1)
-  * text: (P3) Lipschitz smoothness. On the compact embedding domain (bounded token embeddings plus positional encodings), fθ is a composition of C1 maps and is therefore Lipschitz, with con…
-  * forward-ref: &#x27;Lipschitz smoothness&#x27;
-  * forward-ref: &#x27;C1 maps&#x27;
-  * forward-ref: &#x27;operator norms&#x27;
-  * forward-ref: &#x27;dot-product self-attention&#x27;
-  * forward-ref: &#x27;positional encodings&#x27;
-  * forward-ref: &#x27;local Lipschitz constant&#x27;
-  * also introduces here: &#x27;compact embedding domain&#x27;
+== Paragraph 11 (page 2)
+  * text: that belong to a well-connected subset of nodes (a cluster) have more feature vectors x(i), x(i′) with a small Euclidean distance 
 
-== Paragraph 14 (page 1)
-  * text: L · poly(R, ∥W∥) [8, Thm. 3.3] (see also 9). Thus nearby contexts produce nearby logits — the condition under which point evaluations are informative (Section 4).
-  * forward-ref: &#x27;R&#x27;
-  * forward-ref: &#x27;logits&#x27;
+x(i) −x(i′)
 
-== Paragraph 16 (page 2)
-  * text: (P4) Small description complexity. For a bounded-weight, fixed architecture the metric en- tropy of the realizable class grows only polynomially in 1/ε — roughly Hε(F) ≲W log(1/ε) …
-  * forward-ref: &#x27;metric entropy&#x27;
-  * forward-ref: &#x27;Hε(F)&#x27;
-  * forward-ref: &#x27;realizable class&#x27;
-  * forward-ref: &#x27;transformer class&#x27;
-  * forward-ref: &#x27;covering-number bounds&#x27;
-  * forward-ref: &#x27;Kolmogorov–Donoho rate-distortion optimal approximants&#x27;
-  * forward-ref: &#x27;ambient dimension D&#x27;
-  * forward-ref: &#x27;embedding dimension&#x27;
-  * forward-ref: &#x27;context length&#x27;
-  * also introduces here: &#x27;Small description complexity&#x27;
+. Loosely speaking, the feature con…
+  * forward-ref: &#x27;k-means&#x27;
+  * forward-ref: &#x27;soft clustering&#x27;
+
+== Paragraph 14 (page 2)
+  * text: using the eigenvectors of the graph Laplacian matrix L = D −A [9]. The matrix L is positive semi-deﬁnite (psd) and therefore we can ﬁnd an orthonormal set of eigenvectors [11]
+  * forward-ref: &#x27;eigenvectors&#x27;
+  * forward-ref: &#x27;orthonormal set&#x27;
+  * also introduces here: &#x27;positive semi-definite (psd)&#x27;
+
+== Paragraph 18 (page 2)
+  * text: The Ideal Case. To develop some intuition for the use- fulness of the construction (2), consider an empirical graph that contains k components C(1), . . . , C(k) ⊆V that are not co…
+  * forward-ref: &#x27;k-means&#x27;
+  * also introduces here: &#x27;components C(1), ..., C(k)&#x27;, &#x27;indicator vectors e(c)&#x27;
 
 == Paragraph 19 (page 2)
-  * text: Black-box access furnishes an evaluation operator Φ : F →(RV)m, Φ(f) = (f(c1), . . . , f(cm)), instantiated at several realism levels:
-  * forward-ref: &#x27;evaluation operator Φ&#x27;
-  * forward-ref: &#x27;F&#x27;
-  * forward-ref: &#x27;RV&#x27;
+  * text: There are certain types of empirical graphs that are chal- lenging for spectral clustering methods that use the features (2) [9], [27], [28]. For example, spectral methods tend to …
+  * forward-ref: &#x27;λ1&#x27;
+  * forward-ref: &#x27;u(1)&#x27;
+  * also introduces here: &#x27;chain graph&#x27;, &#x27;Ao&#x27;
 
-== Paragraph 22 (page 2)
-  * text: • Sampled-token oracle: only stochastic draws from softmax(z) — noisy, quantised measure- ments requiring repetition to denoise.
-  * forward-ref: &#x27;softmax&#x27;
-  * also introduces here: &#x27;Sampled-token oracle&#x27;
+== Paragraph 27 (page 2)
+  * text: 1 5 10 15 20 Fig. 1: Solution of TV minimization (“◦”) for the chain graph obtained from Algorithm 1 using R = 1000 iterations. Entries (“⋆”) of the eigenvector u(2) corresponding …
+  * forward-ref: &#x27;TV minimization&#x27;
+  * forward-ref: &#x27;Algorithm 1&#x27;
+  * forward-ref: &#x27;R&#x27;
 
-== Paragraph 23 (page 2)
-  * text: • Adaptive logit-bias oracle: query-time perturbations (Carlini et al. [15]) act as designed measurement vectors that reconstruct individual logit coordinates through a top-k API, …
-  * forward-ref: &#x27;SVD&#x27;
-  * forward-ref: &#x27;subspace probing&#x27;
-  * forward-ref: &#x27;query-time perturbations&#x27;
-  * also introduces here: &#x27;Adaptive logit-bias oracle&#x27;
-
-== Paragraph 24 (page 2)
-  * text: A central practical theme is how these restricted oracles degrade the recovery guarantees of the full-logit case — i.e. how API defenses act as perturbations of the measurement ope…
-  * forward-ref: &#x27;API defenses&#x27;
-
-== Paragraph 25 (page 2)
-  * text: 4 Core Theoretical Object: Restricted Isometry over F via Point Evaluation
-  * forward-ref: &#x27;Restricted Isometry&#x27;
-  * forward-ref: &#x27;F&#x27;
-  * forward-ref: &#x27;Point Evaluation&#x27;
-
-== Paragraph 26 (page 2)
-  * text: Fix a context distribution D and the population seminorm ∥f∥2 = Ec∼D∥f(c)∥2. Draw probe
-  * forward-ref: &#x27;probe&#x27;
-  * also introduces here: &#x27;context distribution D&#x27;, &#x27;population seminorm ∥f∥2 = E_{c∼D}∥f(c)∥2&#x27;
-
-== Paragraph 28 (page 2)
-  * text: m P i ∥f(ci)∥2. The recovery problem is well-posed precisely when the evaluation operator is a restricted isometry over the difference set F −F.
-  * forward-ref: &#x27;recovery problem&#x27;
-  * forward-ref: &#x27;evaluation operator&#x27;
-  * forward-ref: &#x27;restricted isometry&#x27;
-  * forward-ref: &#x27;F&#x27;
-
-== Paragraph 29 (page 2)
-  * text: Condition 1 (Evaluation-RIP over F). There exists δ ∈(0, 1) such that, for all f, g ∈F,
-  * forward-ref: &#x27;F&#x27;
-  * also introduces here: &#x27;Evaluation-RIP&#x27;
+== Paragraph 30 (page 2)
+  * text: xi := ˆu(S) i (3)
+  * forward-ref: &#x27;ˆu(S)&#x27;
+  * also introduces here: &#x27;xi&#x27;
 
 == Paragraph 32 (page 2)
-  * text: i=1 ∥f(ci) −g(ci)∥2 ≤(1 + δ) ∥f −g∥2.
-  * forward-ref: &#x27;g&#x27;
-  * forward-ref: &#x27;δ&#x27;
+  * text: 0 0.5 1 Fig. 2: Scatterplot of (scalar) node features xi constructed by spectral and ﬂow-based clustering for the chain graph in Figure 1. Spectral clustering uses the entries (“⋆”…
+  * forward-ref: &#x27;flow-based clustering&#x27;
+  * forward-ref: &#x27;TV minimization&#x27;
 
 == Paragraph 33 (page 2)
-  * text: Condition 1 says: any two models agreeing on the m probe contexts must be globally close. When it holds with small δ, evaluations at {ci} form a norm-preserving sketch of the entir…
-  * forward-ref: &#x27;Condition 1&#x27;
-  * forward-ref: &#x27;probe contexts&#x27;
-  * forward-ref: &#x27;m&#x27;
-  * forward-ref: &#x27;δ&#x27;
-  * forward-ref: &#x27;norm-preserving sketch&#x27;
-  * forward-ref: &#x27;F&#x27;
+  * text: We next describe our novel construction of feature vectors. The idea is to replace the eigenvectors of the Laplacian in (2) with solutions of total variation (TV) minimization prob…
+  * forward-ref: &#x27;network flows&#x27;
+  * forward-ref: &#x27;flow bottlenecks&#x27;
+  * also introduces here: &#x27;total variation (TV) minimization&#x27;
 
-== Paragraph 35 (page 3)
-  * text: Sample complexity via metric entropy. The uniform isometry is an empirical-process state- ment; the required m is governed by the metric entropy Hε(F) of the transformer class. Nor…
-  * forward-ref: &#x27;empirical-process&#x27;
-  * forward-ref: &#x27;transformer class&#x27;
-  * forward-ref: &#x27;covering-number bounds&#x27;
-  * forward-ref: &#x27;self-attention&#x27;
-  * forward-ref: &#x27;m&#x27;
-  * forward-ref: &#x27;ε&#x27;
-  * forward-ref: &#x27;δ&#x27;
-  * also introduces here: &#x27;uniform isometry&#x27;, &#x27;Hε(F)&#x27;
-
-== Paragraph 36 (page 3)
-  * text: Well-posedness via smoothness (sampling numbers). Whether point samples suffice — rather than arbitrary linear functionals — is the subject of information-based complexity. Re- cen…
-  * forward-ref: &#x27;sampling numbers&#x27;
-  * forward-ref: &#x27;approximation numbers&#x27;
-  * forward-ref: &#x27;information-based complexity&#x27;
-  * forward-ref: &#x27;Lipschitz prior (P3)&#x27;
-  * forward-ref: &#x27;Condition 1&#x27;
-  * forward-ref: &#x27;empirical-process argument&#x27;
-
-== Paragraph 37 (page 3)
-  * text: Lower bounds via packing. Applying Fano’s inequality to a maximal ε-packing of F converts metric entropy into a minimax lower bound: the achievable accuracy εm is fixed by the entr…
-  * forward-ref: &#x27;Fano&#x27;s inequality&#x27;
-  * forward-ref: &#x27;ε-packing&#x27;
-  * forward-ref: &#x27;entropy-balance&#x27;
-  * forward-ref: &#x27;εm (achievable accuracy)&#x27;
-  * forward-ref: &#x27;minimax lower bound&#x27;
-  * forward-ref: &#x27;query complexity&#x27;
+== Paragraph 38 (page 3)
+  * text: X
+  * forward-ref: &#x27;X&#x27;
 
 == Paragraph 40 (page 3)
-  * text: Target 1 (Codomain structure). The subspace range(WU) and the hidden dimension d — the latter being identifiable, since WU itself is recoverable only up to an V-irrelevant d×d symm…
-  * forward-ref: &#x27;numerical-rank&#x27;
-  * forward-ref: &#x27;subspace recovery&#x27;
-  * forward-ref: &#x27;SVD&#x27;
-  * forward-ref: &#x27;stacked logit vectors&#x27;
-  * also introduces here: &#x27;Target 1 (Codomain structure)&#x27;, &#x27;hidden dimension d&#x27;, &#x27;V-irrelevant d×d symmetry&#x27;
+  * text: i/∈S (α/2)u2 i+λ∥u∥TV. (3)
+  * forward-ref: &#x27;u&#x27;
+  * forward-ref: &#x27;α&#x27;
+  * forward-ref: &#x27;λ&#x27;
 
-== Paragraph 41 (page 3)
-  * text: Target 2 (Restriction to a structured sub-domain). fθ|S, where S is a prompt family varying along k ≪Ld axes (e.g. in-context demonstrations of a function class [22]). Recovery is …
-  * forward-ref: &#x27;Hε(F|S)&#x27;
-  * also introduces here: &#x27;Target 2 (Restriction to a structured sub-domain)&#x27;, &#x27;S&#x27;, &#x27;prompt family&#x27;
+== Paragraph 47 (page 3)
+  * text: (i,i′)∈− → E f(i,i′) + X
+  * forward-ref: &#x27;X&#x27;
 
-== Paragraph 42 (page 3)
-  * text: Target 3 (General functionals). P(fθ) — a decision boundary on a sub-domain, the presence of a watermark, a behavioural property. Such a functional is recoverable under a restricte…
-  * forward-ref: &#x27;restricted isometry&#x27;
-  * forward-ref: &#x27;F&#x27;
-  * forward-ref: &#x27;quotient of F&#x27;
-  * also introduces here: &#x27;Target 3 (General functionals)&#x27;, &#x27;P(fθ)&#x27;
+== Paragraph 48 (page 3)
+  * text: (i′,i)∈− → E f(i′,i) = ˆui−1 for i ∈S,
+  * forward-ref: &#x27;f(i&#x27;,i)&#x27;
 
-== Paragraph 44 (page 3)
-  * text: RQ1. When does the point-evaluation operator satisfy a restricted isometry over the transformer- realizable class F, and how do the four compressibility priors (P1–P4) enter the is…
-  * forward-ref: &#x27;point-evaluation operator&#x27;
-  * forward-ref: &#x27;restricted isometry&#x27;
-  * forward-ref: &#x27;transformer-realizable class F&#x27;
-  * forward-ref: &#x27;isometry constant&#x27;
-  * forward-ref: &#x27;P1–P4&#x27;
+== Paragraph 50 (page 3)
+  * text: (i,i′)∈− → E f(i,i′) + X
+  * forward-ref: &#x27;f&#x27;
+  * forward-ref: &#x27;X&#x27;
 
-== Paragraph 46 (page 4)
-  * text: RQ2. What is the query complexity m for each target in terms of the metric entropy / sampling numbers of the relevant (restricted or quotiented) class, and does it match the packin…
-  * forward-ref: &#x27;query complexity m&#x27;
-  * forward-ref: &#x27;metric entropy&#x27;
-  * forward-ref: &#x27;sampling numbers&#x27;
-  * forward-ref: &#x27;quotiented class&#x27;
-  * forward-ref: &#x27;packing lower bound&#x27;
+== Paragraph 51 (page 3)
+  * text: (i′,i)∈− → E f(i′,i) = αˆui for i /∈S,
+  * forward-ref: &#x27;f&#x27;
+  * forward-ref: &#x27;α&#x27;
+  * forward-ref: &#x27;ˆu_i&#x27;
+  * forward-ref: &#x27;-→E&#x27;
 
-== Paragraph 47 (page 4)
-  * text: RQ3. How do the restricted oracles of Section 3 — top-k truncation, sampling noise, finite pre- cision, rate limits — degrade the isometry constant, and which defenses provably des…
-  * forward-ref: &#x27;isometry constant&#x27;
-  * forward-ref: &#x27;finite precision&#x27;
-  * forward-ref: &#x27;rate limits&#x27;
-  * forward-ref: &#x27;m&#x27;
+== Paragraph 52 (page 3)
+  * text: |f(i,i′)| ≤λAi,i′ for all (i, i′) ∈−→ E ,
+  * forward-ref: &#x27;f(i,i&#x27;)&#x27;
+  * forward-ref: &#x27;λ&#x27;
 
-== Paragraph 49 (page 4)
-  * text: Theory track. Establish the evaluation-RIP condition for F; import metric-entropy bounds for transformer-type classes and sampling-number results to convert them into query-complex…
-  * forward-ref: &#x27;F&#x27;
-  * forward-ref: &#x27;metric-entropy bounds&#x27;
-  * forward-ref: &#x27;transformer-type classes&#x27;
-  * forward-ref: &#x27;sampling-number results&#x27;
-  * forward-ref: &#x27;query-complexity&#x27;
-  * forward-ref: &#x27;packing lower bounds&#x27;
-  * forward-ref: &#x27;restricted oracles&#x27;
+== Paragraph 53 (page 3)
+  * text: ˆui−ˆui′ =0 for all (i, i′) ∈−→ E with |f(i,i′)|&lt;λAi,i′. (5)
+  * forward-ref: &#x27;f(i,i&#x27;)&#x27;
+  * forward-ref: &#x27;λ&#x27;
 
-== Paragraph 50 (page 4)
-  * text: Empirical track. On open-weight models where fθ is fully known (Pythia, Qwen, Llama across scales): (i) empirically estimate the evaluation-isometry constant for different probe de…
-  * forward-ref: &#x27;open-weight models&#x27;
-  * forward-ref: &#x27;evaluation-isometry constant&#x27;
-  * forward-ref: &#x27;probe designs&#x27;
-  * forward-ref: &#x27;adaptively chosen contexts&#x27;
-  * forward-ref: &#x27;query-complexity scaling curves&#x27;
+== Paragraph 54 (page 3)
+  * text: Proof. The result can be obtained by applying Fenchel duality [8, Ch. 31] to TV minimization (3) and a dual minimum cost ﬂow problem (see [10, Sec. 3]).
+  * forward-ref: &#x27;Fenchel duality&#x27;
+  * forward-ref: &#x27;dual minimum cost flow problem&#x27;
+  * forward-ref: &#x27;minimum cost flow problem&#x27;
 
-== Paragraph 52 (page 4)
-  * text: • Recovery accuracy: subspace/parameter error (T1), function-approximation error on S (T2), functional error (T3).
-  * forward-ref: &#x27;T1&#x27;
-  * forward-ref: &#x27;T2&#x27;
-  * forward-ref: &#x27;T3&#x27;
+== Paragraph 55 (page 3)
+  * text: Let us illustrate Theorem 1 for the empirical graph in Fig- ure 1. This empirical graph is a chain graph and partitioned into two clusters C(1) and C(2) which are connected by a bo…
+  * forward-ref: &#x27;Theorem 1&#x27;
+  * forward-ref: &#x27;λ&#x27;
+  * forward-ref: &#x27;α&#x27;
+  * also introduces here: &#x27;b&#x27;
 
-== Paragraph 54 (page 4)
-  * text: • Isometry diagnostics: empirical δ as a function of probe design and budget.
-  * forward-ref: &#x27;Isometry diagnostics&#x27;
-  * forward-ref: &#x27;empirical δ&#x27;
-  * forward-ref: &#x27;probe design&#x27;
+== Paragraph 56 (page 3)
+  * text: λAo &lt; 1, and |C(1)|(α/λ) + Ao &lt; 1, |C(2)|α ≥λAo. (6)
+  * forward-ref: &#x27;λ&#x27;
+  * forward-ref: &#x27;α&#x27;
 
-== Paragraph 55 (page 4)
-  * text: • Robustness: degradation across the oracle hierarchy; lower-bound tightness (achieved vs information-theoretic m).
-  * forward-ref: &#x27;oracle hierarchy&#x27;
-  * forward-ref: &#x27;lower-bound tightness&#x27;
+== Paragraph 59 (page 3)
+  * text: ˆui =
+  * forward-ref: &#x27;ˆui&#x27;
 
-== Paragraph 57 (page 4)
-  * text: 1. A single compressed-sensing formalism for black-box LLMs: the model as one nonlinear func- tion, query access as point evaluation, recovery governed by a restricted isometry ove…
-  * forward-ref: &#x27;black-box LLMs&#x27;
-  * also introduces here: &#x27;compressed-sensing formalism&#x27;, &#x27;point evaluation&#x27;
+== Paragraph 60 (page 3)
+  * text: ( (1 −λAo)/   1 + α(|C(1)| −1)  for i ∈C(1)
+  * forward-ref: &#x27;λ&#x27;
+  * forward-ref: &#x27;α&#x27;
 
-== Paragraph 58 (page 4)
-  * text: 2. Query-complexity upper bounds (via metric entropy and sampling numbers) and matching packing lower bounds for codomain structure, sub-domain restrictions, and functionals.
-  * forward-ref: &#x27;sampling numbers&#x27;
-  * forward-ref: &#x27;packing lower bounds&#x27;
+== Paragraph 61 (page 3)
+  * text: λAo/   α|C(2)|  for i ∈C(2) .
+  * forward-ref: &#x27;λAo&#x27;
+  * forward-ref: &#x27;α&#x27;
 
-== Paragraph 59 (page 4)
-  * text: 3. A robustness theory relating realistic API oracles to the isometry constant, with provable separations between benign and recovery-destroying defenses.
-  * forward-ref: &#x27;API oracles&#x27;
-  * forward-ref: &#x27;isometry constant&#x27;
-  * forward-ref: &#x27;benign defenses&#x27;
-  * forward-ref: &#x27;recovery-destroying defenses&#x27;
+== Paragraph 62 (page 3)
+  * text: (7) Note that the vector (7) is piece-wise constant over the clusters C(1) and C(2). Thus, if we would use (7) as (single) feature xi = ˆui, basic clustering methods would successf…
+  * forward-ref: &#x27;λ&#x27;
+  * forward-ref: &#x27;α&#x27;
+  * forward-ref: &#x27;stochastic block models&#x27;
+  * forward-ref: &#x27;primal-dual method&#x27;
+  * forward-ref: &#x27;duality&#x27;
 
-== Paragraph 64 (page 5)
-  * text: • The point-evaluation operator may resist a clean RIP for the full class. Mitigation: smoothness places F in the sampling-numbers regime; where a global RIP is unavailable, restri…
-  * forward-ref: &#x27;sampling-numbers regime&#x27;
-  * forward-ref: &#x27;quotient classes&#x27;
+== Paragraph 65 (page 3)
+  * text: 2: for i∈V do : ˜ui :=2ˆu(r) i −ˆu(r−1) i 3: for e = (i, i′) ∈−→ E do
+  * forward-ref: &#x27;˜ui&#x27;
+  * forward-ref: &#x27;ˆu(r)&#x27;
+  * forward-ref: &#x27;ˆu(r−1)&#x27;
 
-== Paragraph 65 (page 5)
-  * text: • Restricted oracles may block logit access entirely. Mitigation: the open-weight track is indepen- dent of any external API; oracle restrictions are simulated locally with control…
-  * forward-ref: &#x27;Restricted oracles&#x27;
-  * forward-ref: &#x27;open-weight track&#x27;
-  * forward-ref: &#x27;controlled corruption layers&#x27;
+== Paragraph 66 (page 3)
+  * text: 4: ˆf (r+1) e := ˆf (r) e +(1/2)(˜ui−˜ui′)
+  * forward-ref: &#x27;˜u_i&#x27;
+  * forward-ref: &#x27;˜u_i′&#x27;
+  * also introduces here: &#x27;ˆf (r+1)_e&#x27;
 
-== Paragraph 69 (page 5)
-  * text: 1 Formalise the function/measurement model; consolidate metric-entropy and sampling-number tools 2 Evaluation-RIP theory; codomain recovery (T1) + benchmark harness 3 T1 empirical …
-  * forward-ref: &#x27;metric-entropy&#x27;
-  * forward-ref: &#x27;sampling-number&#x27;
+== Paragraph 67 (page 3)
+  * text: 5: ˆf (r+1) e := ˆf (r+1) e /max{1, | ˆf (r+1) e |/(λAe)} 6: end for 7: for i ∈V do
+  * forward-ref: &#x27;λ&#x27;
+  * forward-ref: &#x27;Ae&#x27;
 
-== Paragraph 71 (page 5)
-  * text: Linear algebra and high-dimensional probability; prior exposure to compressed sensing or statis- tical learning theory (sample complexity, covering/packing arguments); comfort with…
-  * forward-ref: &#x27;high-dimensional probability&#x27;
-  * forward-ref: &#x27;statistical learning theory&#x27;
-  * forward-ref: &#x27;sample complexity&#x27;
-  * forward-ref: &#x27;covering/packing arguments&#x27;
-  * forward-ref: &#x27;PyTorch&#x27;
-  * forward-ref: &#x27;open-weight LLMs&#x27;
-  * forward-ref: &#x27;metric-entropy&#x27;
-  * forward-ref: &#x27;information-based-complexity&#x27;
+== Paragraph 68 (page 3)
+  * text: 8: ˆu(r+1) i := ˆu(r) i −γi
+  * forward-ref: &#x27;γ_i&#x27;
+
+== Paragraph 70 (page 3)
+  * text: (i,i′) ˆf (r+1) (i,i′) −P
+  * forward-ref: &#x27;P&#x27;
+
+== Paragraph 73 (page 3)
+  * text: 9: if i ∈S then 10: ˆu(r+1) i :=   γi+ˆu(r+1) i  /(γi+1) 11: else 12: ˆu(r+1) i := ˆu(r+1) i /(αγi+1) 13: end if 14: end for
+  * forward-ref: &#x27;γi&#x27;
+  * forward-ref: &#x27;α&#x27;
+
+== Paragraph 74 (page 3)
+  * text: 15: end for 16: bu := ˆu(R)
+  * forward-ref: &#x27;R&#x27;
+  * also introduces here: &#x27;bu&#x27;
+
+== Paragraph 75 (page 3)
+  * text: The output bu ∈Rn of Algorithm 1 is an approximation to the solution of (3). We assume that the number of iterations R used for Algorithm 1 is sufﬁciently large such that the outpu…
+  * forward-ref: &#x27;Algorithm 1&#x27;
+  * also introduces here: &#x27;R&#x27;
+
+== Paragraph 76 (page 4)
+  * text: combined with the convergence rates guaranteed by primal- dual methods [4]. Alternatively, we can tune the number of iterations based on the ﬁnal clustering result obtained by usin…
+  * forward-ref: &#x27;primal-dual methods&#x27;
+  * forward-ref: &#x27;Algorithm 1&#x27;
+  * forward-ref: &#x27;Algorithm 2&#x27;
+  * forward-ref: &#x27;message passing method&#x27;
+
+== Paragraph 77 (page 4)
+  * text: Step 5 enforces the capacity constraint | ˆf (r) (i,i′)| ≤λAi,i′. Step
+  * forward-ref: &#x27;λ&#x27;
+
+== Paragraph 78 (page 4)
+  * text: 8 adjusts the value ˆu(r) i based on the net ﬂow into the node i. In step 10, ﬂow is injected into seed nodes i ∈S while in step (12) ﬂow is leaked out of remaining nodes i /∈S.
+  * forward-ref: &#x27;ˆu^{(r)}_i&#x27;
+
+== Paragraph 79 (page 4)
+  * text: V. FLOW-BASED GRAPH CLUSTERING
+  * forward-ref: &#x27;flow-based graph clustering&#x27;
+
+== Paragraph 82 (page 4)
+  * text: 1: for r = 1, . . . , s do 2: select new seed nodes S with Algorithm 3 3: run Algorithm 1 with G, S, λ, α 4: store resulting vector in bu(r)
+  * forward-ref: &#x27;Algorithm 3&#x27;
+  * forward-ref: &#x27;Algorithm 1&#x27;
+  * forward-ref: &#x27;λ&#x27;
+  * forward-ref: &#x27;α&#x27;
+
+== Paragraph 86 (page 4)
+  * text: 7: compute cluster assignments ˆci by applying k-means to feature vectors (8)
+  * forward-ref: &#x27;k-means&#x27;
+  * forward-ref: &#x27;ˆci&#x27;
+
+== Paragraph 87 (page 4)
+  * text: A key challenge for the successful application of Algo- rithm 2 is a suitable section of seed nodes in step 2. One simple approach is to choose the set S by randomly selecting a si…
+  * forward-ref: &#x27;Algorithm 2&#x27;
+  * forward-ref: &#x27;Algorithm 3&#x27;
+
+== Paragraph 90 (page 4)
+  * text: 1: initialize S := ∅ 2: determine i′ := randomly select from {i : d(i) ≥d} 3: add node, S := {i′} 4: for each i′′ with {i′, i′′} ∈E do 5: D = {i′′′ : {i′′′, i′}, {i′′, i′′′} ∈E} 6:…
+  * forward-ref: &#x27;d&#x27;
+  * forward-ref: &#x27;η&#x27;
+
+== Paragraph 95 (page 4)
+  * text: A dataset [28] with two clusters, as depicted in Figure 3, the ﬁrst cluster is a set of 2D data points drawn from Gaussian density centered at (2, 0.2) with diagonal covariance mat…
+  * forward-ref: &#x27;Algorithm 2&#x27;
+  * forward-ref: &#x27;α&#x27;
+  * forward-ref: &#x27;λ&#x27;
+  * forward-ref: &#x27;η&#x27;
+
+== Paragraph 105 (page 4)
+  * text: 2 4 6 Fig. 3: The left plot is the clustering result of Algorithm 2, the right one is the clustering result of spectral clustering [6].
+  * forward-ref: &#x27;Algorithm 2&#x27;
+
+== Paragraph 106 (page 4)
+  * text: VI-B. Image Segmentation / Pixel Clustering
+  * forward-ref: &#x27;Image segmentation&#x27;
+  * forward-ref: &#x27;Pixel clustering&#x27;
+
+== Paragraph 107 (page 4)
+  * text: The performance of Algorithm 2 for image segmenta- tion/pixel clustering is tested on some RGB images. We construct an empirical graph as mentioned in VI based on pixel values. Eac…
+  * forward-ref: &#x27;Algorithm 2&#x27;
 
 
-==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>type_consistency_lint_llm.py</span><span class='desc'>formal claims are well-typed (relations over compatible operands)</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Type-consistency lint report (LLM, gpt-5-mini-2025-08-07)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>type_consistency_lint_llm.py</span><span class='desc'>formal claims are well-typed (relations over compatible operands)</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Type-consistency lint report (LLM, gpt-5-mini-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 
-  [UNCLEAR] p3  (claims equivalence/inequality among approximation numbers, sampling numbers, and a sharp formula: a_k: scalar vs. sampling numbers g_m: scalar)
-        claim: &quot;Recent results show that whenever the approximation numbers are square-summable (decay rate s &gt; 12 ), the sampling numbers decay at the same polynomial rate, so point evaluations are essentiallyPas powerful as optimal linear measurements [17–19]; the sharp, logarithm-free form gcm ≲ m k≥m a2k is due to Dolbeault et al. [20].&quot;
-        why:   The extracted sentence is garbled: &#x27;s &gt; 12&#x27; is almost certainly a corruption (should be &#x27;s &gt; 1/2&#x27; or similar), &#x27;essentiallyPas&#x27; is garbled, and the displayed sharp form &#x27;gcm ≲ m k≥m a2k&#x27; is unreadable. The operands (approximation numbers a_k and sampling numbers g_m) are present in the ledger, but the numeric inequalities/formula are corrupted and cannot be safely type-checked or reformulated from the text as given.
-        fix:   Replace the corrupted text with the precise statement from the cited work. For example: &quot;If the approximation numbers (a_k) are square-summable (i.e. decay rate s &gt; 1/2), then the sampling numbers satisfy g_m \lesssim (\sum_{k\ge m} a_k^2)^{1/2}, so point evaluations are nearly as powerful as optimal linear measurements.&quot; Cite Dolbeault et al. and/or Krieg &amp; Ullrich for the exact inequality.
-  [UNCLEAR] p2  (approximants / approximation: networks: UNCLEAR (not an explicitly defined ledger symbol) vs. structured function classes: (implicit) set)
-        claim: &quot;networks remain Kolmogorov–Donoho rate-distortion optimal approximants of structured function classes [14].&quot;
-        why:   The sentence uses &#x27;networks&#x27; and &#x27;structured function classes&#x27; without naming which ledger symbols correspond to these terms. The ledger contains F (transformer-realizable class) but does not define a specific symbol &#x27;networks&#x27; or the exact structured class being approximated. The approximation relation requires both operands to be of the same type class; here the operands are underspecified in the thesis text as extracted.
-        fix:   Make operands explicit: e.g. &#x27;Let N_W denote the class of neural networks with W parameters. Then N_W are Kolmogorov–Donoho rate-distortion optimal approximants of the structured function class G in the sense that H_\varepsilon(G) \lesssim W \log(1/\varepsilon).&#x27;. Ensure both &#x27;N_W&#x27; and &#x27;G&#x27; are defined in the ledger as sets (function classes) before asserting the approximation claim.
-  [UNCLEAR] p3  (inequality comparing population and empirical seminorms (RIP): \|f-g\|_2 (population seminorm): function/map vs. (1/m) \sum_{i=1}^m \|f(c_i)-g(c_i)\|_2^2 (empirical average): scalar)
-        claim: &quot;(1 − δ) ∥f − g∥ ≤ 1/m \sum_{i=1}^m ∥f(c_i) − g(c_i)\|_2^2 ≤ (1 + δ) ∥f − g∥2 .&quot; (Condition 1 display as extracted)
-        why:   The extracted display contains inconsistent/garbled notation: the left-hand factor is &#x27;(1-δ) \|f-g\|&#x27; (missing explicit squared/subscript), while the rightmost term is written with a trailing &#x27;2&#x27; (\|f-g\|2). The extraction makes it unclear whether the inequality is meant with squared norms throughout or with plain norms. This ambiguity affects type/range checking (whether the same scalar quantity is compared).
-        fix:   Replace with a consistent, standard RIP display. For example: &#x27;There exists \delta \in (0,1) such that for all f,g \in F, (1-\delta) \|f-g\|_2^2 \le (1/m) \sum_{i=1}^m \|f(c_i)-g(c_i)\|_2^2 \le (1+\delta) \|f-g\|_2^2.&#x27; Ensure the notation \|\cdot\|_2 (population) and the empirical average are explicitly defined and squared consistently.
+  [TYPE-MISMATCH] p3  (assignment: b: index/integer (boundary edge, element of E) vs. û(R): vector/point (approximate solution û produced by Algorithm 1 in R^n))
+        claim: “A boundary edge b with weight Ao . … 15: end for
+16: b := û(R)”
+        why:   The symbol b is introduced as a boundary edge (an element of E) but later in Algorithm 1 is assigned the vector output û(R). This assigns a vector to a symbol previously used as an edge index—different type classes (edge vs vector).
+        fix:   Use distinct symbols: keep b for the boundary edge (e.g. b_edge ∈ E) and name the algorithm output vector e.g. û_out := û^{(R)} (vector in R^n). If the intent was that b denotes the final TV solution, redefine b explicitly as a vector (and rename the boundary edge).
+  [UNCLEAR] p2  (is close to / will be close to: span{u^{(1)},...,u^{(k)}}: (not explicitly given a symbol/type in ledger) vs. span{e^{(c)}}: (indicator vectors e^{(c)} defined informally; &#x27;subspace spanned by&#x27; not given an explicit symbol/type))
+        claim: “the subspace spanned by the first k eigenvectors of L will be close to the subspace spanned by the indicator vectors e(c).”
+        why:   The prose compares two subspaces (&#x27;will be close to&#x27;) but the thesis does not introduce explicit symbols/notation for these subspaces nor a metric for &#x27;closeness&#x27;. Per the instruction, both operands must have explicit ledger types to judge typing; here the operands are described but not declared as named objects with types, so the check is UNCLEAR.
+        fix:   Introduce explicit notation, e.g. S_eig := span{u^{(1)},...,u^{(k)}} and S_ind := span{e^{(1)},...,e^{(k)}}, declare both as subspaces (sets), and define the distance used (e.g. operator norm of difference of projection matrices or largest principal angle). Then state the closeness bound precisely.
+  [UNCLEAR] p4  (outperforms / significantly outperforms: Algorithm 2: algorithm/procedure vs. spectral clustering (Ng et al. variant): algorithm/procedure)
+        claim: “As shown in Figure 3, our method significantly outperforms spectral clustering.”
+        why:   The claim compares two algorithms but does not name the performance metric (type: scalar objective) or provide values/statistical test. Comparing algorithms requires a scalar performance measure (e.g. accuracy, ARI); without an explicitly declared metric or reported numeric results the typing of the comparison is underspecified.
+        fix:   State the exact performance metric used (e.g. clustering accuracy, Adjusted Rand Index) and provide numeric scores ± confidence intervals or statistical test results. Then the relation &#x27;outperforms&#x27; becomes a scalar comparison between these metric values.
+  [UNCLEAR] p3  (used as a multiplicative/update scalar in assignments: γ_i: (not defined in ledger) vs. û_i: vector component (scalar entry of vector û in R^n))
+        claim: Algorithm 1 steps: &quot;8 adjusts the value û_i ...&quot; and the pseudocode uses γ_i in updates (steps 8,10,12) but γ_i is not defined.
+        why:   The algorithm uses γ_i in update formulas but γ_i has no prior declaration (type/range). Without γ_i declared, the arithmetic updates are underspecified (step-size, positivity, or per-node vs global).
+        fix:   Define γ_i explicitly (e.g. γ_i &gt; 0 scalar step-size, possibly equal to a global γ). State any constraints required for convergence (range, whether constant per node, relation to α etc.).
 
-3 finding(s): 0 FAIL, 0 bridge-loose, 3 unclear.  (tokens: 14536)
+4 finding(s): 1 FAIL, 0 bridge-loose, 3 unclear.  (tokens: 17550)
 
 ==========================================================================</pre></div></details></section><section class='group'><h2>Figures &amp; captions</h2><details class='card s-clean'><summary><span class='name mono'>caption_lint.py</span><span class='desc'>no missing or too-short captions</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Caption lint report
-File: ../../topics/compressed-sensing-llms/proposal.pdf
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
 Checks that every figure and table has a caption that is present and long enough to be informative.
 
 No findings.
 
-==========================================================================</pre></div></details></section><section class='group'><h2>Research questions</h2><details class='card s-findings'><summary><span class='name mono'>research_questions_lint_llm.py</span><span class='desc'>each stated research question is answered and revisited</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Research-question lint report (LLM, gpt-5-mini-2025-08-07)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
-
-[WARN] UNANSWERED          RQ1: When does the point-evaluation operator satisfy a restricted isometry over the transformer-realizable class F, and how do the four compressibility priors (P1–P4) enter the isometry constant? (stated p.4)
-        evidence:  The document is a thesis proposal: it states the goal to &quot;Establish the evaluation-RIP condition for F&quot; and to &quot;import metric-entropy bounds...&quot; (Section 7, Methodology) and lists expected theoretical contributions (Section 9), but provides no proofs, theorems, or numerical estimates of an evaluation-RIP or of how P1–P4 quantitatively affect the isometry constant. No section contains derived RIP bounds or empirical δ measurements.
-        revisited in conclusions: no
-        gap:       No formal theorem, proof, or empirical measurement demonstrating an evaluation-RIP is presented, nor any quantitative derivation linking P1–P4 to the isometry constant.
-        fix:       Prove a precise evaluation-RIP theorem for F (stating m and δ) that explicitly quantifies how P1–P4 enter δ, and validate the bound by estimating δ empirically on open-weight transformer models.
-
-[WARN] UNANSWERED          RQ2: What is the query complexity m for each target in terms of the metric entropy / sampling numbers of the relevant (restricted or quotiented) class, and does it match the packing lower bound? (stated p.4)
-        evidence:  The proposal outlines the plan to derive query-complexity upper bounds via metric entropy and sampling numbers and to prove matching packing lower bounds (Sections 4, 5, and 7), and lists these as expected contributions (Section 9), but contains no derived bounds, no expressions for m in terms of H_ε(F) or sampling numbers, and no proved lower bounds.
-        revisited in conclusions: no
-        gap:       No explicit upper-bound formulas for m, no lower-bound proofs, and no empirical scaling curves to demonstrate whether achievable m matches the packing lower bound are provided.
-        fix:       Derive explicit upper bounds for m in terms of metric entropy / sampling numbers for each target, prove corresponding packing lower bounds, and produce experiments measuring empirical m to compare with the theoretical rates.
-
-[WARN] UNANSWERED          RQ3: How do the restricted oracles of Section 3 — top-k truncation, sampling noise, finite precision, rate limits — degrade the isometry constant, and which defenses provably destroy recoverability versus merely inflating m? (stated p.4)
-        evidence:  The proposal describes analysing restricted oracles as perturbations of the isometry and plans empirical stress-tests under simulated top-k and sampling oracles (Sections 3 and 7), and lists a robustness theory as an expected contribution (Section 9), but contains no perturbation analyses, no bounds on how each oracle affects δ, and no empirical results showing which defenses break recoverability.
-        revisited in conclusions: no
-        gap:       Absence of theoretical perturbation bounds relating each restricted oracle to the isometry constant and lack of empirical tests demonstrating the practical impact of these oracles on recovery.
-        fix:       For each restricted oracle, derive a perturbation bound showing how it changes δ (or required m), and run controlled experiments on open-weight models to identify which defenses make recovery information-theoretically impossible versus merely increasing query cost.
-
-3 research question(s): 0 answered, 3 not fully answered.  (tokens: 7072)
-
-==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>rq_quality_lint_llm.py</span><span class='desc'>research questions are well-posed and self-contained</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Research-scope quality report (LLM, gpt-5-2025-08-07)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
-
-Aim: The thesis asks the compressed-sensing question in its purest form: treating fθ as an unknown high-dimensional signal, how much of it can be recovered from m ≪ |V|^L evaluations, under what structural conditions, and with what query designs? [p1] Auditing a closed LLM can be framed as a function recovery problem: Given observed conversations, estimate the underlying function fθ. [p1]
-
-[INFO] ADEQUATE-RQ  RQ1: When does the point-evaluation operator satisfy a restricted isometry over the transformer… (p.3)
-        violates: focused, self-contained
-        Clear, complex, and specific. Slightly double-barreled (existence/conditions for RIP and quantitative dependence of δ). Minor self-containment issue: &#x27;transformer-realizable class F&#x27; is not explicitly defined before p3; F is mentioned (pp2–3) but not formally defined; &#x27;restricted isometry&#x27; and δ are defined on p2 (Condition 1); P1–P4 defined on pp1–2.
-        reformulate: Under a fixed transformer architecture with bounded weights, let F denote the set of next-token functions realizable by that architecture. For probe contexts drawn from a specified distribution, when does the point-evaluation operator satisfy an RIP over F−F, and how do priors P1–P4 quantitatively control the isometry constant δ(m)?
-
-[INFO] ADEQUATE-RQ  RQ2: What is the query complexity m for each target in terms of the metric entropy / sampling n… (p.4)
-        violates: focused, self-contained
-        Clear, measurable, and grounded in identified theory (metric entropy, sampling numbers, packing). Slightly double-barreled (upper bounds and matching lower bounds). Minor self-containment: &#x27;quotiented class&#x27; is mentioned-not-defined before p4 (Target 3 on p3 mentions &#x27;quotient of F&#x27; but gives no definition). &#x27;Targets&#x27; T1–T3 (p3), &#x27;metric entropy&#x27; (p3), &#x27;sampling numbers&#x27; (p3), and &#x27;packing lower bound&#x27; (p3) are introduced earlier.
-        reformulate: For each target T1–T3, define the corresponding restricted or quotient class precisely. What minimal query budget m(ε) achieves error ≤ ε as characterized via the class’s metric entropy or sampling numbers, and do these upper bounds match information-theoretic packing (Fano) lower bounds?
-
-[INFO] ADEQUATE-RQ  RQ3: How do the restricted oracles of Section 3 — top-k truncation, sampling noise, finite prec… (p.4)
-        violates: focused
-        Well-motivated, precise, and researchable; terms and oracles are introduced earlier (pp1–2) and δ is defined (p2). Slightly double-barreled: effect on δ versus classification of defenses by whether RIP/recoverability fails or m increases.
-        reformulate: For the restricted oracles defined in Section 3, quantify their perturbation of the evaluation operator by how they change the RIP constant δ(m) and resulting m(ε), and identify which specific defenses eliminate RIP (no recovery) versus preserve RIP with increased sample complexity.
-
-[WARN] GAP-IDENTIFIED   no explicit research-gap statement found
-[INFO] DELIMITATIONS    satisfied
-[INFO] RQ-ALIGNMENT     satisfied
-[INFO] AIM-COVERAGE     satisfied
-        scope: Explicit research-gap phrasing is not stated; novelty is implied via contributions (p4–5) and contrasts to prior work (pp3–4). Delimitations include: &#x27;There are no separate “attacks,” only different targets&#x27; (p1); analysis assumes a bounded embedding domain (P3: &#x27;The restriction to a bounded domain is essential&#x27;, p1–2); empirical work is limited to open-weight models where fθ is fully known (p3). Alignment: RQ1 maps to Contribution 1 (formalism/RIP); RQ2 to Contribution 2 (upper/lower bounds for targets); RQ3 to Contribution 3 (robustness under restricted oracles). The questions together operationalize the stated aim of quantifying recoverability and query efficiency under structural assumptions.
-
-3 question(s): 0 strong, 3 adequate/weak; 1 warning(s).  (tokens: 11586)
-
-==========================================================================</pre></div></details></section><section class='group'><h2>Method &amp; data</h2><details class='card s-clean'><summary><span class='name mono'>data_split_lint_llm.py</span><span class='desc'>train/validation/test splits are reported per method</span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Data-split lint report (LLM, gpt-5-mini-2025-08-07)
-File: ../../topics/compressed-sensing-llms/proposal.pdf
-
-[INFO] This document is a thesis proposal and does not contain executed experiments or any trained models to evaluate. Evidence: &#x27;Master’s Thesis Proposal&#x27; (page 1) and planned work only: &#x27;Empirical track. On open-weight models ... (i) empirically estimate the evaluation-isometry ... (ii) recover targets T1–T3 ...&#x27; (page 4). No descriptions of actual training, datasets, or data splits are present.
-
-0 method(s); 0 FAIL, 0 UNCLEAR, 0 PASS.  (tokens: 6306)
-
-==========================================================================</pre></div></details></section><section class='group'><h2>Disclosure</h2><details class='card s-findings'><summary><span class='name mono'>ai_disclosure_lint.py</span><span class='desc'>use of AI tools is disclosed with versions</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== AI disclosure lint report
-File: ../../topics/compressed-sensing-llms/proposal.pdf
-Checks for a dedicated AI-use statement naming the tool and version, and that it is not placed inside the Methods chapter.
+==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>figure_lint_llm.py</span><span class='desc'>figures scored against the PLOS Ten Simple Rules</span><span class='pill s-clean'>clean</span></summary><div class='body'><div class='matrix-wrap'><table class='matrix'><tr><th class='fig'>Figure</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th><th>R6</th><th>R7</th><th>R8</th><th>R9</th><th>R10</th></tr><tr><td class='fig'>Figure 4</td><td class='cell ok'>✓</td><td class='cell ok'>✓</td><td class='cell ok'>✓</td><td class='cell ok'>✓</td><td class='cell ok'>✓</td><td class='cell ok'>✓</td><td class='cell na'>·</td><td class='cell ok'>✓</td><td class='cell ok'>✓</td><td class='cell ok'>✓</td></tr></table><p class='legend'>Rules: R1 audience &middot; R2 message &middot; R3 medium &middot; R4 captions &middot; R5 defaults &middot; R6 color &middot; R7 mislead &middot; R8 chartjunk &middot; R9 beauty &middot; R10 tool</p></div></div></details><details class='card s-findings'><summary><span class='name mono'>caption_lint_llm.py</span><span class='desc'>each caption is self-contained and informative</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Caption quality report (LLM, Rule 4; gpt-5-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+LLM check: does each figure/table caption state what is shown, define its symbols, and stand alone for a figure-skimming reader?
 
 How to read: [ERROR] almost certainly a defect, fix it · [WARN] worth reviewing, sometimes a false positive · [INFO] optional check, usually fine.
 
-[WARN] NO-AI-STATEMENT    -            no AI-use disclosure statement found — ml-theses.org requires a dedicated statement (also if no AI tools were used, say so).
+[WARN] WEAK-CAPTION       p4           Algorithm 3: &quot;Algorithm 3 constructs a new set of seed nodes          up t&quot; violates defines-quantities, self-contained, sentence-form — suggest: &quot;Algorithm 3: Constructs a new set of seed nodes within up to three hops by randomly choosing a node i0 (with degree d(i0)), sparsifying the empirical graph by r&quot;
+[WARN] WEAK-CAPTION       p5           Fig 4: &quot;Image Segmentation: The left plot is the original         [1&quot; violates self-contained, sentence-form — suggest: &quot;Image segmentation results: left, original image; middle, segmentation from Algorithm 2; right, spectral-clustering result that separates the object of interest&quot;
 
-1 finding(s): 0 error, 1 warning, 0 info.
+2 finding(s): 0 error, 2 warning, 0 info.
 
-==========================================================================</pre></div></details></section><footer><p>proposal.pdf · run_all_linters.py --profile thesis --llm --bib</p><p>Generated by the <a href='https://ml-theses.org/assets/linters/'>ml-theses.org linter suite</a>. Figure rules: Rougier, Droettboom &amp; Bourne, &ldquo;Ten Simple Rules for Better Figures&rdquo;, PLOS Comput Biol 2014.</p></footer></div><script>
+2 caption(s) judged. Total tokens used: 2931
+
+==========================================================================</pre></div></details></section><section class='group'><h2>Research questions</h2><details class='card s-findings'><summary><span class='name mono'>research_questions_lint_llm.py</span><span class='desc'>each stated research question is answered and revisited</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Research-question lint report (LLM, gpt-5-mini-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+
+[INFO] ANSWERED            RQ1: We propose and study a novel graph clustering method ... we do not use the eigenvectors of a graph Laplacian to construct the feature vectors. Instead, we use the solutions of total variation minimization problems to construct feature vectors that reflect connectivity between data points. (stated p.1)
+        answer:    The paper presents and implements a flow-based clustering method that builds node features from solutions of TV minimization (replacing Laplacian eigenvectors) and then applies k-means to those features.
+        where:     Sections IV and V (pages 3–4): TV minimization formulation (Eq. (3)), duality and Theorem 1 (page 3), Algorithms 1 and 2 and feature construction (Eq. (8), page 4).
+        evidence:  TV minimization is formulated in (3) and TV defined in (4) (page 3). The duality / characterization (Theorem 1) and the primal-dual solver (Algorithm 1) are given on page 3. Algorithm 2 shows how multiple TV solutions are combined into feature vectors x(i) = (ûi(1), ..., ûi(s))^T and k-means is applied (Eq. (8), page 4).
+        revisited in conclusions: no
+
+[INFO] ANSWERED            RQ2: The solutions of total variation minimization are piece-wise constant around a given set of seed nodes ... This duality allows to characterize the solution û of (3) in terms of network flows. (stated p.1)
+        answer:    Yes — the paper proves (via Theorem 1) that the TV minimizer admits a network-flow characterization and demonstrates that for the chain-graph example the TV solution is piecewise constant on clusters around the seed.
+        where:     Section IV (page 3): Theorem 1 and the chain-graph illustrative example (equations (5) and (7)).
+        evidence:  Theorem 1 (page 3) states the necessary and sufficient conditions for û to solve TV minimization via existence of a flow f with capacity constraints (eq. (5)). The chain-graph example yields the explicit piecewise-constant solution (7) on the two clusters (page 3).
+        revisited in conclusions: no
+
+[WARN] PARTIALLY-ANSWERED  RQ3: Our results indicate that our clustering methods can cope with certain graph structures that are challenging for spectral clustering methods. (stated p.1)
+        answer:    The paper provides qualitative and illustrative empirical evidence that the flow-based features better reflect cluster structure in cases where spectral features fail (chain graph, one synthetic example, and one image segmentation), but it lacks systematic quantitative evaluation.
+        where:     Illustrative comparisons in Sections III–V and numerical experiments in Section VI (pages 2–5): chain graph example (Fig.1–2, pages 2–3), synthetic two-cluster experiment (VI-A, page 4), and image segmentation experiment (VI-B, page 5).
+        evidence:  Chain graph: Figure 1 (page 2) shows the eigenvector u(2) entries contrasted with the TV solution; Figure 2 (page 3) scatterplot shows better separation using TV-based scalar feature. VI-A (page 4) states “our method significantly outperforms spectral clustering” for a two-cluster synthetic dataset and gives parameter choices, but reports no numeric metrics. VI-B (page 5) shows an image and segmentation result (Fig.4) and claims better performance than spectral clustering, again without quantitative scores.
+        revisited in conclusions: no
+        gap:       Experimental evidence is limited to a few illustrative examples and is qualitative; there are no quantitative performance metrics (accuracy, NMI, ARI), no statistical trials, and no parameter sensitivity or baseline diversity to substantiate a general claim of superiority.
+        fix:       Provide a quantitative experimental evaluation: for multiple datasets (including the chain-like, varying-size clusters, and standard benchmarks), report clustering metrics (e.g., accuracy/NMI/ARI) averaged over multiple random trials with spectral clustering and other baselines, and include parameter sensitivity analyses to demonstrate statistical significance of the claimed improvement.
+
+3 research question(s): 2 answered, 1 not fully answered.  (tokens: 10797)
+
+==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>rq_quality_lint_llm.py</span><span class='desc'>research questions are well-posed and self-contained</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Research-scope quality report (LLM, gpt-5-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+
+Aim: [p1] &quot;We propose and study a novel graph clustering method for data with an intrinsic network structure... What sets our approach apart from spectral clustering is that we do not use the eigenvectors of a graph Laplacian... Instead, we use the solutions of total variation minimization problems to construct feature vectors that reflect connectivity between data points.&quot;
+
+[INFO] ADEQUATE-RQ  RQ1: [p1] &quot;We propose and study a novel graph clustering method... Instead, we use the solution… (p.1)
+        violates: self-contained
+        Clear and focused statement of the new method. However, &#x27;total variation minimization&#x27; is not defined at or before p1 (first defined via (3) on p3), so the statement is not self-contained at its occurrence in the abstract.
+        reformulate: Define the key term in situ: &quot;We propose a flow-based clustering method that constructs node features by solving total variation (TV) minimization (TV(u) = sum_{edges} A_{i,i&#x27;}|u_i - u_{i&#x27;}|) seeded at S, then clusters the resulting features with k-means.&quot;
+
+[WARN] WEAK-RQ      RQ2: [p1] &quot;Our results indicate that our clustering methods can cope with certain graph structu… (p.1)
+        violates: specific, clear
+        Vague: &#x27;certain graph structures&#x27; and &#x27;cope&#x27; are not specified or measured; the claim does not state which graphs or what performance criterion improves.
+        reformulate: &quot;To what extent does the proposed TV-based feature construction improve clustering accuracy (NMI/ARI and cut conductance) over spectral clustering on (i) chain graphs with single-edge bottlenecks (weight A0) and (ii) graphs with imbalanced cluster sizes, for fixed k and k-means?&quot;
+
+[INFO] ADEQUATE-RQ  RQ3: [p2] &quot;There are certain types of empirical graphs that are challenging for spectral cluste… (p.2)
+        violates: focused
+        Good problem statement identifying two concrete challenging cases (imbalance; chain graph). It bundles multiple cases, so it is not a single focused askable. Terms used (&#x27;spectral clustering&#x27;, &#x27;empirical graph&#x27;) are defined on p2/p1; thus self-contained by page criterion.
+        reformulate: &quot;Under what conditions (imbalance ratio; boundary edge weight A0) does spectral clustering using Laplacian eigenvectors (k leading) fail to recover ground-truth clusters on (a) imbalanced-size clusters and (b) chain graphs?&quot;
+
+[INFO] STRONG-RQ    RQ4: [p4] &quot;Algorithm 3 constructs a new set of seed nodes by first randomly choosing a node i0 … (p.4)
+        Clear, focused, specific heuristic contribution; terminology (degree, common neighbours; thresholds η and d) is defined in the algorithm header and earlier.
+
+[INFO] GAP-IDENTIFIED   satisfied
+[INFO] DELIMITATIONS    satisfied
+[INFO] RQ-ALIGNMENT     satisfied
+[INFO] AIM-COVERAGE     satisfied
+        scope: Research gap is explicitly identified: [p2] spectral clustering struggles on (i) significantly varying cluster sizes and (ii) chain graphs with single-edge bottlenecks. Delimitations are stated: [p1] data are represented as an undirected empirical graph G=(V,E,A); [p1] &quot;Our approach does not take the individual nature of data points into account. Rather, we only use their similarities as encoded in the weighted edges of G.&quot; The contributions (new TV-based feature construction; seed selection heuristic; comparative experiments) align with the aim of proposing and studying a new method and demonstrating advantages on challenging graphs. Collectively, they operationalize the aim by defining the method (Algs. 1–3), instantiating it, and evaluating it against spectral clustering on synthetic and image data.
+
+4 question(s): 1 strong, 3 adequate/weak; 1 warning(s).  (tokens: 15937)
+
+==========================================================================</pre></div></details></section><section class='group'><h2>Method &amp; data</h2><details class='card s-findings'><summary><span class='name mono'>data_split_lint_llm.py</span><span class='desc'>train/validation/test splits are reported per method</span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Data-split lint report (LLM, gpt-5-mini-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+
+
+# method: Flow-based graph clustering (Algorithm 2; TV minimization + k-means on resulting features)
+  [FAIL] TRAIN-SET
+          &quot;A dataset [28] with two clusters, ... the first cluster is a set of 2D data points drawn from Gaussian density... the second cluster is a set of 2D data points denoting uniform density&quot; (page 4). No dataset sizes or explicit training-split sizes are given.
+          fix: State the dataset sizes (number of nodes/points) and explicitly describe which data are used as the input to the method (e.g. full dataset used for clustering; if subsets are used, give selection procedure and counts).
+  [FAIL] VALIDATION-SET
+          &quot;σ is a tuning parameter that chosen via cross-validation or using a probabilistic model&quot; (page 4). No cross-validation folds, hold-out ratio, or separation procedure is described for hyperparameter tuning of the flow-based method.
+          fix: Specify the validation procedure used for hyperparameter selection (e.g. k-fold cross-validation with k=..., or a held-out validation set of size ...), list the hyperparameters tuned and the selection criterion.
+  [FAIL] TEST-SET
+          Experiments (synthetic and image segmentation) are reported without any explicit description of a held-out test set or statement that no test set is needed (pages 4-5).
+          fix: Report a held-out test set (or a cross-validation protocol) that is disjoint from training/validation and state clearly that the final performance is computed only on that held-out data.
+  [FAIL] DIAGNOSIS-ON-SPLIT
+          &quot;As shown in Figure 3, our method significantly outperforms spectral clustering.&quot; (page 4) Results are shown as final clustering outputs; no train vs validation diagnostics, learning curves, or error analysis on held-out data are provided.
+          fix: Include diagnostics that use the described splits (e.g. compare training vs validation metrics, show stability across folds or learning curves, and perform error analysis on held-out test data).
+
+# method: Spectral clustering (baseline)
+  [FAIL] TRAIN-SET
+          Spectral clustering is applied as a baseline in the experiments (e.g. &quot;the right one is the clustering result of spectral clustering&quot; Fig.3, page 4) but no dataset sizes or explicit training-split construction are provided.
+          fix: As for the proposed method, state the dataset sizes and precisely which data points are input to spectral clustering (and whether any preprocessing or splitting was applied).
+  [FAIL] VALIDATION-SET
+          There is no description of a validation split used for spectral clustering hyperparameters or model selection; only a passing mention that σ can be chosen via cross-validation (page 4).
+          fix: Describe whether spectral clustering hyperparameters (e.g. kernel σ, number of eigenvectors, k-means initialization) were tuned on a validation set or by cross-validation, and provide the exact procedure.
+  [FAIL] TEST-SET
+          Experimental comparisons between methods are presented (pages 4-5) but the paper lacks any statement that a disjoint test set was held out and used only for final evaluation.
+          fix: Either hold out a separate test set for final evaluation or run a proper cross-validation protocol, and state explicitly that the reported baseline numbers are computed on that disjoint test data.
+  [FAIL] DIAGNOSIS-ON-SPLIT
+          The paper reports qualitative/aggregate clustering outputs (Figures 3 and 4) and statements of better performance (page 4-5) but provides no split-based diagnostics (no train vs validation comparisons or stability across folds).
+          fix: Provide split-aware diagnostics for the baseline as well (e.g. performance on training vs validation/test sets, variability across folds, and quantitative metrics with confidence intervals).
+
+2 method(s); 8 FAIL, 0 UNCLEAR, 0 PASS.  (tokens: 11172)
+
+==========================================================================</pre></div></details></section><section class='group'><h2>Other</h2><details class='card s-findings'><summary><span class='name mono'>contribution_faithfulness_lint_llm.py</span><span class='desc'></span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Contribution-faithfulness lint (LLM, gpt-5-mini-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+
+VERDICT: OVERSTATED
+
+Actual main contribution (new method with limited empirical evaluation / empirical finding):
+  The paper develops a concrete algorithm: solve constrained TV minimization around chosen seed sets (primal–dual implementation), stack multiple such solutions into feature vectors, and run k-means to obtain clusters. It provides a duality-based characterization of the TV solution (Theorem 1) and gives a heuristic seed-selection routine plus preliminary experiments (one synthetic two-cluster example and image segmentation) showing cases where the TV-based features separate clusters better than a baseline spectral clustering implementation.
+
+As presented (claimed):
+  The paper proposes a novel flow-based graph clustering method that constructs Euclidean node features from solutions of total-variation (TV) minimization (instead of Laplacian eigenvectors) and then applies standard clustering (k-means/GMM). The authors claim this approach better reflects connectivity/bottlenecks in graphs and can cope with graph structures that are challenging for spectral clustering; seed nodes can be chosen by domain knowledge or simple heuristics; algorithms and a primal–dual solver are provided.
+
+Discrepancies (claim vs. evidence):
+  - “&quot;our clustering methods can cope with certain graph structures that are challenging for spectral clustering methods&quot;”  (p1; 4)
+      shortfall: The empirical evidence for this claim is limited to a small synthetic two-cluster example (chain / size-imbalance) and a few image-segmentation examples; no broad suite of synthetic/real benchmarks, ablations, or robustness tests are provided to support the generality of the claim.
+  - “Feature construction &#x27;better reflects the cluster geometry&#x27; and flow bottlenecks are &#x27;the boundaries between the clusters&#x27; (motivating superiority over spectral features)”  (p2; 3)
+      shortfall: This is argued intuitively and illustrated on single examples (Figures 1–3), but there is no quantitative analysis, general theorem, or extensive experiments linking these flow-based features to improved clustering under well-defined graph models (e.g., stochastic block models) or showing consistent gains across datasets.
+  - “Seed nodes can be obtained by &#x27;simple heuristics&#x27; and the method is practically applicable”  (p3; 4)
+      shortfall: The paper gives one heuristic (Algorithm 3) but provides no study of sensitivity to seed selection, no comparison to alternative initialization strategies, and no guidance on how many seeds or parameter choices are required in practice.
+  - “The duality result (Theorem 1) underpins the method in a principled way”  (p3)
+      shortfall: While Theorem 1 states a duality to flows, the paper does not use this to derive guarantees for clustering quality, convergence rates for cluster recovery, or principled parameter choices; the theorem is used mainly for intuition and to justify the solver.
+  - “Empirical superiority versus spectral clustering”  (p4; 5)
+      shortfall: Comparisons use only one baseline (spectral clustering) on a tiny set of tasks; no multiple competitive baselines, no hyperparameter-matched experiments, and no statistical evaluation are provided to substantiate a general superiority claim.
+
+Faithful restatement:
+  Propose the contribution as: a flow-based clustering algorithm that builds node features by solving constrained TV minimization around seed sets, together with a primal–dual implementation and a seed-selection heuristic, and present preliminary experiments (synthetic chain/size-imbalanced data and image segmentation) that illustrate cases where TV-based features can outperform basic spectral clustering.
+
+Notes:
+  Code is provided (GitHub link on page 5), which supports reproducibility of the small-scale experiments; extending evaluation (more datasets, baselines, seed/parameter sensitivity, and theoretical analyses) would be required to substantiate the broader claims currently made.
+
+
+verdict=OVERSTATED, 5 discrepancy(ies).  (tokens: 9736)
+
+==========================================================================</pre></div></details><details class='card s-findings'><summary><span class='name mono'>abstract_selfcontained_lint_llm.py</span><span class='desc'></span><span class='pill s-findings'>findings</span></summary><div class='body'><pre class='out'>== Abstract self-containment lint (LLM, gpt-5-mini-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+Elementary = terms in the Aalto Dictionary of ML (691 terms). A gap = a term neither elementary nor defined inline.
+
+GRADE: FAIR   (4 gap(s))
+
+  [UNDEFINED]       primal-dual method   (standard-ish)
+        reader asks: What is a primal-dual method and how does it operate (primal vs dual updates)?
+        fix:         say: an optimization algorithm that alternately updates primal variables and dual variables
+  [UNDEFINED]       Fenchel duality   (standard-ish)
+        reader asks: What is Fenchel duality and what role does it play in deriving the flow dual?
+        fix:         say: a convex optimization duality relating a primal problem to its dual problem
+  [UNDEFINED]       minimum cost flow problem   (standard-ish)
+        reader asks: What is the minimum cost flow problem referenced in the duality (constraints, objective)?
+        fix:         say: an optimization that finds flows minimizing total edge cost under flow conservation and capacity limits
+  [UNDEFINED]       message passing   (standard-ish)
+        reader asks: What exactly is meant by &#x27;message passing&#x27; here (what messages, what update rule)?
+        fix:         say: iterative neighbor-to-neighbor updates where nodes exchange local variables with adjacent nodes
+
+Verdict: FAIR — the abstract assumes knowledge of optimization jargon (especially &#x27;Fenchel duality&#x27;), which is the single worst offender.
+
+grade=FAIR, 4 gap(s).  (tokens: 16511)
+
+==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>central_concept_citation_lint_llm.py</span><span class='desc'></span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== Central-concept citation lint (LLM, gpt-5-mini-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+
+SUMMARY: 6 central concept(s): 4 cited, 2 own-coinage, 0 elementary, 0 uncited, 0 vaguely-attributed
+
+How to read: each concept the paper is built on, and whether it points to a source. UNCITED / ATTR-VAGUE are the gaps; own-coinage and elementary vocabulary owe no citation.
+
+[CITED]  K2  Total variation (TV) minimization on graphs (TV minimization problem and TV norm kukTV) (p3)
+    central:  Provides the load-bearing mathematical objective used to construct node features (Eq. (3),(4)).
+    (defined inline)
+    why:      The TV norm and the constrained minimization (3) are explicitly defined and are the mathematical core of feature construction; the authors point to prior work on TV methods and their own prior paper [10] and related TV learning [14].
+
+[CITED]  K3  Duality between TV minimization and network flow (Theorem 1 / flow characterization) (p3)
+    central:  Gives the theoretical characterization of optimal TV solutions and drives the interpretation and algorithmic design (flow viewpoint, constraints (5)).
+    (defined inline)
+    why:      Theorem 1 and its optimality/duality conditions are stated and the proof is referenced to Fenchel duality [8] and the authors&#x27; prior work [10].
+
+[CITED]  K4  Spectral clustering (Laplacian eigenvector feature construction and baseline comparison) (p2)
+    central:  Serves as the principal baseline and conceptual foil; spectral feature construction (Eq. (1),(2)) motivates the TV-based alternative.
+    (defined inline)
+    why:      The standard Laplacian eigenvector approach and its limitations are reviewed and cited to von Luxburg [9] and matrix/computational sources [11].
+
+[CITED]  K5  Primal–dual iterative solver for TV minimization (Algorithm 1) (p3)
+    central:  Is the concrete optimization algorithm used to compute all TV-based features in experiments and is claimed to have provable convergence properties.
+    (defined inline)
+    why:      Algorithm 1 is presented in full and the authors cite primal-dual method results/preconditioning and convergence [4], [19].
+
+[OWN-COINAGE]  K1  Flow-based graph clustering (the paper&#x27;s proposed method) (p1)
+    central:  Names the paper&#x27;s core method and appears in title/abstract; all experiments evaluate this approach.
+    (defined inline)
+    why:      The manuscript presents and evaluates a novel clustering pipeline (Algorithm 2) that constructs features from TV solutions and applies k-means; the method is presented as the authors&#x27; contribution.
+
+[OWN-COINAGE]  K6  Seed-node selection heuristic (Algorithm 3) (p4)
+    central:  Determines the local TV problems to be solved and thus materially affects the produced feature vectors and final clustering.
+    (defined inline)
+    why:      Algorithm 3 is the paper&#x27;s proposed heuristic for choosing S; it is used repeatedly in Algorithm 2 and influences empirical performance.
+
+Overall: Provenance is largely adequate: the mathematical machinery (TV, duality, primal–dual solver) and spectral-clustering baseline are supported by citations. The paper&#x27;s named contributions (flow-based clustering and the seed-selection heuristic) are presented as novel and defined inline but should be explicitly declared as the authors&#x27; own and linked to the closest prior work (e.g. [10],[12],[14]) in the text to clarify novelty and provenance.
+
+6 central concept(s): 4 cited, 2 own-coinage, 0 elementary, 0 uncited, 0 vaguely-attributed.  (tokens: 13709)
+
+==========================================================================</pre></div></details><details class='card s-clean'><summary><span class='name mono'>erm_clarity_lint_llm.py</span><span class='desc'></span><span class='pill s-clean'>clean</span></summary><div class='body'><pre class='out'>== ERM clarity-of-presentation lint (LLM, gpt-5-mini-2025-08-07)
+File: /Users/junga1/tvmin/flowbasedclustering/flowbasedclustering.pdf
+
+SUMMARY: ERM triple: 3/3 CLEAR (data_point=CLEAR, features=CLEAR, label=CLEAR)
+
+How to read: for each object defining the learning problem — the located evidence and what a reader cannot reconstruct.
+CLEAR reconstructable · PARTIAL under-specified · UNCLEAR ambiguous · MISSING absent.
+
+[CLEAR  ] DATA POINT (one example)
+    evidence: &quot;Every node i ∈ V = {1, . . . , n} of the empirical graph represents a data point.&quot; (p.1)
+    gap:      none — the granularity of one data point is explicitly stated as one graph node.
+
+[CLEAR  ] FEATURES  (model input)
+    evidence: &quot;x(i) = û_i^{(1)}, . . . , û_i^{(s)} for every node i ∈ V.&quot; (Eq. (8), p.4)
+    gap:      none — feature vector dimension s is an input to Algorithm 2 and the per-data-point feature vector is explicitly specified.
+
+[CLEAR  ] LABEL     (model output)
+    evidence: &quot;Output: cluster assignments ĉ1, . . . , ĉn ∈ {1, . . . , k}&quot; (Alg. 2 header)&quot; and &quot;7: compute cluster assignments ĉi by applying k-means to feature vectors (8).&quot; (p.4)
+    gap:      none — the model output is explicitly defined as discrete cluster labels in {1,..,k}.
+
+-- Boundary checks --
+[CLEAR  ] INPUT/OUTPUT BOUNDARY
+    evidence: &quot;x(i) = û_i^{(1)}, . . . , û_i^{(s)} ... 7: compute cluster assignments ĉi by applying k-means to feature vectors (8).&quot; (p.4)
+    gap:      none — features (x(i)) and outputs (cluster assignments ĉi) are separated unambiguously.
+
+[CLEAR  ] DATA-POINT IDENTITY  
+    evidence: &quot;Every node i ∈ V = {1, . . . , n} of the empirical graph represents a data point.&quot; (p.1)
+    gap:      none — the data-point granularity (one graph node) is explicitly stated.
+
+Overall: Clear: the paper explicitly defines one data point as a graph node, gives the exact per-node feature vector (Eq. 8) and specifies the output labels (cluster indices), so a reader can reconstruct data_point, features, and label without guessing.
+
+ERM triple: 3/3 CLEAR (data_point=CLEAR, features=CLEAR, label=CLEAR).  (tokens: 9662)</pre></div></details></section><footer><p>flowbasedclustering.pdf · run_all_linters.py --profile paper --llm</p><p>Generated by the <a href='https://ml-theses.org/assets/linters/'>ml-theses.org linter suite</a>. Figure rules: Rougier, Droettboom &amp; Bourne, &ldquo;Ten Simple Rules for Better Figures&rdquo;, PLOS Comput Biol 2014.</p></footer></div><script>
 (function(){
   var btns=document.querySelectorAll('.controls button');
   function apply(mode){

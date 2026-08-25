@@ -5,7 +5,14 @@ Figures" (Rougier, Droettboom & Bourne, PLOS Comput Biol 2014).
 Looks at the RENDERED figures, not just their captions. Every figure in the
 PDF is located, rendered, and judged by a vision model against each of the
 ten rules; the output is a MATRIX with one row per figure and one column
-per rule:
+per rule, PLUS a "message decoded from each figure" section: for every figure
+the model first states, from the VISUAL ALONE, the single takeaway a reader
+would decode, then compares it to the caption's claim (= match / ~ partial /
+≠ the visual does not support the caption). This operationalises R2 ("Identify
+your message") -- a figure fails R2 when its decoded message does not match
+what the caption claims.
+
+Columns:
 
   R1  Know your audience          appropriate detail/notation for a thesis
   R2  Identify your message       one clear takeaway the visual conveys and
@@ -179,7 +186,12 @@ def find_figures(doc) -> List[Figure]:
             if region.height < 30:
                 continue
             region = region & page.rect
-            figs.append(Figure(number, pno + 1, cap_text.strip()[:200],
+            # Keep the WHOLE caption: R4 judges whether the caption is
+            # self-contained, so a truncated caption makes the model
+            # (correctly) report truncation. Multi-panel captions routinely
+            # run many hundreds of characters; cap only to guard against a
+            # pathological run-on that swallows body text.
+            figs.append(Figure(number, pno + 1, cap_text.strip()[:2000],
                                region, dpis))
     return figs
 
@@ -220,10 +232,11 @@ SYSTEM_PROMPT = (
     "  R1 Know your audience: detail and notation suit a technical thesis "
     "reader — not oversimplified, not assuming unstated context. Usually "
     "'ok'.\n"
-    "  R2 Identify your message: infer the single main takeaway from the "
-    "VISUAL. 'bad' if there is no discernible point, or the visual "
-    "contradicts / fails to support the specific claim the caption makes; "
-    "state the inferred takeaway ('reads as: ...') in the note. A "
+    "  R2 Identify your message: use the decoded message (see MESSAGE "
+    "DECODING below). 'bad' if there is no discernible point "
+    "(caption_match indecipherable) or the visual contradicts / fails to "
+    "support the caption's claim (caption_match 'mismatch'); 'weak' if it "
+    "only partially supports it ('partial'); 'ok' on a clear 'match'. A "
     "structural/architecture diagram whose job is to show structure "
     "satisfies this — its structure IS the message.\n"
     "  R3 Adapt to the medium: legible at print size. 'bad'/'weak' for "
@@ -256,8 +269,22 @@ SYSTEM_PROMPT = (
     "'bad' only when content that should have been typeset was "
     "screenshotted instead. A clean, deliberately cropped code listing "
     "shown AS a listing is 'ok'.\n\n"
-    "Respond with STRICT JSON, exactly one entry per rule key:\n"
-    '{{"rules": {{"R1": {{"v": "ok|weak|bad|na", "note": "..."}}, '
+    "MESSAGE DECODING (do this FIRST, and it grounds R2): looking ONLY at "
+    "the rendered figure and NOT at the caption, state in one sentence the "
+    "single main takeaway a reader would decode from the visual alone — what "
+    "does this figure actually show or argue? Put it in 'decoded_message'. "
+    "For a multi-panel figure, give the overall takeaway the panels combine "
+    "to make. THEN read the caption's claimed point and set 'caption_match': "
+    "'match' if the visual clearly conveys the caption's message, 'partial' "
+    "if it conveys it only weakly/ambiguously or the caption claims more than "
+    "the visual shows, 'mismatch' if the visual does not support or "
+    "contradicts the caption. In 'caption_match_note' say briefly how the "
+    "decoded message lines up with (or departs from) the caption.\n\n"
+    "Respond with STRICT JSON — the decoded message, the caption comparison, "
+    "then exactly one entry per rule key:\n"
+    '{{"decoded_message": "...", "caption_match": "match|partial|mismatch", '
+    '"caption_match_note": "...", '
+    '"rules": {{"R1": {{"v": "ok|weak|bad|na", "note": "..."}}, '
     '"R2": {{...}}, "R3": {{...}}, "R4": {{...}}, "R5": {{...}}, '
     '"R6": {{...}}, "R7": {{...}}, "R8": {{...}}, "R9": {{...}}, '
     '"R10": {{...}}}}}}'
@@ -375,7 +402,7 @@ def main(argv: List[str] = None) -> int:
                 f"all ten rules.")
         try:
             raw, usage = client.complete(model=model, system=system,
-                                         user=user, timeout=300,
+                                         user=user, timeout=600,
                                          images=[pix.tobytes("png")])
         except RuntimeError as e:
             rows.append({"label": label, "page": fig.page_no,
@@ -384,6 +411,9 @@ def main(argv: List[str] = None) -> int:
             continue
         total_tokens += usage.get("total_tokens", 0)
         parsed = extract_json(raw) or {}
+        decoded = str(parsed.get("decoded_message", "")).strip()
+        cap_match = str(parsed.get("caption_match", "")).strip().lower()
+        cap_note = str(parsed.get("caption_match_note", "")).strip()
         ruleset = parsed.get("rules", {}) if isinstance(parsed, dict) else {}
         verdicts = dict(heur)  # heuristics as a floor; LLM refines below
         for key in RULE_KEYS:
@@ -405,7 +435,9 @@ def main(argv: List[str] = None) -> int:
               f"{n_bad} bad, {n_weak} weak (white={wr:.0%})",
               file=sys.stderr)
         rows.append({"label": label, "page": fig.page_no,
-                     "verdicts": verdicts, "status": ""})
+                     "verdicts": verdicts, "status": "",
+                     "decoded": decoded, "cap_match": cap_match,
+                     "cap_note": cap_note})
 
     doc.close()
     print(render_matrix(rows, args.pdf))
@@ -447,6 +479,22 @@ def render_matrix(rows, source) -> str:
     out.append("Cells:  ✓ pass   ~ minor issue   ✗ clear violation   "
                "· not applicable   ? not assessed")
     out.append("")
+
+    # Decoded message per figure (read from the visual alone) vs the caption.
+    MATCH_GLYPH = {"match": "=", "partial": "~", "mismatch": "≠"}
+    decoded_rows = [r for r in rows if r.get("decoded")]
+    if decoded_rows:
+        out.append("Message decoded from each figure (visual alone) vs caption:")
+        for r in decoded_rows:
+            cm = r.get("cap_match", "")
+            tag = f"[{cm} {MATCH_GLYPH.get(cm, '?')}]" if cm else ""
+            out.append(f"  {r['label']} (p{r['page']}) {tag}")
+            out.append(f"      reads as: {r['decoded']}")
+            if r.get("cap_note") and cm in ("partial", "mismatch"):
+                out.append(f"      vs caption: {r['cap_note']}")
+        out.append("  (= visual matches caption · ~ partial · "
+                   "≠ visual does not support the caption's claim)")
+        out.append("")
 
     # Per-figure notes for weak/bad cells, plus any not-scored rows.
     notes = []
