@@ -28,6 +28,36 @@ Which KEY is used follows from LLM_BASE_URL, not the other way round: the
 helpers below inspect the URL, then read the matching variable (falling back
 to reading it out of the user's shell profile, see ``_key_from_shell_profile``).
 
+CHANGING THE MODEL. Pass a model id with ``--model`` on any linter (or
+``run_all_linters.py --model <id>``), or export ``LLM_MODEL``; ``--vision-model``
+/ ``LLM_VISION_MODEL`` sets the model figure_lint_llm.py uses for images. The
+valid ids depend on the endpoint (``--base-url`` / ``LLM_BASE_URL``). Which ids
+each Aalto service offers changes over time — these are the authoritative
+sources, and the values below were current in Aug 2026:
+
+  * Aalto AI API (default endpoint). GPT-5 family, dated ids:
+    ``gpt-5-2025-08-07``, ``gpt-5-mini-2025-08-07`` (the suite default),
+    ``gpt-5-nano-2025-08-07``. Catalogue + keys (Aalto login):
+    https://www.aalto.fi/en/services/aalto-ai-apis
+  * Aalto LLM Gateway (``--base-url https://llm-gateway.k8s.aalto.fi/api/v1``).
+    Open-weight models served on Aalto hardware; the live list is a GET on
+    ``/models`` (the id string is what you pass to ``--model``). Aug-2026 set:
+    ``RedHatAI/gemma-4-31B-it-FP8-Dynamic`` (recommended starter),
+    ``openai/gpt-oss-120b``, ``Qwen/Qwen3-30B-A3B-Instruct-2507-FP8``,
+    ``Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8``,
+    ``Qwen/Qwen3-VL-30B-A3B-Instruct-FP8`` (vision),
+    ``Qwen/Qwen3-VL-30B-A3B-Thinking-FP8``, ``Qwen/Qwen3.8-27B-FP8``,
+    ``google/gemma-4-E4B-it``, ``google/codegemma-7b-it``. Docs + key
+    self-service UI (Aalto VPN): https://scicomp.aalto.fi/aalto/llm-web-apis/
+
+Both Aalto services require the Aalto network / VPN. Example — run the whole
+suite through the gateway's Gemma model:
+
+  export AALTO_LLM_KEY=...    # made at https://llm-gateway.k8s.aalto.fi/
+  python3 run_all_linters.py thesis.pdf --llm \
+      --base-url https://llm-gateway.k8s.aalto.fi/api/v1 \
+      --model RedHatAI/gemma-4-31B-it-FP8-Dynamic
+
 Stdlib urllib only — no SDK needed.
 """
 
@@ -52,6 +82,87 @@ BASE_URL_HELP = ("LLM endpoint (default: the Aalto AI API, "
 API_KEY_HELP = ("API key (default: $AALTO_API_KEY for the Aalto AI API, "
                 "$AALTO_LLM_KEY for the Aalto LLM gateway, "
                 "$OPENROUTER_API_KEY otherwise).")
+
+
+_ANNOT_CACHE: Optional[str] = None
+
+# Only the SEMANTIC linters — the ones judging content, clarity, and framing —
+# benefit from the reviewer's margin comments. Injecting the annotation block
+# into the structural/mechanical linters (forward-ref, type-consistency, cross-
+# ref, acronym, caption, …) just inflates every one of their (often batched)
+# calls for no signal, which dominated the rerun's cost. Gate by the running
+# script's basename; override with $LINT_ANNOTATE_ONLY (comma-separated names,
+# or "*" for all).
+_SEMANTIC_LINTERS = {
+    "erm_clarity_lint_llm.py",
+    "central_concept_citation_lint_llm.py",
+    "abstract_selfcontained_lint_llm.py",
+    "prose_lint_llm.py",
+    "contribution_faithfulness_lint_llm.py",
+    "contribution_support_lint_llm.py",
+}
+
+
+def _annotations_wanted() -> bool:
+    """True if the currently-running linter is one that should receive the
+    reviewer annotations. Determined from sys.argv[0] (each linter runs as its
+    own process, incl. under run_all_linters.py, so the basename is the linter
+    module). $LINT_ANNOTATE_ONLY overrides the default semantic allowlist."""
+    override = os.environ.get("LINT_ANNOTATE_ONLY", "").strip()
+    if override == "*":
+        return True
+    allow = ({s.strip() for s in override.split(",") if s.strip()}
+             if override else _SEMANTIC_LINTERS)
+    script = os.path.basename(sys.argv[0] or "")
+    return script in allow
+
+
+def annotation_context() -> str:
+    """Reviewer margin comments to fold into a SEMANTIC LLM linter's system
+    prompt (see _SEMANTIC_LINTERS / $LINT_ANNOTATE_ONLY).
+
+    When $LINT_ANNOTATIONS_FILE points at a JSON list of annotations (each
+    {page, type, comment, quoted}, as extracted from the draft PDF), return a
+    delimited block instructing the linter to treat them as high-priority
+    signal WITHIN ITS OWN REMIT. Empty string when the var is unset/unreadable
+    or the running linter is not in the semantic allowlist, so those runs are
+    unaffected. Cached: the file is read once per process."""
+    global _ANNOT_CACHE
+    if _ANNOT_CACHE is not None:
+        return _ANNOT_CACHE
+    path = os.environ.get("LINT_ANNOTATIONS_FILE")
+    if not path or not os.path.exists(path) or not _annotations_wanted():
+        _ANNOT_CACHE = ""
+        return _ANNOT_CACHE
+    try:
+        rows = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        _ANNOT_CACHE = ""
+        return _ANNOT_CACHE
+    lines = []
+    for i, r in enumerate(rows, 1):
+        pg = r.get("page", "?")
+        cm = (r.get("comment") or "").strip()
+        q = (r.get("quoted") or "").strip()
+        if not cm and not q:
+            continue
+        on = f' on "{q}"' if q else ""
+        lines.append(f"[A{i} p{pg}]{on}: {cm}" if cm
+                     else f"[A{i} p{pg}] (highlight){on}")
+    if not lines:
+        _ANNOT_CACHE = ""
+        return _ANNOT_CACHE
+    _ANNOT_CACHE = (
+        "\n\n----- REVIEWER ANNOTATIONS -----\n"
+        "The following are margin comments written by the human expert "
+        "reviewer on THIS exact draft. Treat them as high-priority signal. "
+        "Where an annotation raises a concern that falls within your specific "
+        "linting remit, corroborate it with located evidence or refute it, and "
+        "fold that verdict into your findings — do not merely echo the "
+        "comment, and do not step outside your remit to chase annotations that "
+        "do not apply to your check.\n" + "\n".join(lines)
+        + "\n----- END ANNOTATIONS -----")
+    return _ANNOT_CACHE
 
 
 def is_responses_api(base_url: str) -> bool:
@@ -85,7 +196,9 @@ def is_aalto_endpoint(base_url: str) -> bool:
 def default_model(base_url: str = BASE_URL) -> str:
     """Text model id to use: ``$LLM_MODEL`` if set, otherwise a sensible
     default for the given endpoint (GPT-5-mini on the Aalto AI API, Qwen3 on
-    the Aalto LLM Gateway, Gemini Flash elsewhere)."""
+    the Aalto LLM Gateway, Gemini Flash elsewhere). Override per run with
+    ``--model`` / ``$LLM_MODEL``; see the module docstring for the current
+    valid ids on each Aalto endpoint."""
     if os.environ.get("LLM_MODEL"):
         return os.environ["LLM_MODEL"]
     if is_responses_api(base_url):
@@ -155,12 +268,14 @@ class LLMClient:
         self.responses = is_responses_api(base_url)
 
     def complete(self, model: str, system: str, user: str,
-                 timeout: float = 120.0, max_tokens: int = 8000,
+                 timeout: float = 900.0, max_tokens: int = 8000,
                  images: Optional[list] = None) -> Tuple[str, dict]:
         """Returns (raw_text, usage_dict). Raises RuntimeError on failure.
         `images` is an optional list of PNG bytes attached to the user
         message (use a vision-capable model, see default_vision_model)."""
         import base64
+        # Fold in reviewer annotations (no-op unless $LINT_ANNOTATIONS_FILE set).
+        system = system + annotation_context()
         if self.responses:
             content = [{"type": "input_text", "text": user}]
             for png in images or []:
@@ -234,6 +349,19 @@ class LLMClient:
                     time.sleep(wait)
                     continue
                 raise RuntimeError(f"LLM gateway error {e.code}: {detail}") from e
+            except (TimeoutError, urllib.error.URLError) as e:
+                # Transient network/read timeout — common on large vision
+                # payloads or slow reasoning. Retry with backoff instead of
+                # aborting the whole linter run. (HTTPError is a URLError
+                # subclass but is handled above, so it never reaches here.)
+                reason = getattr(e, "reason", e)
+                if attempt < 10:
+                    wait = 15
+                    print(f"[llm] network error ({reason}) — retrying in "
+                          f"{wait}s ({attempt + 1}/10)", file=sys.stderr)
+                    time.sleep(wait)
+                    continue
+                raise RuntimeError(f"LLM gateway unreachable: {reason}") from e
         if data is None:
             raise RuntimeError("LLM gateway unreachable after retries.")
         if isinstance(data.get("error"), dict) and data["error"]:
@@ -281,20 +409,31 @@ def make_client(base_url: str = BASE_URL,
     return LLMClient(base_url, key)
 
 
+def _repair_json(s: str) -> str:
+    r"""Fix the invalid escapes LLMs most often emit. JSON permits only
+    \" \\ \/ \b \f \n \r \t \uXXXX; anything else after a backslash is a
+    parse error. Models frequently write \' (e.g. "confidence\'s"), so drop
+    the backslash before any character that is not a legal escape."""
+    return re.sub(r'\\([^"\\/bfnrtu])', r"\1", s)
+
+
 def extract_json(text: str) -> Optional[dict]:
-    """Parse strict JSON, with a fallback to the first {...} block."""
+    """Parse strict JSON, with fallbacks: strip code fences, repair the
+    invalid escapes LLMs emit (e.g. \\'), and finally the first {...} block."""
     text = text.strip()
     if text.startswith("```"):
         text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
         text = re.sub(r"\n?```$", "", text).strip()
-    try:
-        return json.loads(text)
-    except Exception:
-        pass
+    for candidate in (text, _repair_json(text)):
+        try:
+            return json.loads(candidate)
+        except Exception:
+            pass
     m = re.search(r"\{.*\}", text, re.S)
     if m:
-        try:
-            return json.loads(m.group(0))
-        except Exception:
-            return None
+        for candidate in (m.group(0), _repair_json(m.group(0))):
+            try:
+                return json.loads(candidate)
+            except Exception:
+                pass
     return None

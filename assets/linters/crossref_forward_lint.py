@@ -403,12 +403,15 @@ def analyze(
         if d is None:
             unresolved.append(r)
             continue
-        # Forward if definition is strictly below the reference in reading
-        # order. The tuple guard already excludes backward/same-position
-        # definitions, so `distance` below is always > 0.
+        # Forward if definition is strictly below the reference in reading order.
         if (d.page, d.y) <= (r.page, r.y):
             continue  # backward or same line -> not a forward ref
         distance = (d.page - r.page) + (d.y - r.y) / page_height
+        if distance <= 0:
+            continue
+        is_forward = distance > 0
+        if not is_forward:
+            continue
         if not any_forward and distance <= threshold:
             continue
         dedup_key = (r.kind, r.num, r.page, round(r.y))

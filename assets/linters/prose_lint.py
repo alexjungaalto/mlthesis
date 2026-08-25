@@ -11,6 +11,12 @@ Guidelines enforced (heuristically):
     or claims a property with no defined metric. A nearby number does not
     excuse these.
     -> [WARN] JARGON per occurrence.
+  * Empty buzzwords — words near-universally replaceable by a plainer
+    one: "leverage"/"utilize" -> "use", "in order to" -> "to", plus
+    unearned hype ("seamless", "cutting-edge", "holistic", "synergy").
+    Legitimate senses ("financial leverage", measured "utilization")
+    are carved out.
+    -> [WARN] BUZZWORD per occurrence.
   * Dangling references — "this shows", "it follows" where "this"/"it" has
     no clear antecedent.
     -> [INFO] DANGLING-REFERENCE for sentences STARTING with a bare
@@ -78,12 +84,33 @@ JARGON_RE = re.compile(
     r"smoothly|(?:model|training|network|method)\s+struggl\w+|"
     r"degrades?\s+gracefully|graceful\s+degradation|"
     r"(?:works?|performs?)\s+(?:very\s+|quite\s+|really\s+)?well|"
-    r"(?:good|great|strong|excellent|impressive|decent)\s+"
+    r"(?:good|great|strong|excellent|impressive|decent|competitive)\s+"
+    r"(?:performance|results|accuracy)|"
+    r"achieves?\s+(?:strong|impressive|competitive|superior)\s+"
     r"(?:performance|results|accuracy)|"
     r"(?:training|convergence)\s+is\s+(?:very\s+)?(?:stable|smooth)|"
+    r"state[- ]of[- ]the[- ]art\s+(?:performance|results|accuracy)|"
     r"(?:fast(?:est)?|smooth(?:est)?|(?:most\s+)?stable)\s+"
     r"(?:and\s+(?:fast(?:est)?|smooth(?:est)?|(?:most\s+)?stable)\s+)?"
     r"convergence)\b", re.I)
+
+# Empty buzzwords: near-universally replaceable by a plainer word, high
+# enough precision for a regex pass. "leverage"/"utilize" -> "use";
+# "in order to" -> "to"; hype adjectives ("novel", "seamless", ...) that
+# read as unearned praise. Carve-outs below drop the legitimate senses.
+BUZZWORD_RE = re.compile(
+    r"\b(leverages?|leveraging|leveraged|utili[sz]es?|utili[sz]ing|"
+    r"utili[sz]ed|in\s+order\s+to|seamless(?:ly)?|cutting[- ]edge|"
+    r"holistic(?:ally)?|synerg\w+)\b", re.I)
+# "leverage" as the physics/finance noun and "utilization" (a measured
+# quantity, e.g. GPU utilization) are legitimate — do not flag those.
+BUZZWORD_OK_RE = re.compile(
+    r"\b(financial\s+leverage|utili[sz]ation)\b", re.I)
+# A hype word inside a cited paper title is the cited authors' wording, not
+# the author's prose. Skip sentences that look like a bibliographic entry
+# (an "et al." or an author-initial list run together with a 4-digit year).
+CITATIONISH_RE = re.compile(
+    r"et\s+al\.|[A-Z][a-z]+,\s+[A-Z]\.[^.]*\b(19|20)\d\d\b")
 
 # Forward-looking cue phrases: "as we will see", "we will discuss ... later",
 # "will be defined in ...", "more on this later", "later in this chapter".
@@ -150,6 +177,16 @@ def main(argv: List[str] = None) -> int:
                 rep.add("WARN", "JARGON", where,
                         f"colloquial/undefined claim '{m.group(1)}' — "
                         f"define and measure the property or drop it: "
+                        f"\"{sent[:95]}{'…' if len(sent) > 95 else ''}\"")
+            m = BUZZWORD_RE.search(sent)
+            if m and not BUZZWORD_OK_RE.search(sent) \
+                    and not CITATIONISH_RE.search(sent):
+                word = m.group(1)
+                plain = {"in order to": "to"}.get(word.lower(), "'use' / plain wording")
+                if re.match(r"(?i)leverage|utili", word):
+                    plain = "use"
+                rep.add("WARN", "BUZZWORD", where,
+                        f"empty buzzword '{word}' — prefer {plain}: "
                         f"\"{sent[:95]}{'…' if len(sent) > 95 else ''}\"")
             m = FORWARD_CUE_RE.search(sent)
             if m:
