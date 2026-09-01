@@ -58,12 +58,15 @@ there are findings, and `2` on a usage error (bad arguments, missing file),
 so you can also wire the linters into scripts or CI.
 
 > **Prefer a visual report?** Add `--dashboard` to the runner —
-> `python3 run_all_linters.py thesis.pdf --dashboard` runs the whole suite
-> and opens a self-contained HTML dashboard in your browser (summary band,
-> one card per linter, the figure × ten-rules matrix). See
+> `python3 run_all_linters.py thesis.pdf --dashboard` opens a self-contained
+> HTML dashboard in your browser (summary band, one card per linter, the
+> figure × ten-rules matrix). The dashboard shows only the linters you ran:
+> without `--llm` it contains just the fast heuristic checks — the semantic
+> assessments (research questions, contributions, story flow, the thesis
+> checklist) appear only when you add `--llm`. See
 > [Basic usage](#basic-usage), or
 > **[view a live example dashboard](https://ml-theses.org/assets/linters/demo_dashboard.html)**
-> (a real run of this suite on a sample document).
+> (a real `--llm --bib` run of this suite on a sample document).
 
 ## Quick start
 
@@ -79,12 +82,14 @@ pip install pymupdf                       # some PDF linters need it
 # 3. fast heuristic pass (no LLM, no network) over a compiled PDF
 python3 run_all_linters.py thesis.pdf         # replace thesis.pdf with your file
 
-# 4. optional: add the LLM + bibliography linters
+# 4. recommended: add the LLM + bibliography linters — the semantic checks
+#    (research questions, contributions, flow, checklist) run ONLY with --llm
 export AALTO_API_KEY=...                   # key from the Aalto API dev portal
 python3 run_all_linters.py thesis.pdf --llm --bib
 
 # 5. optional: get an HTML dashboard, opened in your browser
-python3 run_all_linters.py thesis.pdf --dashboard
+#    (shows only the linters you ran — combine with --llm for the full picture)
+python3 run_all_linters.py thesis.pdf --llm --bib --dashboard
 ```
 
 A few terms in those commands, in plain language:
@@ -95,14 +100,20 @@ A few terms in those commands, in plain language:
 - **Fast / heuristic pass (step 3)** — the linters that use only simple
   text rules. No internet, no API key, nothing leaves your computer. Start
   here.
-- **LLM linters (step 4)** — extra checks powered by a **large language
-  model** (the same kind of AI as ChatGPT). They are more insightful but
-  need an API key and send your text to a language-model service; see
-  [Data handling](#data-handling) for where that text goes and how to keep
-  it private. `--bib` turns on the reference checker, which looks each
-  citation up online.
+- **LLM linters (step 4)** — the checks powered by a **large language
+  model** (the same kind of AI as ChatGPT). This is where the substantive
+  feedback lives: whether your research questions are well-posed and
+  answered, whether the claimed contributions are supported by the text,
+  story flow, and the thesis checklist. **None of these run without
+  `--llm`** — the fast pass in step 3 covers only mechanical issues. The
+  trade-off: `--llm` needs an API key and sends your text to a
+  language-model service; see [Data handling](#data-handling) for where
+  that text goes and how to keep it private. `--bib` turns on the
+  reference checker, which looks each citation up online.
 - **Dashboard (step 5)** — the same results as a web page instead of
-  terminal text (see [Basic usage](#basic-usage)).
+  terminal text (see [Basic usage](#basic-usage)). It renders whatever
+  linters you ran, so pair it with `--llm` to see the semantic assessments
+  as cards too.
 
 Once you have a report, [Basic usage](#basic-usage) explains how to read a
 finding line (severity, code, location, evidence). Everything below that is
@@ -398,6 +409,11 @@ python3 run_all_linters.py thesis.pdf              # fast heuristic suite
 python3 run_all_linters.py thesis.pdf --llm --bib  # + LLM + bibliography
 ```
 
+The first command runs only the fast, rule-based checks. The semantic
+assessments — research questions, contributions, flow, the thesis
+checklist and the other `*_llm` linters in the tables below — require the
+second form: they run **only with `--llm`**.
+
 `run_all_linters.py` prints each linter's report followed by a one-line
 per-linter summary (`clean` / `findings` / `error`).
 
@@ -408,9 +424,15 @@ Want to see what it looks like first?
 exactly as the command below would render your own.
 
 ```sh
-python3 run_all_linters.py thesis.pdf --dashboard          # fast suite
-python3 run_all_linters.py thesis.pdf --llm --bib --dashboard
+python3 run_all_linters.py thesis.pdf --dashboard          # fast suite only
+python3 run_all_linters.py thesis.pdf --llm --bib --dashboard   # full suite
 ```
+
+Note that `--dashboard` changes only *how* results are shown, not *which*
+linters run: the first command renders a dashboard of the fast checks
+alone. To see the semantic assessment cards (research questions,
+contributions, flow, checklist) — the ones featured in the example
+dashboard above — use the second command.
 
 This runs the suite once and, when it finishes, writes a self-contained HTML
 page — a summary band, one expandable card per linter grouped by theme, and
