@@ -561,7 +561,7 @@ python3 bibliography_linter.py thesis.pdf          # verify references
 
 | Instruction | Linter | How |
 |---|---|---|
-| Problem formulation: data points,<br>features, labels defined | `thesis_checklist_llm.py`<br>`erm_clarity_lint_llm.py` | verdict `problem-formulation`<br>with quoted evidence<br>per ERM object (data point / features /<br>label): `CLEAR` / `PARTIAL` / `UNCLEAR` /<br>`MISSING`, plus the input/output-boundary<br>and data-point-identity checks |
+| Problem formulation: data points,<br>features, labels defined | `thesis_checklist_llm.py`<br>`problem_clarity_lint_llm.py` | verdict `problem-formulation`<br>with quoted evidence<br>per defining object of the learning<br>problem (paradigm-aware — e.g. data point /<br>features / label for supervised, state /<br>action / reward / objective for RL):<br>`CLEAR` / `PARTIAL` / `UNCLEAR` /<br>`MISSING`, plus the interface-boundary<br>and unit-identity checks |
 | Abstract readable from elementary<br>(Dictionary) concepts alone | `abstract_selfcontained_lint_llm.py` | grade `GOOD` / `FAIR` / `POOR`; per term<br>`UNDEFINED` / `AMBIGUOUS` /<br>`COMPOUND-JARGON` gaps, each with the<br>naive-reader question and an inline fix |
 | Research scope/questions well-posed<br>(clear, focused, specific, complex,<br>feasible, relevant, self-contained) | `rq_quality_lint_llm.py` | per-question criteria verdicts<br>+ scope checks (gap,<br>delimitations, alignment) |
 | Identify data sources and evaluation criteria | `thesis_checklist_llm.py` | verdict `data-sources-eval` |
@@ -673,7 +673,7 @@ extras. A short prose note on each linter follows the table.
 | [`contribution_faithfulness_lint_llm.py`](contribution_faithfulness_lint_llm.py) | one holistic verdict: is the headline<br>contribution over- or under-sold? | `.pdf` | Aalto AI API |
 | [`abstract_selfcontained_lint_llm.py`](abstract_selfcontained_lint_llm.py) | is the abstract self-contained from<br>elementary (Aalto Dictionary) concepts?<br>(paper profile) | `.pdf` | Aalto AI API |
 | [`central_concept_citation_lint_llm.py`](central_concept_citation_lint_llm.py) | are the paper's central concepts sourced<br>(cited / own-coinage / elementary /<br>uncited)? (paper profile) | `.pdf` | Aalto AI API |
-| [`erm_clarity_lint_llm.py`](erm_clarity_lint_llm.py) | is the learning task stated clearly as<br>empirical risk minimisation (data points,<br>features, labels, model, loss)?<br>(paper profile) | `.pdf` | Aalto AI API |
+| [`problem_clarity_lint_llm.py`](problem_clarity_lint_llm.py) | is the learning problem stated clearly?<br>Identifies the paradigm (supervised,<br>unsupervised, RL, generative) and grades<br>its defining objects — e.g. data point /<br>features / label, or state / action /<br>reward / objective (paper profile) | `.pdf` | Aalto AI API |
 | [`annotation_coverage_lint_llm.py`](annotation_coverage_lint_llm.py) | cross-checks reviewer PDF annotations<br>against what the suite flagged<br>(`COVERED`/`PARTIAL`/`UNCAUGHT`) | run output<br>+ annotations | Aalto AI API |
 | [`figure_lint_llm.py`](figure_lint_llm.py) | figures scored against the PLOS<br>Ten Simple Rules for Better Figures<br>(figures × ten-rules matrix) | `.pdf` | PyMuPDF<br>(+ Aalto AI API<br>unless `--no-llm`) |
 | [`section_intro_lint_llm.py`](section_intro_lint_llm.py) | does each chapter/section intro map<br>its subsections and tie them together? | `.pdf` | PyMuPDF +<br>Aalto AI API |

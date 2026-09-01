@@ -94,7 +94,7 @@ _ANNOT_CACHE: Optional[str] = None
 # script's basename; override with $LINT_ANNOTATE_ONLY (comma-separated names,
 # or "*" for all).
 _SEMANTIC_LINTERS = {
-    "erm_clarity_lint_llm.py",
+    "problem_clarity_lint_llm.py",
     "central_concept_citation_lint_llm.py",
     "abstract_selfcontained_lint_llm.py",
     "prose_lint_llm.py",

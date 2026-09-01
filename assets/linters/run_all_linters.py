@@ -101,7 +101,7 @@ LLM = [
     ("contribution_faithfulness_lint_llm.py", True, False, BOTH, False),
     ("abstract_selfcontained_lint_llm.py", True, False, (PAPER,), False),
     ("central_concept_citation_lint_llm.py", True, False, (PAPER,), False),
-    ("erm_clarity_lint_llm.py", True, False, (PAPER,), False),
+    ("problem_clarity_lint_llm.py", True, False, (PAPER,), False),
     ("own_work_relation_lint_llm.py", True, False, (PAPER,), False),
 ]
 BIB = [("bibliography_linter.py", True, False, BOTH, False)]

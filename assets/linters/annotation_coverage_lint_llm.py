@@ -60,13 +60,13 @@ SYSTEM_PROMPT = (
     "  UNCAUGHT  no linter addresses it. This is either a coverage gap in the "
     "suite or a concern no linter is designed to check (say which).\n\n"
     "Judge by MEANING, not string overlap: the reviewer asking 'what is one "
-    "data point?' is COVERED by an ERM-clarity linter grading the data point "
+    "data point?' is COVERED by a problem-clarity linter grading the data point "
     "PARTIAL/UNCLEAR, even with no shared words. Be strict about COVERED — the "
     "linter must actually name the same problem, not merely lint the same "
     "sentence for a different reason.\n\n"
     "Respond with STRICT JSON:\n"
     '{"annotations": [{"id": "A1", "status": "COVERED|PARTIAL|UNCAUGHT", '
-    '"linters": ["erm_clarity_lint_llm.py"], "note": "one line: what the '
+    '"linters": ["problem_clarity_lint_llm.py"], "note": "one line: what the '
     'linter caught, or why nothing did"}], '
     '"suite_gaps": ["one line per class of concern the suite systematically '
     'misses"], '
