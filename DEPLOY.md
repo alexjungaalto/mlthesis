@@ -94,6 +94,31 @@ nginx -t && systemctl reload nginx
 certbot --nginx -d ml-theses.org -d www.ml-theses.org
 ```
 
+### Canonical host: redirect www → apex
+
+After certbot has run, consolidate on the apex domain: remove
+`www.ml-theses.org` from the main block's `server_name` and append a
+redirect block to the same file (reuse the exact `ssl_certificate` lines
+certbot added to the main block — the certificate covers both names):
+
+```nginx
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name www.ml-theses.org;
+    ssl_certificate /etc/letsencrypt/live/ml-theses.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ml-theses.org/privkey.pem;
+    return 301 https://ml-theses.org$request_uri;
+}
+```
+
+Then `nginx -t && systemctl reload nginx`, and verify:
+
+```bash
+curl -sI https://www.ml-theses.org/ | head -3
+# expect: HTTP/2 301  +  location: https://ml-theses.org/
+```
+
 ## 4. Deploy key (server ⇄ GitHub Actions)
 
 On your **laptop**, create a dedicated key pair for CI:
