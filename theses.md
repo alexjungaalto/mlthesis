@@ -20,7 +20,7 @@
 
 | # | Author | Title | Date | Industry | Recording |
 |---|--------|-------|------|----------|-----------|
-| 1 | G. Argyrou | [Byzantine-Robust and Communication-Efficient Federated Fire Detection on Edge Cameras](https://urn.fi/URN:NBN:fi:aalto-202608206487) | Aug. 2026 | Kudelski IoT |  |
+| 1 | G. Argyrou | [Byzantine-Robust and Communication-Efficient Federated Fire Detection on Edge Cameras](https://urn.fi/URN:NBN:fi:aalto-202608206487) | Aug. 2026 | Kudelski IoT | [video](https://youtu.be/edr3yNM_4-U) |
 | 2 | J. Haapanen | [Anomaly Detection in Phase-Level Maritime Operational Data — A Comparative Study of Detection Methods](https://urn.fi/URN:NBN:fi:aalto-202608206502) | Aug. 2026 | Napa Oy | [video](https://youtu.be/9K9sDFP4VDQ) |
 | 3 | B. Prágai | [Merkle Tree-based framework for verifiable, incentivized and privacy-preserving data contribution systems: A Proof-of-concept](https://urn.fi/URN:NBN:fi:aalto-202608176029) | Aug. 2026 | Fixmeapp AB | [video](https://youtu.be/3VDUt9yOLxc) |
 | 4 | A. Päkkilä | [Active Constraint Set Learning for Constrained Optimization](https://urn.fi/URN:NBN:fi:aalto-202608206512) | Aug. 2026 | Relex Solutions | [video](https://youtu.be/mFspgU3ZW0Q) |
