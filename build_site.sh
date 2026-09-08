@@ -60,6 +60,25 @@ fi
 echo "==> Regenerating theses.md from theses.csv"
 python3 compile_theses.py --markdown
 
+# Sync the thesis list onto the alexjung.at supervision page (a Jekyll site
+# checked out in a sibling repo, published via GitHub Pages). The sync only
+# rewrites the marker-delimited generated section of supervision.md; the
+# change still has to be committed and pushed in that repo to go live. Local
+# convenience step — skipped when the checkout is absent (e.g. in CI, which
+# only deploys ml-theses.org).
+ALEXJUNG_SITE_DIR="${ALEXJUNG_SITE_DIR:-$HOME/MachineLearningForAll.github.io}"
+if [[ -f "$ALEXJUNG_SITE_DIR/supervision.md" ]]; then
+  echo "==> Syncing thesis list into $ALEXJUNG_SITE_DIR/supervision.md"
+  python3 compile_theses.py --supervision "$ALEXJUNG_SITE_DIR/supervision.md" >/dev/null
+  if ! git -C "$ALEXJUNG_SITE_DIR" diff --quiet -- supervision.md; then
+    echo "    supervision.md changed — commit and push in $ALEXJUNG_SITE_DIR to publish on alexjung.at"
+  else
+    echo "    supervision.md already up to date"
+  fi
+else
+  echo "==> Skipping alexjung.at sync (no checkout at $ALEXJUNG_SITE_DIR)"
+fi
+
 echo "==> Regenerating Topics.md from topics.csv"
 python3 compile_topics.py --markdown
 

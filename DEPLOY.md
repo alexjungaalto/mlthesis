@@ -27,6 +27,13 @@ You normally only ever hand-edit `theses.csv`, `README.md`, or `Topics.md`.
 regenerated from the CSV, but stays committed so the README's link to it
 works in the GitHub repo view.
 
+When a checkout of the personal-website repo exists at
+`~/MachineLearningForAll.github.io` (override with `ALEXJUNG_SITE_DIR`),
+`build_site.sh` additionally syncs the thesis list into that repo's
+`supervision.md` (the <https://alexjung.at/supervision/> page). The step is
+skipped in CI, where no such checkout exists — after a local build, review,
+commit, and push in that repo to publish the updated page via GitHub Pages.
+
 ## 2. DNS (domain registrar)
 
 Point the domain at the Hetzner server's IP:

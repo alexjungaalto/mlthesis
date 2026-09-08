@@ -39,6 +39,7 @@ This is a **public GitHub repository** providing guidance to master thesis stude
 - For a standalone LaTeX/PDF export of the thesis list, run `python compile_theses.py --tex`. The resulting `theses.tex` (and a compiled `theses.pdf`) are git-ignored local exports — do not commit them.
 - Run `python compile_theses.py --stats` for summary statistics.
 - When adding new theses, append to `theses.csv` and re-run the script.
+- The thesis list also feeds the **alexjung.at supervision page**: `build_site.sh` runs `python compile_theses.py --supervision <path>` against the Jekyll checkout at `~/MachineLearningForAll.github.io/supervision.md` (override with `ALEXJUNG_SITE_DIR`; skipped if absent, e.g. in CI). Only the marker-delimited section of that page is regenerated; commit and push in that repo to publish.
 - Ground truth for author names and titles is the `citation_author` / `citation_title` metadata on the linked Aaltodoc record. Use proper diacritics (e.g. `Hämmäinen`, not `Hamminen`).
 
 ## Working with Topic Proposals

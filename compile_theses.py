@@ -16,6 +16,7 @@ Usage:
 import argparse
 import csv
 import os
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -23,6 +24,15 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_CSV = SCRIPT_DIR / "theses.csv"
 DEFAULT_MD = SCRIPT_DIR / "theses.md"
 DEFAULT_TEX = SCRIPT_DIR / "theses.tex"
+
+# Markers delimiting the generated thesis list on the alexjung.at supervision
+# page (see --supervision). Everything between them is replaced on each sync;
+# the hand-written intro above the markers is left untouched.
+SUPERVISION_BEGIN = (
+    "<!-- theses:begin — generated from theses.csv by"
+    " `compile_theses.py --supervision`; do not edit by hand -->"
+)
+SUPERVISION_END = "<!-- theses:end -->"
 
 
 def load_theses(csv_path: Path) -> list[dict]:
@@ -233,6 +243,93 @@ def generate_tex(theses: list[dict], output_path: Path) -> None:
     print(f"LaTeX written to {output_path}")
 
 
+def thesis_year(t: dict) -> int:
+    """Extract the four-digit year from a thesis record's date field."""
+    m = re.search(r"\b(19|20)\d{2}\b", t["date"])
+    return int(m.group(0)) if m else 0
+
+
+def render_supervision_entry(t: dict, label: str, uni_display: str) -> str:
+    """Render one thesis as an IEEE-style citation line for the Jekyll page."""
+    parts = [f'[{label}]&nbsp;&nbsp;{t["author"]}, "{t["title"]},"']
+    if t["status"].lower() == "ongoing":
+        parts.append(f"M.Sc. thesis (in progress), {uni_display}.")
+    else:
+        parts.append(f"M.Sc. thesis, {uni_display}, {t['date']}.")
+    if t["industry"]:
+        parts.append(f"(with {t['industry']})")
+    if t["status"].lower() != "ongoing" and t["url"]:
+        parts.append(f"[link]({t['url']})")
+    if t.get("recording"):
+        parts.append(f"[video]({t['recording']})")
+    return " ".join(parts)
+
+
+def generate_supervision(theses: list[dict], page_path: Path) -> None:
+    """Regenerate the thesis list on the alexjung.at supervision page.
+
+    Replaces the content between SUPERVISION_BEGIN/SUPERVISION_END markers in
+    the Jekyll page, keeping the hand-written front matter and intro intact.
+    Ongoing theses are labeled [O1], [O2], ...; completed theses are numbered
+    continuously across universities and grouped by year (newest first), with
+    everything up to 2017 collected under a single heading.
+    """
+    uni_display = {"Aalto": "Aalto University"}
+    by_uni: dict[str, list[dict]] = {}
+    for t in theses:
+        by_uni.setdefault(t["university"], []).append(t)
+
+    lines: list[str] = []
+    completed_no = 0
+    for uni, records in by_uni.items():
+        display = uni_display.get(uni, uni)
+        ongoing = [r for r in records if r["status"].lower() == "ongoing"]
+        completed = [r for r in records if r["status"].lower() != "ongoing"]
+        # Newest first; stable, so CSV order is kept within a year.
+        completed.sort(key=thesis_year, reverse=True)
+
+        lines += [f"## {display}", ""]
+
+        if ongoing:
+            lines += ["### Ongoing", ""]
+            for i, t in enumerate(ongoing, 1):
+                lines += [render_supervision_entry(t, f"O{i}", display), ""]
+
+        if completed:
+            if ongoing:
+                lines += ["### Completed", ""]
+            # Group by year, folding 2017 and older into one bucket. Skip the
+            # year headings entirely when a university has a single group
+            # (e.g. TU Wien).
+            group = lambda t: max(thesis_year(t), 2017)
+            headings = len({group(t) for t in completed}) > 1
+            prev = None
+            for t in completed:
+                if headings and group(t) != prev:
+                    prev = group(t)
+                    label = str(prev) if prev > 2017 else "2017 and earlier"
+                    lines += [f"#### {label}", ""]
+                completed_no += 1
+                lines += [render_supervision_entry(t, str(completed_no), display), ""]
+
+    page = page_path.read_text(encoding="utf-8")
+    if SUPERVISION_BEGIN not in page or SUPERVISION_END not in page:
+        raise SystemExit(
+            f"Error: markers not found in {page_path}.\n"
+            f"Add these two lines around the generated thesis list:\n"
+            f"  {SUPERVISION_BEGIN}\n  {SUPERVISION_END}"
+        )
+    head, rest = page.split(SUPERVISION_BEGIN, 1)
+    _, tail = rest.split(SUPERVISION_END, 1)
+    body = "\n".join([SUPERVISION_BEGIN, "", *lines]).rstrip() + "\n" + SUPERVISION_END
+    page_path.write_text(head + body + tail, encoding="utf-8")
+    n_ongoing = sum(1 for t in theses if t["status"].lower() == "ongoing")
+    print(
+        f"Supervision page updated: {page_path} "
+        f"({n_ongoing} ongoing, {completed_no} completed)"
+    )
+
+
 def print_stats(theses: list[dict]) -> None:
     """Print summary statistics."""
     print(f"\nTotal theses: {len(theses)}")
@@ -277,6 +374,12 @@ def main():
     parser.add_argument("--output", type=Path, default=DEFAULT_MD, help="Markdown output path")
     parser.add_argument("--tex", action="store_true", help="Generate theses.tex")
     parser.add_argument("--tex-output", type=Path, default=DEFAULT_TEX, help="LaTeX output path")
+    parser.add_argument(
+        "--supervision",
+        type=Path,
+        metavar="PAGE",
+        help="Sync the thesis list into the alexjung.at supervision page (Jekyll .md)",
+    )
     parser.add_argument("--stats", action="store_true", help="Print statistics")
     parser.add_argument("--university", type=str, help="Filter by university")
     parser.add_argument("--status", type=str, help="Filter by status (ongoing/completed)")
@@ -302,6 +405,13 @@ def main():
 
     if args.tex:
         generate_tex(theses, args.tex_output)
+
+    if args.supervision:
+        if not args.supervision.exists():
+            # SystemExit so the message reaches stderr even when stdout is
+            # redirected (build_site.sh silences the summary output).
+            raise SystemExit(f"Error: supervision page not found at {args.supervision}")
+        generate_supervision(theses, args.supervision)
 
     return 0
 
