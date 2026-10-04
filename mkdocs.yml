@@ -18,6 +18,8 @@ use_directory_urls: false
 
 theme:
   name: material
+  # Template overrides (Open Graph / Twitter Card tags for link previews).
+  custom_dir: web/overrides
   language: en
   features:
     - navigation.tabs

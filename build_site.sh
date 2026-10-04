@@ -101,6 +101,12 @@ rm -f docs/material/.DS_Store docs/material/creategraphtex.py
 mkdir -p docs/stylesheets
 cp web/extra.css docs/stylesheets/extra.css
 
+# Link-preview card image referenced by the Open Graph tags in
+# web/overrides/main.html (https://ml-theses.org/assets/social-card.png).
+# Regenerate with `python3 web/make_social_card.py` after changing its text.
+mkdir -p docs/assets
+cp web/social-card.png docs/assets/social-card.png
+
 # robots.txt (points crawlers at the auto-generated sitemap). Copied to the
 # docs root so MkDocs publishes it at site root: https://ml-theses.org/robots.txt
 cp web/robots.txt docs/robots.txt
