@@ -46,10 +46,11 @@ installed, and a terminal. The [Quick start](#quick-start) gets you a first
 report in about two minutes. The rest of the page is reference material you
 can read as questions come up.
 
-These linters check MSc thesis manuscripts against the writing instructions
-of [ml-theses.org](https://ml-theses.org) — the thesis guide for students
-supervised by Alex Jung at Aalto University. (Writing a conference or
-journal paper instead of a thesis? Add `--profile paper` — see
+These linters check thesis manuscripts — bachelor's, master's, or doctoral,
+at any university — against the writing instructions of
+[ml-theses.org](https://ml-theses.org), the thesis guide for students
+supervised by Alex Jung. (Writing a conference or journal paper instead of a
+thesis? Add `--profile paper` — see
 [Profiles](#profiles-thesis-vs-research-paper).)
 
 Every script is run as `python3 <script> ...` and prints a **findings
@@ -72,8 +73,8 @@ so you can also wire the linters into scripts or CI.
 
 ```sh
 # 1. get the suite
-git clone https://github.com/alexjungaalto/masterthesis.git
-cd masterthesis/assets/linters
+git clone https://github.com/alexjungaalto/mlthesis.git
+cd mlthesis/assets/linters
 
 # 2. one-time setup
 python3 -m venv .venv && source .venv/bin/activate
@@ -122,14 +123,14 @@ reference — dip into it as questions come up.
 ## Getting the scripts
 
 All linters live in one directory —
-[`assets/linters/`](https://github.com/alexjungaalto/masterthesis/tree/main/assets/linters)
-in the masterthesis repo. Two ways to get them:
+[`assets/linters/`](https://github.com/alexjungaalto/mlthesis/tree/main/assets/linters)
+in the mlthesis repo. Two ways to get them:
 
 - **The whole suite (recommended)** — clone or download the repo and work
   inside `assets/linters/`:
   ```sh
-  git clone https://github.com/alexjungaalto/masterthesis.git
-  cd masterthesis/assets/linters
+  git clone https://github.com/alexjungaalto/mlthesis.git
+  cd mlthesis/assets/linters
   ```
 - **A single script** — each one is served on the website at its own URL,
   e.g. <https://ml-theses.org/assets/linters/prose_lint.py>. Download it (and
@@ -168,7 +169,7 @@ The repository ships a `SHA256SUMS` file listing the SHA-256 hash of every
 `.py` file. After cloning or downloading, verify the scripts match:
 
 ```sh
-cd masterthesis/assets/linters
+cd mlthesis/assets/linters
 shasum -a 256 -c SHA256SUMS      # macOS/BSD; prints "<file>: OK" for each
 # or, on Linux:
 sha256sum -c SHA256SUMS
@@ -260,6 +261,13 @@ endpoint such as OpenRouter — override the endpoint and model either way:
   through `run_all_linters.py`, picks them up. A flag, when given, wins
   over the matching env var.
 
+> **Not at Aalto?** The Aalto endpoints are reachable only from the Aalto
+> network or VPN, so students at other universities (e.g. IMC Krems) should
+> point the linters at a **local on-device model** or at an OpenAI-compatible
+> gateway their own university provides, using `--base-url` as above. The
+> rule-based linters (everything without `_llm` in the name) need no LLM at
+> all and work the same everywhere.
+
 ### Choosing the LLM model
 
 You pick the model with **`--model <id>`** (or the **`LLM_MODEL`** env var);
@@ -322,7 +330,8 @@ python3 run_all_linters.py thesis.pdf --llm \
 
 The `*_llm` linters send the **manuscript text (and, for the figure and
 caption linters, figure images)** to the configured endpoint. A thesis
-draft is *unpublished material*, so keep it on an Aalto-hosted gateway:
+draft is *unpublished material*, so keep it on infrastructure your
+university controls or on your own machine:
 
 - **Default keeps the draft on Aalto infrastructure.** The Aalto AI API
   and the Aalto LLM Gateway run within Aalto's tenant. Per Aalto's own

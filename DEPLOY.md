@@ -1,6 +1,6 @@
 # Deploying ml-theses.org
 
-The site is a **static** MkDocs Material build. The repo's source-of-truth
+The site (ml-theses.org — the thesis guide for all levels and host universities, built from the `alexjungaalto/mlthesis` repo) is a **static** MkDocs Material build. The repo's source-of-truth
 files (`README.md`, `Topics.md`, `theses.csv`) are assembled by
 [`build_site.sh`](build_site.sh) into `site/`, which is served by nginx on a
 Hetzner VPS. Every push to `main` rebuilds and deploys via GitHub Actions.

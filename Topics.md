@@ -1,6 +1,8 @@
-# Available Master's Thesis Topics
+# Open Thesis Topics
 
-Open topics for a master's thesis supervised by [Alex Jung](https://machinelearningforall.github.io/about/), Associate Professor for Machine Learning at Aalto University.
+Open topics for a bachelor's, master's, or doctoral thesis supervised by [Alex Jung](https://machinelearningforall.github.io/about/), Associate Professor for Machine Learning. The topics are open to students at any of the universities I supervise at (currently Aalto University and IMC Krems); your own university's thesis regulations still apply — see [University-specific information](index.md#university-specific-information) in the thesis guide.
+
+Each topic lists the thesis levels it suits (`BSc`, `MSc`, `PhD`). Most topics can be scoped up or down, so treat the level as a starting point and ask if you would like to do a listed topic at a different level. The topics in this catalog are only a subset of the possible topics: you are welcome to propose your own, ideally related to the [guidance on getting started](index.md#getting-started).
 
 To discuss a topic or propose your own, get in touch — see the contact links in the [thesis guide](index.md#feedback-and-questions).
 
@@ -8,7 +10,7 @@ To discuss a topic or propose your own, get in touch — see the contact links i
 
 ### A National Inference Grid: Could a Country Run Its Own AI Beyond Big Tech?
 
-**Difficulty:** Advanced · **Data source:** Public compute and telecom data
+**Level:** MSc, PhD · **Difficulty:** Advanced · **Data source:** Public compute and telecom data
 
 Today, powerful AI language models usually run inside the data centres of a few large technology companies. This topic asks a different question: could a country instead run such a model itself, by pooling together many ordinary computers spread across the country? And if so, who should own and run that shared system? A useful comparison is the mobile phone network. It is essential, everyday infrastructure that a whole country depends on, yet it is not owned by the state: it is built and run by a small number of private companies that are licensed and regulated to serve the public. Could a national AI capability be organised the same way? The thesis weighs this telecom model against other options too, from public roads that everyone can use to community-run projects with no central owner. The student studies whether the idea could work well enough in practice, whether it would be cheaper than renting from big cloud providers, and what ownership and rules would make it trustworthy and independent. The work stays focused on one main angle so it remains a single thesis. Suitable for a student interested in AI, computing infrastructure, and technology policy.
 
@@ -23,7 +25,7 @@ Today, powerful AI language models usually run inside the data centres of a few 
 
 ### Political Influence on Childcare Provision in Rural Austria
 
-**Difficulty:** Intermediate · **Data source:** data.gv.at
+**Level:** BSc, MSc · **Difficulty:** Intermediate · **Data source:** data.gv.at
 
 Analyse whether and how local political leadership correlates with the availability of publicly funded childcare in rural Austrian municipalities, using open government data. Methods: data aggregation, correlation and regression analysis, before/after-election comparisons, and optionally causal inference. Tools: Python, pandas, geopandas. Suits students interested in political data science and regional development with a solid Python and statistics background.
 
@@ -33,7 +35,7 @@ Analyse whether and how local political leadership correlates with the availabil
 
 ### Compressed Sensing of LLMs: Query-Efficient Recovery of a Black-Box Next-Token Function
 
-**Difficulty:** Advanced · **Data source:** Open-weight LLMs (Pythia, Qwen, Llama)
+**Level:** MSc, PhD · **Difficulty:** Advanced · **Data source:** Open-weight LLMs (Pythia, Qwen, Llama)
 
 An LLM can be viewed as a single unknown function: give it a context, it returns scores for the next token. This topic poses a compressed-sensing question about that function: how much of it can be reconstructed from a limited number of black-box queries, and what is the smallest number of queries needed? Classical compressed sensing recovers a high-dimensional signal from few measurements when the signal is structured; here the structure comes from how transformers are built (low-dimensional hidden states, smoothness, limited model complexity) and each query is one measurement. The thesis develops the theory (when do queries pin the model down, and a matching lower bound on how many are required) and tests it on open-weight models such as Pythia, Qwen, and Llama, including under realistic API limits (top-k outputs, sampling noise, rate limits). The pay-off is a precise account of how auditable a deployed model is from the outside, and which deployment choices provably limit what an outsider can recover — a contribution to model auditing and trustworthy AI. Strong background in linear algebra, high-dimensional probability and statistical learning theory (or compressed sensing) recommended, plus comfort running open-weight LLMs in PyTorch.
 

@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 """
-Compile a list of supervised master thesis projects at TU Wien and Aalto University.
+Compile the list of theses supervised by Alex Jung.
 
-Reads thesis data from a CSV file (theses.csv) and generates:
+The list covers every level (bachelor's, master's, doctoral) and every host
+university (Aalto University, IMC Krems, TU Wien, ...). Reads thesis data from
+a CSV file (theses.csv) and generates:
   - A summary printed to the console
   - A Markdown file (theses.md) with tables grouped by university
-  - Basic statistics (per year, per industry partner, ongoing vs completed)
+  - Basic statistics (per level, per year, per industry partner, ongoing vs
+    completed)
 
 Usage:
     python compile_theses.py                  # print summary
     python compile_theses.py --markdown       # also write theses.md
     python compile_theses.py --stats          # print statistics
+    python compile_theses.py --level PhD      # filter by thesis level
 """
 
 import argparse
@@ -34,6 +38,41 @@ SUPERVISION_BEGIN = (
 )
 SUPERVISION_END = "<!-- theses:end -->"
 
+# Thesis levels, in the order they are listed when a university has several.
+# The CSV `level` column holds the short key; an empty level means MSc (the
+# column was added after the list already held 130+ master's theses).
+LEVELS = {
+    "PhD": {"label": "Doctoral thesis", "citation": "Ph.D. dissertation"},
+    "MSc": {"label": "Master's thesis", "citation": "M.Sc. thesis"},
+    "BSc": {"label": "Bachelor's thesis", "citation": "B.Sc. thesis"},
+}
+DEFAULT_LEVEL = "MSc"
+
+# Short university keys used in the CSV -> full names for the published pages.
+UNI_DISPLAY = {
+    "Aalto": "Aalto University",
+    "IMC Krems": "IMC Krems University of Applied Sciences",
+    "TU Wien": "TU Wien",
+}
+
+
+def normalize_level(raw: str) -> str:
+    """Map a CSV level value onto a LEVELS key (case-insensitive, '' -> MSc)."""
+    key = (raw or "").strip()
+    if not key:
+        return DEFAULT_LEVEL
+    for k in LEVELS:
+        if k.lower() == key.lower():
+            return k
+    raise SystemExit(
+        f"Error: unknown thesis level {raw!r}; expected one of {', '.join(LEVELS)}"
+    )
+
+
+def uni_display(uni: str) -> str:
+    """Full display name for a university key (falls back to the key)."""
+    return UNI_DISPLAY.get(uni, uni)
+
 
 def load_theses(csv_path: Path) -> list[dict]:
     """Load thesis records from a CSV file."""
@@ -42,6 +81,7 @@ def load_theses(csv_path: Path) -> list[dict]:
         reader = csv.DictReader(f)
         for row in reader:
             row["number"] = int(row["number"])
+            row["level"] = normalize_level(row.get("level", ""))
             theses.append(row)
     return theses
 
@@ -52,11 +92,15 @@ def filter_theses(
     status: str | None = None,
     year: str | None = None,
     industry: str | None = None,
+    level: str | None = None,
 ) -> list[dict]:
-    """Filter thesis records by university, status, year, or industry partner."""
+    """Filter thesis records by university, level, status, year, or industry."""
     result = theses
     if university:
         result = [t for t in result if t["university"].lower() == university.lower()]
+    if level:
+        wanted = normalize_level(level)
+        result = [t for t in result if t["level"] == wanted]
     if status:
         result = [t for t in result if t["status"].lower() == status.lower()]
     if year:
@@ -74,16 +118,31 @@ def print_summary(theses: list[dict]) -> None:
 
     for uni, records in by_uni.items():
         print(f"\n{'='*70}")
-        print(f"  {uni}  ({len(records)} theses)")
+        print(f"  {uni_display(uni)}  ({len(records)} theses)")
         print(f"{'='*70}")
         for t in records:
             status_tag = " [ongoing]" if t["status"].lower() == "ongoing" else ""
             industry_tag = f"  (industry: {t['industry']})" if t["industry"] else ""
             url_tag = f"  {t['url']}" if t["url"] else ""
-            print(f"  {t['number']:>3}. {t['author']}, {t['title']}{status_tag}{industry_tag}")
+            print(
+                f"  {t['number']:>3}. [{t['level']}] {t['author']}, "
+                f"{t['title']}{status_tag}{industry_tag}"
+            )
             if url_tag:
                 print(f"       {t['url']}")
     print()
+
+
+def level_summary(theses: list[dict]) -> str:
+    """One sentence with the total and the per-level counts, e.g.
+    '137 theses in total: 1 doctoral, 135 master's, 1 bachelor's.'"""
+    counts = Counter(t["level"] for t in theses)
+    parts = [
+        f"{counts[k]} {v['label'].lower().replace(' thesis', '')}"
+        for k, v in LEVELS.items()
+        if counts[k]
+    ]
+    return f"{len(theses)} theses in total: {', '.join(parts)}."
 
 
 def generate_markdown(theses: list[dict], output_path: Path) -> None:
@@ -92,34 +151,46 @@ def generate_markdown(theses: list[dict], output_path: Path) -> None:
     for t in theses:
         by_uni.setdefault(t["university"], []).append(t)
 
-    lines = ["# Supervised Master Theses\n"]
+    lines = [
+        "# Supervised Theses",
+        "",
+        "Bachelor's, master's, and doctoral theses supervised or co-supervised by "
+        "[Alex Jung](https://machinelearningforall.github.io/about/), grouped by "
+        "host university. " + level_summary(theses),
+        "",
+        "The **Level** column uses " + ", ".join(
+            f"`{k}` for a {v['label'].lower()}" for k, v in LEVELS.items()
+        ) + ". Generated from `theses.csv`; do not edit this file by hand.",
+        "",
+    ]
 
     for uni, records in by_uni.items():
         ongoing = [r for r in records if r["status"].lower() == "ongoing"]
         completed = [r for r in records if r["status"].lower() != "ongoing"]
 
-        lines.append(f"## {uni} ({len(records)} total)\n")
+        lines.append(f"## {uni_display(uni)} ({len(records)} total)\n")
 
         if ongoing:
             lines.append(f"### Ongoing ({len(ongoing)})\n")
-            lines.append("| # | Author | Title | Industry | Recording |")
-            lines.append("|---|--------|-------|----------|-----------|")
+            lines.append("| # | Level | Author | Title | Industry | Recording |")
+            lines.append("|---|-------|--------|-------|----------|-----------|")
             for i, t in enumerate(ongoing, 1):
                 rec = f"[video]({t['recording']})" if t.get("recording") else ""
                 lines.append(
-                    f"| {i} | {t['author']} | {t['title']} | {t['industry']} | {rec} |"
+                    f"| {i} | {t['level']} | {t['author']} | {t['title']} "
+                    f"| {t['industry']} | {rec} |"
                 )
             lines.append("")
 
         if completed:
             lines.append(f"### Completed ({len(completed)})\n")
-            lines.append("| # | Author | Title | Date | Industry | Recording |")
-            lines.append("|---|--------|-------|------|----------|-----------|")
+            lines.append("| # | Level | Author | Title | Date | Industry | Recording |")
+            lines.append("|---|-------|--------|-------|------|----------|-----------|")
             for i, t in enumerate(completed, 1):
                 title = f"[{t['title']}]({t['url']})" if t["url"] else t["title"]
                 rec = f"[video]({t['recording']})" if t.get("recording") else ""
                 lines.append(
-                    f"| {i} | {t['author']} | {title} "
+                    f"| {i} | {t['level']} | {t['author']} | {title} "
                     f"| {t['date']} | {t['industry']} | {rec} |"
                 )
             lines.append("")
@@ -170,8 +241,9 @@ def generate_tex(theses: list[dict], output_path: Path) -> None:
         r"\setlength{\parindent}{0pt}",
         r"\setlength{\parskip}{0.5em}",
         r"",
-        r"\title{Co-Supervised Master Theses \\[0.3em]"
-        r" \large by Alex Jung, Assoc.\ Prof.\ for Machine Learning}",
+        r"\title{Supervised Theses \\[0.3em]"
+        r" \large Bachelor's, master's, and doctoral theses supervised by"
+        r" Alex Jung, Assoc.\ Prof.\ for Machine Learning}",
         r"\author{}",
         r"\date{\today}",
         r"",
@@ -184,19 +256,19 @@ def generate_tex(theses: list[dict], output_path: Path) -> None:
         ongoing = [r for r in records if r["status"].lower() == "ongoing"]
         completed = [r for r in records if r["status"].lower() != "ongoing"]
 
-        lines.append(rf"\section*{{{tex_escape(uni)} ({len(records)} total)}}")
+        lines.append(rf"\section*{{{tex_escape(uni_display(uni))} ({len(records)} total)}}")
         lines.append("")
 
         if ongoing:
             lines.append(rf"\subsection*{{Ongoing ({len(ongoing)})}}")
             lines.append("")
-            lines.append(r"\begin{longtable}{@{}r p{3cm} p{6.5cm} p{2.8cm} p{2cm}@{}}")
+            lines.append(r"\begin{longtable}{@{}r l p{2.8cm} p{6cm} p{2.6cm} p{1.8cm}@{}}")
             lines.append(r"\toprule")
-            lines.append(r"\# & Author & Title & Industry & Recording \\")
+            lines.append(r"\# & Level & Author & Title & Industry & Recording \\")
             lines.append(r"\midrule")
             lines.append(r"\endfirsthead")
             lines.append(r"\toprule")
-            lines.append(r"\# & Author & Title & Industry & Recording \\")
+            lines.append(r"\# & Level & Author & Title & Industry & Recording \\")
             lines.append(r"\midrule")
             lines.append(r"\endhead")
             lines.append(r"\bottomrule")
@@ -204,7 +276,7 @@ def generate_tex(theses: list[dict], output_path: Path) -> None:
             for i, t in enumerate(ongoing, 1):
                 rec = rf"\href{{{t['recording']}}}{{video}}" if t.get("recording") else ""
                 lines.append(
-                    f"{i} & {tex_escape(t['author'])} & "
+                    f"{i} & {t['level']} & {tex_escape(t['author'])} & "
                     f"{tex_escape(t['title'])} & {tex_escape(t['industry'])} & {rec} \\\\"
                 )
             lines.append(r"\end{longtable}")
@@ -213,13 +285,13 @@ def generate_tex(theses: list[dict], output_path: Path) -> None:
         if completed:
             lines.append(rf"\subsection*{{Completed ({len(completed)})}}")
             lines.append("")
-            lines.append(r"\begin{longtable}{@{}r p{2.8cm} p{6.3cm} p{1.6cm} p{2cm} p{1.8cm}@{}}")
+            lines.append(r"\begin{longtable}{@{}r l p{2.6cm} p{5.8cm} p{1.6cm} p{1.9cm} p{1.6cm}@{}}")
             lines.append(r"\toprule")
-            lines.append(r"\# & Author & Title & Date & Industry & Recording \\")
+            lines.append(r"\# & Level & Author & Title & Date & Industry & Recording \\")
             lines.append(r"\midrule")
             lines.append(r"\endfirsthead")
             lines.append(r"\toprule")
-            lines.append(r"\# & Author & Title & Date & Industry & Recording \\")
+            lines.append(r"\# & Level & Author & Title & Date & Industry & Recording \\")
             lines.append(r"\midrule")
             lines.append(r"\endhead")
             lines.append(r"\bottomrule")
@@ -230,7 +302,7 @@ def generate_tex(theses: list[dict], output_path: Path) -> None:
                     title_tex = rf"\href{{{t['url']}}}{{{title_tex}}}"
                 rec = rf"\href{{{t['recording']}}}{{video}}" if t.get("recording") else ""
                 lines.append(
-                    f"{i} & {tex_escape(t['author'])} & {title_tex} & "
+                    f"{i} & {t['level']} & {tex_escape(t['author'])} & {title_tex} & "
                     f"{tex_escape(t['date'])} & {tex_escape(t['industry'])} & {rec} \\\\"
                 )
             lines.append(r"\end{longtable}")
@@ -249,13 +321,14 @@ def thesis_year(t: dict) -> int:
     return int(m.group(0)) if m else 0
 
 
-def render_supervision_entry(t: dict, label: str, uni_display: str) -> str:
+def render_supervision_entry(t: dict, label: str, display: str) -> str:
     """Render one thesis as an IEEE-style citation line for the Jekyll page."""
+    kind = LEVELS[t["level"]]["citation"]
     parts = [f'[{label}]&nbsp;&nbsp;{t["author"]}, "{t["title"]},"']
     if t["status"].lower() == "ongoing":
-        parts.append(f"M.Sc. thesis (in progress), {uni_display}.")
+        parts.append(f"{kind} (in progress), {display}.")
     else:
-        parts.append(f"M.Sc. thesis, {uni_display}, {t['date']}.")
+        parts.append(f"{kind}, {display}, {t['date']}.")
     if t["industry"]:
         parts.append(f"(with {t['industry']})")
     if t["status"].lower() != "ongoing" and t["url"]:
@@ -274,7 +347,6 @@ def generate_supervision(theses: list[dict], page_path: Path) -> None:
     continuously across universities and grouped by year (newest first), with
     everything up to 2017 collected under a single heading.
     """
-    uni_display = {"Aalto": "Aalto University"}
     by_uni: dict[str, list[dict]] = {}
     for t in theses:
         by_uni.setdefault(t["university"], []).append(t)
@@ -282,7 +354,7 @@ def generate_supervision(theses: list[dict], page_path: Path) -> None:
     lines: list[str] = []
     completed_no = 0
     for uni, records in by_uni.items():
-        display = uni_display.get(uni, uni)
+        display = uni_display(uni)
         ongoing = [r for r in records if r["status"].lower() == "ongoing"]
         completed = [r for r in records if r["status"].lower() != "ongoing"]
         # Newest first; stable, so CSV order is kept within a year.
@@ -338,7 +410,14 @@ def print_stats(theses: list[dict]) -> None:
     uni_counts = Counter(t["university"] for t in theses)
     print("\nBy university:")
     for uni, count in uni_counts.most_common():
-        print(f"  {uni}: {count}")
+        print(f"  {uni_display(uni)}: {count}")
+
+    # By level
+    level_counts = Counter(t["level"] for t in theses)
+    print("\nBy level:")
+    for key, meta in LEVELS.items():
+        if level_counts[key]:
+            print(f"  {meta['label']} ({key}): {level_counts[key]}")
 
     # Ongoing vs completed
     ongoing = sum(1 for t in theses if t["status"].lower() == "ongoing")
@@ -368,7 +447,9 @@ def print_stats(theses: list[dict]) -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Compile supervised master thesis list.")
+    parser = argparse.ArgumentParser(
+        description="Compile the list of supervised theses (all levels, all universities)."
+    )
     parser.add_argument("--csv", type=Path, default=DEFAULT_CSV, help="Path to theses.csv")
     parser.add_argument("--markdown", action="store_true", help="Generate theses.md")
     parser.add_argument("--output", type=Path, default=DEFAULT_MD, help="Markdown output path")
@@ -381,7 +462,12 @@ def main():
         help="Sync the thesis list into the alexjung.at supervision page (Jekyll .md)",
     )
     parser.add_argument("--stats", action="store_true", help="Print statistics")
-    parser.add_argument("--university", type=str, help="Filter by university")
+    parser.add_argument(
+        "--university", type=str, help="Filter by university key (e.g. Aalto, 'IMC Krems')"
+    )
+    parser.add_argument(
+        "--level", type=str, help="Filter by thesis level: " + ", ".join(LEVELS)
+    )
     parser.add_argument("--status", type=str, help="Filter by status (ongoing/completed)")
     parser.add_argument("--year", type=str, help="Filter by year")
     parser.add_argument("--industry", type=str, help="Filter by industry partner")
@@ -393,7 +479,9 @@ def main():
         return 1
 
     theses = load_theses(args.csv)
-    theses = filter_theses(theses, args.university, args.status, args.year, args.industry)
+    theses = filter_theses(
+        theses, args.university, args.status, args.year, args.industry, args.level
+    )
 
     print_summary(theses)
 
