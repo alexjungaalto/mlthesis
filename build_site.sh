@@ -88,14 +88,14 @@ mkdir -p docs
 
 # README is the landing page; its internal links to Topics.md / theses.md /
 # material/* resolve unchanged once those files sit alongside it.
-cp README.md   docs/index.md
+cp README.md   docs/README.md   # MkDocs renders README.md as index.html; keeps 'Edit this page' pointing at the real file
 cp Garage.md   docs/Garage.md
 cp Topics.md   docs/Topics.md
 cp theses.md   docs/theses.md
 cp -R material docs/material
 
 # Strip files that should not be published with the materials.
-rm -f docs/material/.DS_Store docs/material/creategraphtex.py
+rm -f docs/material/.DS_Store docs/material/creategraphtex.py docs/material/sponsor_map*
 
 # Custom stylesheet (table layout tweaks etc.).
 mkdir -p docs/stylesheets

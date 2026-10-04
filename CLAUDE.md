@@ -44,6 +44,7 @@ This is a **public GitHub repository** (published as ml-theses.org) providing gu
 - When adding new theses, append to `theses.csv` and re-run the script.
 - The thesis list also feeds the **alexjung.at supervision page**: `build_site.sh` runs `python compile_theses.py --supervision <path>` against the Jekyll checkout at `~/MachineLearningForAll.github.io/supervision.md` (override with `ALEXJUNG_SITE_DIR`; skipped if absent, e.g. in CI). Only the marker-delimited section of that page is regenerated; commit and push in that repo to publish.
 - Ground truth for author names and titles is the `citation_author` / `citation_title` metadata on the linked Aaltodoc record. Use proper diacritics (e.g. `Hämmäinen`, not `Hamminen`).
+- `date` is the month the degree was conferred (not the Aaltodoc publication date, which is often a few weeks earlier). Rows are ordered newest first; `number` is a per-university running index in file order (printed only by `--stats`), so renumber the block when inserting a row.
 
 ## Working with Topic Proposals
 

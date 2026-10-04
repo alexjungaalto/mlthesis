@@ -54,9 +54,10 @@ thesis? Add `--profile paper` — see
 [Profiles](#profiles-thesis-vs-research-paper).)
 
 Every script is run as `python3 <script> ...` and prints a **findings
-report**. The exit status is `0` when the manuscript is clean, `1` when
-there are findings, and `2` on a usage error (bad arguments, missing file),
-so you can also wire the linters into scripts or CI.
+report**. The exit status is `0` when the manuscript is clean (or has only
+`INFO` findings), `1` when there are `WARN` or `ERROR` findings, and
+non-zero with a message on a usage error (bad arguments, missing file) or a
+missing dependency, so you can also wire the linters into scripts or CI.
 
 > **Prefer a visual report?** Add `--dashboard` to the runner —
 > `python3 run_all_linters.py thesis.pdf --dashboard` opens a self-contained
@@ -190,7 +191,7 @@ the checksum, skim them — or scan for the patterns a malicious script would
 need, none of which appear in this suite:
 
 ```sh
-grep -rnE '\b(eval|exec|os\.system|os\.popen|subprocess.*shell=True|b64decode|__import__|pickle|marshal|socket\.)\b' *.py
+grep -rnE '\b(eval|exec)\(|\bos\.system|\bos\.popen|subprocess.*shell=True|\bb64decode\b|__import__|\bpickle\b|\bmarshal\b|\bsocket\.' *.py
 ```
 
 For a more thorough, automated pass, run
@@ -295,12 +296,12 @@ python3 run_all_linters.py thesis.pdf --llm --model gpt-5-2025-08-07
 ```
 
 **Aalto LLM Gateway** (open-weight models on Aalto hardware; needs the Aalto
-VPN and a key made at <https://llm-gateway.k8s.aalto.fi/>). Point `--base-url`
+VPN and a key made at <https://llm-gateway.aalto.fi/>). Point `--base-url`
 at it, then choose a `--model`. The **authoritative, current** list is a
 one-liner against its `/models` endpoint:
 
 ```sh
-curl -s https://llm-gateway.k8s.aalto.fi/api/v1/models \
+curl -s https://llm-gateway.aalto.fi/api/v1/models \
      -H "Authorization: Bearer $AALTO_LLM_KEY" | python3 -m json.tool
 ```
 
@@ -316,9 +317,9 @@ retries the 503s for you). See
 [Local LLM web APIs](https://scicomp.aalto.fi/aalto/llm-web-apis/) for details.
 
 ```sh
-export AALTO_LLM_KEY=...     # from https://llm-gateway.k8s.aalto.fi/
+export AALTO_LLM_KEY=...     # from https://llm-gateway.aalto.fi/
 python3 run_all_linters.py thesis.pdf --llm \
-    --base-url https://llm-gateway.k8s.aalto.fi/api/v1 \
+    --base-url https://llm-gateway.aalto.fi/api/v1 \
     --model RedHatAI/gemma-4-31B-it-FP8-Dynamic \
     --vision-model Qwen/Qwen3-VL-30B-A3B-Instruct-FP8
 ```
@@ -328,8 +329,8 @@ python3 run_all_linters.py thesis.pdf --llm \
 
 ### Data handling
 
-The `*_llm` linters send the **manuscript text (and, for the figure and
-caption linters, figure images)** to the configured endpoint. A thesis
+The `*_llm` linters send the **manuscript text (and, for the figure
+linter, figure images)** to the configured endpoint. A thesis
 draft is *unpublished material*, so keep it on infrastructure your
 university controls or on your own machine:
 
@@ -341,7 +342,7 @@ university controls or on your own machine:
   material, unlike public services such as ChatGPT. For the authoritative
   terms, data classification, and GDPR position, check the
   [Aalto AI services](https://www.aalto.fi/en/services/ai-services) and
-  [responsible use of AI in research](https://www.aalto.fi/en/services/responsible-use-of-artificial-intelligence-in-the-research-process)
+  [responsible use of generative AI in research](https://www.aalto.fi/en/services/responsible-use-of-generative-artificial-intelligence-in-the-research-process)
   pages — they, not this README, are the source of truth.
 - **A local on-device model is also compliant — and the most private.**
   Point the linters at a server running on your own machine (e.g.
@@ -368,14 +369,15 @@ university controls or on your own machine:
 - **Do not point `--base-url` at a public endpoint** (e.g. OpenRouter)
   for a real draft — that would send unpublished material to a public AI
   service, contrary to
-  [Aalto's guidance](https://www.aalto.fi/en/services/responsible-use-of-artificial-intelligence-in-the-research-process).
+  [Aalto's guidance](https://www.aalto.fi/en/services/responsible-use-of-generative-artificial-intelligence-in-the-research-process).
   The client prints a warning when the endpoint is not Aalto-hosted.
 - **Special-category personal data** (e.g. interview transcripts,
   human-subjects data embedded in the draft) needs a data-classification
   check before linting, even on the Aalto gateway.
-- When running these on a student's draft, tell the student that
-  supervisor feedback may be produced by routing their manuscript through
-  this suite — the mirror image of the AI-use disclosure asked of them.
+- Expect your supervisor to use this suite too: part of the feedback on
+  your draft may be produced by routing your manuscript through these
+  linters (on the same Aalto-hosted or local infrastructure) — the mirror
+  image of the AI-use disclosure asked of you.
 
 ## Basic usage
 
@@ -408,8 +410,10 @@ line above, `[WARN] NEVER-EXPANDED  p12  'INT4' used 11 time(s)...`:
    PDF, or `file:line` when you lint LaTeX sources.
 4. **Evidence** — what was found and why it was flagged, in plain words.
 
-A clean run prints no finding lines and exits with status `0`; a run with
-findings exits `1`; a missing file or missing dependency exits `2`.
+A clean run prints no finding lines and exits with status `0` (so does a
+run with only `INFO` findings); a run with `WARN` or `ERROR` findings exits
+`1`; a usage error, a missing file, or a missing dependency exits non-zero
+with a message.
 
 Run everything at once:
 
@@ -456,7 +460,7 @@ adds the report — it takes nothing away.
 
 ## Profiles: thesis vs. research paper
 
-The suite targets MSc theses by default, but a thesis and a conference/
+The suite targets theses by default, but a thesis and a conference/
 journal paper are the same object — an ML manuscript — and ~14 of the
 linters (prose, acronym, terminology, math, captions, figures, flow,
 forward-references, citations, unreferenced entities, type-consistency)
@@ -570,8 +574,8 @@ python3 bibliography_linter.py thesis.pdf          # verify references
 
 | Instruction | Linter | How |
 |---|---|---|
-| Problem formulation: data points,<br>features, labels defined | `thesis_checklist_llm.py`<br>`problem_clarity_lint_llm.py` | verdict `problem-formulation`<br>with quoted evidence<br>per defining object of the learning<br>problem (paradigm-aware — e.g. data point /<br>features / label for supervised, state /<br>action / reward / objective for RL):<br>`CLEAR` / `PARTIAL` / `UNCLEAR` /<br>`MISSING`, plus the interface-boundary<br>and unit-identity checks |
-| Abstract readable from elementary<br>(Dictionary) concepts alone | `abstract_selfcontained_lint_llm.py` | grade `GOOD` / `FAIR` / `POOR`; per term<br>`UNDEFINED` / `AMBIGUOUS` /<br>`COMPOUND-JARGON` gaps, each with the<br>naive-reader question and an inline fix |
+| Problem formulation: data points,<br>features, labels defined | `thesis_checklist_llm.py`<br>`problem_clarity_lint_llm.py`<br>(paper profile only; run the<br>script standalone for a thesis) | verdict `problem-formulation`<br>with quoted evidence<br>per defining object of the learning<br>problem (paradigm-aware — e.g. data point /<br>features / label for supervised, state /<br>action / reward / objective for RL):<br>`CLEAR` / `PARTIAL` / `UNCLEAR` /<br>`MISSING`, plus the interface-boundary<br>and unit-identity checks |
+| Abstract readable from elementary<br>(Dictionary) concepts alone | `abstract_selfcontained_lint_llm.py`<br>(paper profile only; run the<br>script standalone for a thesis) | grade `GOOD` / `FAIR` / `POOR`; per term<br>`UNDEFINED` / `AMBIGUOUS` /<br>`COMPOUND-JARGON` gaps, each with the<br>naive-reader question and an inline fix |
 | Research scope/questions well-posed<br>(clear, focused, specific, complex,<br>feasible, relevant, self-contained) | `rq_quality_lint_llm.py` | per-question criteria verdicts<br>+ scope checks (gap,<br>delimitations, alignment) |
 | Identify data sources and evaluation criteria | `thesis_checklist_llm.py` | verdict `data-sources-eval` |
 | Training loss and validation/test<br>loss explicitly stated | `thesis_checklist_llm.py` | verdict `loss-functions` |
@@ -588,7 +592,7 @@ python3 bibliography_linter.py thesis.pdf          # verify references
 | Figures clear, labelled,<br>informative captions | `figure_lint_llm.py`<br>`caption_lint.py`<br>`caption_lint_llm.py`<br>`thesis_checklist_llm.py` | rendered figures scored against the<br>PLOS Ten Simple Rules (figures × rules<br>matrix; pixels + vision LLM)<br>`SHORT-CAPTION`, `NO-CAPTION`<br>`WEAK-CAPTION` (per-caption LLM)<br>verdict `captions-informative` |
 | References formatted per IEEE guidelines | `citation_style_lint.py` | style/entry/citation checks (LaTeX + PDF) |
 | Terms from the Aalto<br>Dictionary of ML | `terminology_lint.py` | `NON-DICTIONARY`, `TERM-MIX`<br>(dictionary term first per cluster) |
-| Central concepts given a source<br>(provenance of the load-bearing ideas) | `central_concept_citation_lint_llm.py` | per central concept: `CITED` /<br>`OWN-COINAGE` / `ELEMENTARY` /<br>`UNCITED` / `ATTR-VAGUE`, with the fix |
+| Central concepts given a source<br>(provenance of the load-bearing ideas) | `central_concept_citation_lint_llm.py`<br>(paper profile only; run the<br>script standalone for a thesis) | per central concept: `CITED` /<br>`OWN-COINAGE` / `ELEMENTARY` /<br>`UNCITED` / `ATTR-VAGUE`, with the fix |
 | Every chapter/section has zero<br>or >= 2 subdivisions | `structure_lint.py` | `LONE-CHILD` (LaTeX + PDF) |
 
 ### Suite self-check
@@ -652,8 +656,10 @@ The full catalogue, one row per linter. **Input** is the file type it
 accepts (`.pdf` for a compiled PDF, `.tex` for LaTeX source, `.bib` for a
 bibliography file). **Needs** is any extra requirement beyond plain Python:
 *network* (internet access), *PyMuPDF* (the `pip install pymupdf` package),
-or *Aalto AI API* (an LLM linter — needs `AALTO_API_KEY`); a dash means no
-extras. A short prose note on each linter follows the table.
+or *LLM endpoint* (an LLM linter — the Aalto AI API by default, which needs
+`AALTO_API_KEY`, or any OpenAI-compatible endpoint via `--base-url`; see
+[Setup](#setup)); a dash means no extras. A short prose note on each linter
+follows the table.
 
 | Script | Checks | Input | Needs |
 |---|---|---|---|
@@ -661,8 +667,8 @@ extras. A short prose note on each linter follows the table.
 | [`structure_lint.py`](structure_lint.py) | sectioning units with exactly one subdivision | `.tex`, `.pdf` | — |
 | [`unreferenced_entity_linter.py`](unreferenced_entity_linter.py) | numbered equations/tables/figures never referenced | `.tex`, `.pdf` | — |
 | [`crossref_forward_lint.py`](crossref_forward_lint.py) | references to floats (figures, tables,<br>algorithms) defined many pages later | `.pdf` | PyMuPDF |
-| [`forward_ref_lint.py`](forward_ref_lint.py) | concepts used before defined (regex) | `.pdf` | PyMuPDF |
-| [`forward_ref_lint_llm.py`](forward_ref_lint_llm.py) | concepts used before defined (LLM) | `.pdf` | PyMuPDF +<br>Aalto AI API |
+| [`forward_ref_lint.py`](forward_ref_lint.py) | concepts used before defined (regex) | `.pdf` | PyMuPDF or<br>pdfplumber |
+| [`forward_ref_lint_llm.py`](forward_ref_lint_llm.py) | concepts used before defined (LLM) | `.pdf` | PyMuPDF +<br>LLM endpoint |
 | [`acronym_lint.py`](acronym_lint.py) | acronym expanded at first use, no re-expansion | `.tex`, `.pdf` | — |
 | [`prose_lint.py`](prose_lint.py) | vague quantifiers, dangling refs, forward cues | `.tex`, `.pdf` | — |
 | [`unresolved_reference_lint.py`](unresolved_reference_lint.py) | uncited appeals to companion/forthcoming<br>studies; label-code schemes (R1, T6, …)<br>used without a definition in the text | `.tex`, `.pdf` | — |
@@ -670,30 +676,30 @@ extras. A short prose note on each linter follows the table.
 | [`math_typeset_lint.py`](math_typeset_lint.py) | display-math punctuation, `\eqref`, long inline math | `.tex` | — |
 | [`citation_style_lint.py`](citation_style_lint.py) | IEEE reference/citation format | `.tex`, `.pdf` | — |
 | [`caption_lint.py`](caption_lint.py) | missing/too-short figure & table captions | `.tex`, `.pdf` | — |
-| [`caption_lint_llm.py`](caption_lint_llm.py) | per-caption quality: states what's shown,<br>defines quantities, self-contained,<br>sentence form | `.tex`, `.pdf` | Aalto AI API |
+| [`caption_lint_llm.py`](caption_lint_llm.py) | per-caption quality: states what's shown,<br>defines quantities, self-contained,<br>sentence form | `.tex`, `.pdf` | LLM endpoint |
 | [`ai_disclosure_lint.py`](ai_disclosure_lint.py) | dedicated AI-use statement with tool + version | `.tex`, `.pdf` | — |
-| [`thesis_checklist_llm.py`](thesis_checklist_llm.py) | 9-item manuscript checklist,<br>PASS/FAIL + evidence (thesis profile) | `.pdf` | Aalto AI API |
-| [`paper_checklist_llm.py`](paper_checklist_llm.py) | reviewer content checklist for a<br>research paper, PASS/FAIL + evidence<br>(paper profile; venue-gated ethics item) | `.pdf` | Aalto AI API |
-| [`related_work_faithfulness_llm.py`](related_work_faithfulness_llm.py) | finds the <=3 most-related works and<br>checks the draft represents them<br>faithfully against their real abstracts | `.pdf` | Aalto AI API<br>+ OpenAlex |
-| [`data_split_lint_llm.py`](data_split_lint_llm.py) | per studied ML method:<br>train/validation/test set construction<br>and diagnosis on that split | `.pdf` | Aalto AI API |
-| [`research_questions_lint_llm.py`](research_questions_lint_llm.py) | each stated research question:<br>answered? where? on what evidence? | `.pdf` | Aalto AI API |
-| [`rq_quality_lint_llm.py`](rq_quality_lint_llm.py) | how well-posed are research questions<br>and scope (university criteria)? | `.pdf` | Aalto AI API |
-| [`contribution_support_lint_llm.py`](contribution_support_lint_llm.py) | per claimed contribution: which result<br>(theorem/proof, experiment, analysis)<br>backs it, and does it? | `.pdf` | Aalto AI API |
-| [`contribution_faithfulness_lint_llm.py`](contribution_faithfulness_lint_llm.py) | one holistic verdict: is the headline<br>contribution over- or under-sold? | `.pdf` | Aalto AI API |
-| [`abstract_selfcontained_lint_llm.py`](abstract_selfcontained_lint_llm.py) | is the abstract self-contained from<br>elementary (Aalto Dictionary) concepts?<br>(paper profile) | `.pdf` | Aalto AI API |
-| [`central_concept_citation_lint_llm.py`](central_concept_citation_lint_llm.py) | are the paper's central concepts sourced<br>(cited / own-coinage / elementary /<br>uncited)? (paper profile) | `.pdf` | Aalto AI API |
-| [`problem_clarity_lint_llm.py`](problem_clarity_lint_llm.py) | is the learning problem stated clearly?<br>Identifies the paradigm (supervised,<br>unsupervised, RL, generative) and grades<br>its defining objects — e.g. data point /<br>features / label, or state / action /<br>reward / objective (paper profile) | `.pdf` | Aalto AI API |
-| [`annotation_coverage_lint_llm.py`](annotation_coverage_lint_llm.py) | cross-checks reviewer PDF annotations<br>against what the suite flagged<br>(`COVERED`/`PARTIAL`/`UNCAUGHT`) | run output<br>+ annotations | Aalto AI API |
-| [`figure_lint_llm.py`](figure_lint_llm.py) | figures scored against the PLOS<br>Ten Simple Rules for Better Figures<br>(figures × ten-rules matrix) | `.pdf` | PyMuPDF<br>(+ Aalto AI API<br>unless `--no-llm`) |
-| [`section_intro_lint_llm.py`](section_intro_lint_llm.py) | does each chapter/section intro map<br>its subsections and tie them together? | `.pdf` | PyMuPDF +<br>Aalto AI API |
-| [`type_consistency_lint_llm.py`](type_consistency_lint_llm.py) | formal claims well-typed: relations over<br>same-type operands, values in range,<br>dimensionless quantities unit-free<br>(`TYPE-MISMATCH`, `RANGE`, `DIMENSION`,<br>`BRIDGE-LOOSE`) | `.pdf` | Aalto AI API |
-| [`flow_lint_llm.py`](flow_lint_llm.py) | narrative flow: section openers that<br>stand alone, no paragraph-to-paragraph<br>discontinuities | `.pdf` | PyMuPDF +<br>Aalto AI API |
-| [`prose_lint_llm.py`](prose_lint_llm.py) | LLM self-editing pass (uncited<br>claims, tense drift, jargon, …) | `.tex`, `.pdf` | Aalto AI API |
+| [`thesis_checklist_llm.py`](thesis_checklist_llm.py) | 9-item manuscript checklist,<br>PASS/FAIL + evidence (thesis profile) | `.pdf` | LLM endpoint |
+| [`paper_checklist_llm.py`](paper_checklist_llm.py) | reviewer content checklist for a<br>research paper, PASS/FAIL + evidence<br>(paper profile; venue-gated ethics item) | `.pdf` | LLM endpoint |
+| [`related_work_faithfulness_llm.py`](related_work_faithfulness_llm.py) | finds the <=3 most-related works and<br>checks the draft represents them<br>faithfully against their real abstracts | `.pdf` | LLM endpoint<br>+ OpenAlex |
+| [`data_split_lint_llm.py`](data_split_lint_llm.py) | per studied ML method:<br>train/validation/test set construction<br>and diagnosis on that split | `.pdf` | LLM endpoint |
+| [`research_questions_lint_llm.py`](research_questions_lint_llm.py) | each stated research question:<br>answered? where? on what evidence? | `.pdf` | LLM endpoint |
+| [`rq_quality_lint_llm.py`](rq_quality_lint_llm.py) | how well-posed are research questions<br>and scope (university criteria)? | `.pdf` | LLM endpoint |
+| [`contribution_support_lint_llm.py`](contribution_support_lint_llm.py) | per claimed contribution: which result<br>(theorem/proof, experiment, analysis)<br>backs it, and does it? | `.pdf` | LLM endpoint |
+| [`contribution_faithfulness_lint_llm.py`](contribution_faithfulness_lint_llm.py) | one holistic verdict: is the headline<br>contribution over- or under-sold? | `.pdf` | LLM endpoint |
+| [`abstract_selfcontained_lint_llm.py`](abstract_selfcontained_lint_llm.py) | is the abstract self-contained from<br>elementary (Aalto Dictionary) concepts?<br>(paper profile) | `.pdf` | LLM endpoint |
+| [`central_concept_citation_lint_llm.py`](central_concept_citation_lint_llm.py) | are the paper's central concepts sourced<br>(cited / own-coinage / elementary /<br>uncited)? (paper profile) | `.pdf` | LLM endpoint |
+| [`problem_clarity_lint_llm.py`](problem_clarity_lint_llm.py) | is the learning problem stated clearly?<br>Identifies the paradigm (supervised,<br>unsupervised, RL, generative) and grades<br>its defining objects — e.g. data point /<br>features / label, or state / action /<br>reward / objective (paper profile) | `.pdf` | LLM endpoint |
+| [`annotation_coverage_lint_llm.py`](annotation_coverage_lint_llm.py) | cross-checks reviewer PDF annotations<br>against what the suite flagged<br>(`COVERED`/`PARTIAL`/`UNCAUGHT`) | run output<br>+ annotations | LLM endpoint |
+| [`figure_lint_llm.py`](figure_lint_llm.py) | figures scored against the PLOS<br>Ten Simple Rules for Better Figures<br>(figures × ten-rules matrix) | `.pdf` | PyMuPDF<br>(+ LLM endpoint<br>unless `--no-llm`) |
+| [`section_intro_lint_llm.py`](section_intro_lint_llm.py) | does each chapter/section intro map<br>its subsections and tie them together? | `.pdf` | PyMuPDF +<br>LLM endpoint |
+| [`type_consistency_lint_llm.py`](type_consistency_lint_llm.py) | formal claims well-typed: relations over<br>same-type operands, values in range,<br>dimensionless quantities unit-free<br>(`TYPE-MISMATCH`, `RANGE`, `DIMENSION`,<br>`BRIDGE-LOOSE`) | `.pdf` | LLM endpoint |
+| [`flow_lint_llm.py`](flow_lint_llm.py) | narrative flow: section openers that<br>stand alone, no paragraph-to-paragraph<br>discontinuities | `.pdf` | PyMuPDF +<br>LLM endpoint |
+| [`prose_lint_llm.py`](prose_lint_llm.py) | LLM self-editing pass (uncited<br>claims, tense drift, jargon, …) | `.tex`, `.pdf` | LLM endpoint |
 | [`run_all_linters.py`](run_all_linters.py) | runs everything above; `--dashboard`<br>renders + opens an HTML report;<br>`--annotations` folds in reviewer PDF notes | either | — |
 | [`dashboard.py`](dashboard.py) | renders a run as a self-contained HTML<br>dashboard (`--open` to launch in a browser) | either | — |
 
 Shared modules: `lintutil.py` (text extraction, report format),
-`aalto_llm.py` (Aalto AI API client; also used by the `*_llm` linters).
+`aalto_llm.py` (the LLM client used by the `*_llm` linters).
 `extract_annotations.py` (a helper, not a linter) pulls a PDF's margin
 highlights and comments into a JSON list — see
 [Augmenting a run with an annotated PDF](#augmenting-a-run-with-an-annotated-pdf).

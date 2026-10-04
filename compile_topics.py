@@ -21,6 +21,7 @@ Usage:
 import argparse
 import csv
 from pathlib import Path
+from urllib.parse import quote
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_CSV = SCRIPT_DIR / "topics.csv"
@@ -115,7 +116,7 @@ def generate_markdown(topics: list[dict], output_path: Path) -> None:
         "Associate Professor for Machine Learning. The topics are open to students "
         "at any of the universities I supervise at (currently Aalto University and "
         "IMC Krems); your own university's thesis regulations still apply — see "
-        "[University-specific information](index.md#university-specific-information) "
+        "[University-specific information](README.md#university-specific-information) "
         "in the thesis guide.",
         "",
         "Each topic lists the thesis levels it suits (`BSc`, `MSc`, `PhD`). Most "
@@ -123,10 +124,10 @@ def generate_markdown(topics: list[dict], output_path: Path) -> None:
         "and ask if you would like to do a listed topic at a different level. "
         "The topics in this catalog are only a subset of the possible topics: "
         "you are welcome to propose your own, ideally related to the "
-        "[guidance on getting started](index.md#getting-started).",
+        "[guidance on getting started](README.md#getting-started).",
         "",
         "To discuss a topic or propose your own, get in touch — see the contact "
-        "links in the [thesis guide](index.md#feedback-and-questions).",
+        "links in the [thesis guide](README.md#feedback-and-questions).",
         "",
     ]
 
@@ -165,7 +166,7 @@ def generate_markdown(topics: list[dict], output_path: Path) -> None:
                     lines.append(f"{j}. {ref}")
                 lines.append("")
 
-            subject = t["title"].replace(" ", "%20")
+            subject = quote(t["title"])
             lines.append(
                 f"[Ask about this topic](mailto:{CONTACT_EMAIL}"
                 f"?subject=Thesis%20topic:%20{subject})"

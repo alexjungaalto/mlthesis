@@ -2,7 +2,7 @@
 
 This repository contains guidance for students doing a **bachelor's, master's, or doctoral thesis** in applied machine learning supervised by [Alex Jung](https://machinelearningforall.github.io/about/). It applies regardless of where you are enrolled. The guide currently covers students at **Aalto University** (Finland) and **IMC Krems University of Applied Sciences** (Austria); everything that depends on your university or degree level is collected in [Thesis Levels](#thesis-levels-bachelors-masters-doctoral) and [University-Specific Information](#university-specific-information), so the rest of the guide reads the same for everyone.
 
-- Supervised theses, all levels and universities: [theses.md](theses.md)
+- Supervised theses, grouped by university: [theses.md](theses.md)
 - Open topics: [Topics.md](Topics.md)
 - Weekly drop-in session for all thesis students: [Thesis Garage](Garage.md)
 - Your university's official thesis rules (templates, forms, deadlines): see [University-Specific Information](#university-specific-information)
@@ -24,7 +24,7 @@ This repository contains guidance for students doing a **bachelor's, master's, o
 11. [Iterative Writing Process](#iterative-writing-process)
 12. [Self-Editing Pass (Prose Linter)](#self-editing-pass-prose-linter)
 13. [Final Thesis Checklist](#final-thesis-checklist)
-14. [Thesis Presentation and Self-Evaluation](#thesis-presentation-and-self-evaluation)
+14. [Thesis Presentation and Self-Assessment](#thesis-presentation-and-self-assessment)
 15. [Thesis Evaluation, Decision, and Appeals](#thesis-evaluation-decision-and-appeals)
 16. [University-Specific Information](#university-specific-information)
 17. [References](#references)
@@ -38,7 +38,7 @@ As your supervisor, you can expect me to:
 
 - Help you clearly define your ML problem.
 - Advise on suitable ML methods, tools, and resources.
-- **Be available weekly in the [Thesis Garage](Garage.md)**, where you can present your progress and get feedback on work in progress.
+- **Be available in the weekly [Thesis Garage](Garage.md)** during the teaching term (dates on the Garage page), where you can present your progress and get feedback on work in progress.
 - Guide you through thesis writing and evaluation.
 - Give feedback on **complete, polished drafts** and on your self-assessment.
 - Offer the opportunity to discuss your self-assessment before submission.
@@ -51,7 +51,7 @@ As your supervisor, you can expect me to:
 As a thesis student, you are expected to:
 
 - Take ownership of your research and drive progress independently.
-- **Drop by the weekly [Thesis Garage](Garage.md) and present your progress regularly** — a result, a plot, or a problem you are stuck on. This is the main place you get feedback on work in progress.
+- **Use the weekly [Thesis Garage](Garage.md) to present your progress** — a result, a plot, or a problem you are stuck on. Attendance is voluntary, but it is the main place you get feedback on work in progress, so plan to come regularly.
 - Come prepared with concrete questions or results.
 - Speak up early — tell me as soon as you are stuck or falling behind schedule.
 - Use high-quality scientific references (peer-reviewed journals, reputable conferences, established textbooks).
@@ -69,14 +69,14 @@ The writing and methodology conventions in this guide are the same at every leve
 | **Goal** | Show that you can apply established ML methods correctly to a well-defined problem and report the results in a scientific format | Show that you can independently formulate an ML problem, choose and justify methods, and evaluate them critically | Make an original, peer-reviewed contribution to the state of the art |
 | **Typical problem** | A given dataset and a clearly stated task; compare a few standard models against a sensible baseline | A problem you shape yourself (often with an industry partner); design, implement, and evaluate a method, including diagnosis of failure modes | A research programme spanning several related problems, each addressed in a publication |
 | **Literature review** | Short: the handful of papers and the textbook chapters that define your methods | Systematic: position your work relative to the most relevant prior work and identify the gap you address | Comprehensive and ongoing; each paper has its own related-work section, the summary ties them together |
-| **Typical duration** | A few months alongside courses | 6–12 months, often full-time | 3–5 years |
-| **Where this guide applies** | Everything up to and including the [Final Thesis Checklist](#final-thesis-checklist); the [Self-Editing Pass](#self-editing-pass-prose-linter) matters just as much for a short text | All of it | All of it, applied to each article and to the summary; add the `--profile paper` mode of the [linter suite](assets/linters/README.md) for the articles |
+| **Typical duration** | The nominal duration set by your study programme, usually alongside courses | The nominal duration set by your study programme (typically about six months full-time) | 3–5 years |
+| **Where this guide applies** | All of it; the [Self-Editing Pass](#self-editing-pass-prose-linter) matters just as much for a short text | All of it | All of it, applied to each article and to the summary; add the `--profile paper` mode of the [linter suite](assets/linters/README.md) for the articles |
 
 **Bachelor's students:** keep the problem small enough that you can finish the full loop — data, model, evaluation, write-up — with time left for revision. A clean, well-reported comparison of standard methods is a good bachelor's thesis; an ambitious method that is half-evaluated is not.
 
 **Master's students:** the distinguishing feature is critical evaluation. Beyond reporting a test score, diagnose *why* a method works or fails (sensitivity analysis, error analysis, comparison to a simple baseline) and relate the findings back to your research questions.
 
-**Doctoral students:** a doctoral thesis is normally **article-based** (a set of peer-reviewed publications plus a summary) or, less commonly, a **monograph**. Each paper is a self-contained piece of work with its own problem formulation, related work, and evaluation; the manuscript conventions below apply to each of them. The summary (also called the compilation part or "introductory chapter") is where this guide's advice on structure and self-contained section openers matters most, because it has to make the papers read as one argument. Doctoral theses are currently supervised at Aalto University; see [Aalto University](#aalto-university) below for the formal requirements of the Doctoral Programme in Science.
+**Doctoral students:** a doctoral thesis is normally **article-based** (a set of peer-reviewed publications plus a summary) or, less commonly, a **monograph**. Each paper is a self-contained piece of work with its own problem formulation, related work, and evaluation; the manuscript conventions below apply to each of them. The summary (also called the compilation part or "introductory chapter") is where this guide's advice on structure and self-contained section openers matters most, because it has to make the papers read as one argument. Doctoral supervision is offered at Aalto University; see [Aalto University](#aalto-university) below for the formal requirements of the Doctoral Programme in Science.
 
 ---
 
@@ -90,7 +90,7 @@ To start your thesis:
 4. **Identify data sources and evaluation criteria** (e.g., test accuracy, computational efficiency).
 5. **Check what your programme requires before you start** — most universities require a registered topic and an approved proposal before the work formally counts. See [University-Specific Information](#university-specific-information).
 
-Detailed guidance is available in [Chapter 2 of the textbook *Machine Learning: The Basics*](https://doi.org/10.1007/978-981-16-8193-6) (open access via most university libraries) and in these [lecture videos](https://youtube.com/playlist?list=PLrbn2dGrLJK9zB7pdEd8QOtmC9-eoqoch).
+Detailed guidance is available in [Chapter 2 of the textbook *Machine Learning: The Basics*](https://doi.org/10.1007/978-981-16-8193-6) (available through most university libraries) and in these [lecture videos](https://youtube.com/playlist?list=PLrbn2dGrLJK9zB7pdEd8QOtmC9-eoqoch).
 
 ---
 
@@ -106,9 +106,9 @@ A thesis moves through the same phases at every level; the phases are shorter an
 | **Modeling** | Implement and train ML models; run baseline experiments |
 | **Evaluation & Diagnosis** | Benchmarks, sensitivity analysis, error analysis |
 | **Writing** | Draft chapters iteratively; incorporate feedback |
-| **Self-Assessment & Presentation** | Complete any evaluation form your programme requires; prepare and deliver the thesis presentation or defence |
+| **Self-Assessment & Presentation** | Write your self-assessment (see [Thesis Presentation and Self-Assessment](#thesis-presentation-and-self-assessment)); prepare and deliver the thesis presentation or defence |
 
-Typical overall durations: a few months for a bachelor's thesis, 6–12 months for a master's thesis, 3–5 years for a doctoral thesis (see [Thesis Levels](#thesis-levels-bachelors-masters-doctoral)). Your programme's deadlines, not these estimates, are binding.
+Plan with the nominal duration your study programme sets for the thesis (for a master's thesis typically about six months full-time; for a doctoral thesis 3–5 years; see [Thesis Levels](#thesis-levels-bachelors-masters-doctoral)). Your programme's deadlines, not these estimates, are binding.
 
 ---
 
@@ -129,7 +129,7 @@ The [Claude Code extension for VS Code](https://marketplace.visualstudio.com/ite
 
 ## Responsible Use of AI
 
-Follow your university's official policy; the rules differ between universities and are stricter for students than for staff. The links are collected under [University-Specific Information](#university-specific-information). The principles below hold everywhere.
+Follow your university's official policy; the rules differ between universities, and the rules for students can be stricter than those for staff (they are at IMC Krems). The links are collected under [University-Specific Information](#university-specific-information). The principles below hold everywhere.
 
 ### Accountability
 
@@ -137,7 +137,7 @@ You are accountable for the entire content of your thesis — every claim, resul
 
 ### Disclosure
 
-- Disclose when and how you used AI tools, in a dedicated statement — not in the Methods section, which is reserved for research methods.
+- Disclose when and how you used AI tools in a dedicated statement; keep the Methods section for research methods. If your university's policy additionally asks for in-text marking or a note in the methods section, add that as well.
 - Record the tool, version, and settings; online services change frequently, so exact reproduction is rarely possible.
 - Include the statement even if you used no AI tools, and say so plainly — with no statement, a reader cannot tell "no AI used" from "AI used but not disclosed".
 - If your university prescribes a specific form or wording for the disclosure, use that; the dedicated statement is the minimum.
@@ -157,7 +157,7 @@ AI tools can support your work when used for:
 - Generating boilerplate or plotting templates (always review and test)
 - Surfacing counterarguments to test your reasoning
 
-Universities treat undisclosed or improper AI use as a breach of good scientific practice, with the same consequences as plagiarism — up to the thesis being declared invalid. When in doubt, ask before you use a tool, not after.
+Universities treat undisclosed or improper AI use as a breach of good scientific practice, with the same consequences as plagiarism — up to the thesis being declared invalid or the degree being revoked. When in doubt, ask before you use a tool, not after.
 
 ## Practical Workflow
 
@@ -165,7 +165,7 @@ A thesis in machine learning typically involves:
 
 - **Data Collection and Preprocessing** using, e.g., [pandas](https://pandas.pydata.org/).
 - **Model Training and Validation** using, e.g., [scikit-learn](https://scikit-learn.org/).
-- **Model Diagnosis** using numerical experiments (benchmarks, sensitivity analysis) and, when appropriate, mathematical analysis (generalisation bounds, error analysis, comparison to Bayes' risk).
+- **Model Diagnosis** using numerical experiments (benchmarks, sensitivity analysis) and, when appropriate, mathematical analysis (generalisation bounds, error analysis, comparison to Bayes risk).
 
 For academic sources, use:
 
@@ -196,9 +196,9 @@ When preparing your thesis, ensure:
 - **Equations**: Reference all numbered equations using `\eqref{}`. Only number equations that are referenced in the text; leave unreferenced equations unnumbered.
 - **Algorithms**: Present new methods as pseudocode ([see examples](https://www.overleaf.com/learn/latex/Algorithms)).
 - **Figures**: Ensure all figures are clear, labelled, and have informative captions ([caption guidelines: Rule 4 of the PLOS "Ten Simple Rules for Better Figures"](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003833)). Set the figure size to its final print width so that tick, axis, and legend text renders at no less than roughly 80% of the body-text size, and check that all plots remain readable in a grayscale printout.
-- **References**: Format according to [IEEE guidelines](https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE_Reference_Guide.pdf) unless your programme prescribes another style (IMC Krems programmes often prescribe their own; check your programme's formatting guide). Whatever the style, apply it consistently and cite the published, peer-reviewed version of a paper rather than its arXiv preprint whenever one exists (check [dblp](https://dblp.org) or the publisher's site).
+- **References**: Format according to [IEEE guidelines](https://journals.ieeeauthorcenter.ieee.org/create-your-ieee-journal-article/create-the-text-of-your-article/ieee-editorial-style-manual/) unless your programme prescribes another style (IMC Krems programmes often prescribe their own; check your programme's formatting guide). Whatever the style, apply it consistently and cite the published, peer-reviewed version of a paper rather than its arXiv preprint whenever one exists (check [dblp](https://dblp.org) or the publisher's site).
 
-For creating effective figures, see Edward Tufte's [The Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi).
+For creating effective figures, see Edward Tufte's [The Visual Display of Quantitative Information](https://www.edwardtufte.com/book/the-visual-display-of-quantitative-information/).
 
 ---
 
@@ -229,7 +229,7 @@ L(\theta) = \frac{1}{n} \sum_{i=1}^n \ell(f(x_i;\theta), y_i).
 - Start serious writing with the **literature review** or **methodology** chapters. These settle earliest and rarely need rewriting when your results change.
 - Hold off on the **results** and **discussion** chapters until your experiments have settled — these chapters often change a lot, so writing them up too early wastes effort.
 - Write the **abstract last**. It is the shortest section but depends on everything else being settled.
-- **Get feedback as you go through the weekly [Thesis Garage](Garage.md).** The garage — not written draft review — is where you get feedback on work in progress. Present your progress regularly: a result, a plot, a problem you are stuck on, or a short section you want reactions to. Bring specific questions. This is the fastest way to correct course early, and it is available every week; a finished written draft is not a prerequisite for it.
+- **Get feedback as you go through the weekly [Thesis Garage](Garage.md).** The garage — not written draft review — is where you get feedback on work in progress. Present your progress regularly: a result, a plot, a problem you are stuck on, or a short section you want reactions to. Bring specific questions. This is the fastest way to correct course early, and it is available every week of the teaching term; a finished written draft is not a prerequisite for it.
 - Also draw on feedback from peers and, where appropriate, LLM-based tools for quick checks between garage sessions.
 - Keep in mind that detailed **written** feedback from me comes only on a **complete, polished draft** you consider finished (see [What to Expect from Your Supervisor](#what-to-expect-from-your-supervisor)). Use the weekly garage sessions for everything before that stage.
 - Expect and budget for multiple revision rounds before submission. Some programmes (for example the master's programmes at IMC Krems) formally allow a rejected thesis to be sent back for revision only a limited number of times, so the revision rounds should happen *before* the official submission, not after.
@@ -255,7 +255,7 @@ Once a draft is near-final, read it through once looking **only** for the recurr
 
 Reading aloud, or reading one defect type at a time from start to finish, catches far more than a single general pass.
 
-A linter suite covering every defect on this list — and most of the manuscript checklist above — is available in [`assets/linters/`](assets/linters/README.md): run `python3 run_all_linters.py thesis.pdf` on your compiled PDF (or on your LaTeX sources) before every revision round. The scripts need only Python 3 with `pdftotext` or PyMuPDF; see the [linter README](assets/linters/README.md). The `--llm` checks default to Aalto's hosted AI gateway (Aalto network only), but can also run against a **local on-device model** (e.g. `mlx_lm.server` on Apple Silicon, or Ollama) or any OpenAI-compatible endpoint your own university provides, so your unpublished draft never leaves your machine or your institution — see [Data handling](assets/linters/README.md) in the README. Students outside Aalto should use one of those alternatives.
+A linter suite covering nearly every defect on this list (all but the statistical-significance check) — and most of the manuscript checklist above — is available in [`assets/linters/`](assets/linters/README.md): run `python3 run_all_linters.py thesis.pdf` on your compiled PDF (or on your LaTeX sources) before every revision round. For the fast pass the scripts need only Python 3 plus `pdftotext` or PyMuPDF; see the [linter README](assets/linters/README.md). The `--llm` checks default to the Aalto AI API (Aalto network or VPN), but can also run against a **local on-device model** (e.g. `mlx_lm.server` on Apple Silicon, or Ollama) or any OpenAI-compatible endpoint your own university provides, so your unpublished draft never leaves your machine or your institution — see [Data handling](assets/linters/README.md) in the README. Students outside Aalto should use one of those alternatives.
 
 ---
 
@@ -263,30 +263,30 @@ A linter suite covering every defect on this list — and most of the manuscript
 
 Before submitting, verify each item below. Links point to the relevant section of this guide.
 
-- [x] ML problem is precisely formulated: data points, features, and labels are clearly defined (see [Getting Started](#getting-started))
-- [x] Loss functions for training and evaluation are explicitly stated (see [Manuscript Preparation](#thesis-manuscript-preparation))
-- [x] Methods are clearly described, including pseudocode for new algorithms
-- [x] Baselines or benchmarks are included and discussed
-- [x] All figures have labelled axes and informative captions
-- [x] All numbered equations, tables, and figures are referenced in the text
-- [x] Citations are formatted consistently according to IEEE guidelines or the style your programme prescribes
-- [x] Acronyms are expanded at first use and terminology is consistent (see [Self-Editing Pass](#self-editing-pass-prose-linter))
-- [x] A prose self-editing pass has been done for forward referencing, vague quantifiers, and dangling references (see [Self-Editing Pass](#self-editing-pass-prose-linter))
-- [x] Research questions are focused, specific, and not answerable with a bare yes/no (see [Getting Started](#getting-started))
-- [x] Solver/library versions, key tolerance values, and hardware are reported for all experiments
-- [x] Figure text is legible at print size and in grayscale
-- [x] The AI-use statement is included, naming tools and versions (also if no AI tools were used)
-- [x] The thesis uses your university's official template and meets its formal requirements (see [University-Specific Information](#university-specific-information))
-- [x] Any self-assessment or evaluation form your programme requires is completed (Aalto master's students: [form here](material/Statement_template_CCIS.docx))
+- [ ] ML problem is precisely formulated: data points, features, and labels are clearly defined (see [Getting Started](#getting-started))
+- [ ] Loss functions for training and evaluation are explicitly stated (see [Manuscript Preparation](#thesis-manuscript-preparation))
+- [ ] Methods are clearly described, including pseudocode for new algorithms
+- [ ] Baselines or benchmarks are included and discussed
+- [ ] All figures have labelled axes and informative captions
+- [ ] All numbered equations, tables, and figures are referenced in the text
+- [ ] Citations are formatted consistently according to IEEE guidelines or the style your programme prescribes
+- [ ] Acronyms are expanded at first use and terminology is consistent (see [Self-Editing Pass](#self-editing-pass-prose-linter))
+- [ ] A prose self-editing pass has been done for forward referencing, vague quantifiers, and dangling references (see [Self-Editing Pass](#self-editing-pass-prose-linter))
+- [ ] Research questions are focused, specific, and not answerable with a bare yes/no (see [Getting Started](#getting-started))
+- [ ] Solver/library versions, key tolerance values, and hardware are reported for all experiments
+- [ ] Figure text is legible at print size and in grayscale
+- [ ] The AI-use statement is included, naming tools and versions (also if no AI tools were used)
+- [ ] The thesis uses your university's official template and meets its formal requirements (see [University-Specific Information](#university-specific-information))
+- [ ] Your self-assessment is written (Aalto master's students: fill in the School of Science [assessment statement template](material/Statement_template_CCIS.docx); see [below](#thesis-presentation-and-self-assessment))
 
 ---
 
-## Thesis Presentation and Self-Evaluation
+## Thesis Presentation and Self-Assessment
 
 After completing the thesis manuscript:
 
-- Complete the self-assessment your programme requires, with explicit references to sections of your thesis. Aalto master's students use the [evaluation form](material/Statement_template_CCIS.docx); if your programme has no form, write a one-page self-assessment along the same lines — it is the basis for our discussion in any case.
-- Read the grading criteria of your programme before submission so you know what a high-quality thesis looks like in your examiners' eyes. For Aalto master's theses this is the [grade characterisation PDF](material/GradeCharact.pdf); for other programmes see [University-Specific Information](#university-specific-information).
+- Write a self-assessment with explicit references to sections of your thesis. Aalto master's students fill in the School of Science [assessment statement template](material/Statement_template_CCIS.docx) — the form examiners use — as their self-assessment; this is my practice, not a programme requirement. Students elsewhere write a one-page self-assessment along the same lines. It is the basis for our discussion in any case.
+- Read the grading criteria of your programme before submission so you know what a high-quality thesis looks like in your examiners' eyes. For Aalto master's theses this is the School of Science [grade characterisation PDF](material/GradeCharact.pdf); for other programmes see [University-Specific Information](#university-specific-information).
 - Optionally, request a meeting to discuss your self-assessment before submission.
 - Prepare your thesis presentation — either live during a garage session or as a recorded video ([see examples](https://youtube.com/playlist?list=PLrbn2dGrLJK8xt7j0tvaL0uMCdrtQ7JY2)). Where your programme requires a formal presentation or oral defence (for example the *kommissionelle Gesamtprüfung* at IMC Krems or a doctoral defence), the garage is a good place to rehearse it.
 
@@ -311,7 +311,7 @@ After completing the thesis manuscript:
 
 ### Appealing a grading decision
 
-- If you believe an error occurred, you can **request a review** of the decision. The exact instrument differs by country: at Aalto it is a request for rectification of the grade, at IMC Krems a complaint about a defect in the assessment procedure. The deadlines are short — **two weeks** at both universities — so act promptly.
+- If you believe an error occurred, you can **request a review** of the decision. The exact instrument differs by country: at Aalto it is a request for rectification of the grade, at IMC Krems a complaint about a defect in how a negatively assessed examination was conducted. The deadlines are short — **two weeks** at both universities — so act promptly.
 - The formal procedures are linked under [University-Specific Information](#university-specific-information).
 
 **Practical advice:** If unsure whether an appeal is appropriate, discuss the evaluation with your supervisor first. Many issues can be resolved without a formal appeal.
@@ -328,12 +328,13 @@ Theses are supervised in the Department of Computer Science (School of Science, 
 
 | | Where to look |
 |---|---|
-| **Bachelor's thesis** | Instructions, template, and seminar schedule on your programme's pages in the Aalto Student Guide ([Aalto Bachelor's Programme in Science and Technology](https://www.aalto.fi/en/programmes/aalto-bachelors-programme-in-science-and-technology)); past theses in [Aaltodoc](https://libguides.aalto.fi/c.php?g=410698&p=2797875) |
+| **Bachelor's thesis** | Instructions and the evaluation rubric on the programme's [thesis page](https://www.aalto.fi/en/programmes/aalto-bachelors-programme-in-science-and-technology/thesis); templates and the seminar schedule on the JOIN.bsc course page in MyCourses; past theses in [Aaltodoc](https://libguides.aalto.fi/c.php?g=410698&p=2797875) |
 | **Master's thesis** | [SCI Master's Thesis Guide on MyCourses](https://mycourses.aalto.fi/course/view.php?id=41665) — templates, forms, evaluation rules; start with the "Get oriented" section |
 | **Doctoral thesis** | [Doctoral thesis in the Aalto Doctoral Programme in Science](https://www.aalto.fi/en/programmes/aalto-doctoral-programme-in-science/doctoral-thesis) — article-based vs monograph, pre-examination, defence; general information at [Aalto Doctoral Education](https://www.aalto.fi/en/doctoral-education) |
-| **Grading criteria (MSc)** | [Grade characterisation](material/GradeCharact.pdf) and the [self-assessment form](material/Statement_template_CCIS.docx) used by the CCIS master's programme |
-| **Responsible AI use** | [Responsible use of AI in the research process](https://www.aalto.fi/en/services/responsible-use-of-artificial-intelligence-in-the-research-process) and [Tips for using AI for students](https://www.aalto.fi/en/services/tips-for-using-artificial-intelligence-for-students) |
-| **Library** | [Aalto University Library (Primo)](https://primo.aalto.fi/discovery/search?vid=358AALTO_INST:VU1&lang=en); the Finnish [JUFO](https://jfp.csc.fi/jufoportal) ranking for publication quality |
+| **Grading criteria (MSc)** | The School of Science (SCI) [grade characterisation](material/GradeCharact.pdf), which assumes a six-month target time for the thesis process, and the [assessment statement template](material/Statement_template_CCIS.docx) examiners use, which I ask you to fill in as your self-assessment |
+| **Peer-review forms** | Review forms from my Aalto courses, useful as a model for reviewing your own draft: [Machine Learning project](material/CS_C3240_PeerReview.pdf), [Federated Learning project](material/CS_E4740_PeerReview.pdf) |
+| **Responsible AI use** | [Tips for using AI for students](https://www.aalto.fi/en/services/tips-for-using-artificial-intelligence-for-students); for doctoral students also [Responsible use of generative AI in the research process](https://www.aalto.fi/en/services/responsible-use-of-generative-artificial-intelligence-in-the-research-process), which is written for researchers |
+| **Library** | [Aalto University Library (Primo)](https://primo.aalto.fi/nde/search?vid=358AALTO_INST:MAIN&lang=en); the Finnish [JUFO](https://jfp.csc.fi/jufoportal) ranking for publication quality |
 | **Appeals** | [Academic appeals at Aalto University](https://www.aalto.fi/en/applications-instructions-and-guidelines/academic-appeals): a request for rectification must be submitted within **14 days** of being notified of the grade |
 | **LLM access for the linters** | The [linter suite](assets/linters/README.md) defaults to the Aalto AI API / LLM Gateway (Aalto network or VPN) |
 
@@ -345,12 +346,12 @@ IMC Krems (IMC Fachhochschule Krems, Austria) offers bachelor's and master's pro
 |---|---|
 | **Regulations** | [Satzungsteil Studien- und Prüfungsordnung](https://www.imc.ac.at/fileadmin-imckrems/user_upload/Downloads/DE/Rectorate/studien-und-pruefungsordnung.pdf) (German; FHR-5-0035). Bachelor's theses: section 3.8; master's theses: section 3.9 |
 | **Thesis guides** | *Leitfaden für Bachelorarbeiten und Bachelorprüfungen* (FHM-5-0008), *Leitfaden für Masterarbeiten und Masterprüfungen* (FHR-5-0009), and the formatting guide *Leitfaden für die formale Gestaltung schriftlicher/wissenschaftlicher Arbeiten* (FHM-5-0003) — all on the eDesktop; ask your programme's study services if you cannot find them |
-| **Process** | The topic and the written proposal (*Exposé*) must be approved by the programme director before you start; a master's thesis can be submitted for approval at the earliest three months after the proposal was approved. Surveys or data collection may only begin after proposal approval, and must follow the IMC IT policy and data-protection rules |
+| **Process** | The topic and the written proposal (*Exposé*) must be approved by the programme director; approval is a prerequisite for submitting the thesis, and surveys or data collection may only begin after it (following the IMC IT policy and data-protection rules). A master's thesis can be submitted for approval at the earliest three months after the proposal was approved; topics involving ethics-relevant data additionally need ethics-committee approval, which the student applies for |
 | **Assessment** | The supervisors write a moderated assessment report (*Gutachten*), which is handed to you together with the grade. A master's thesis that is not approved can be returned for revision at most twice. The thesis is followed by a presentation and oral examination (*kommissionelle Gesamtprüfung*) |
-| **Good scientific practice and AI** | Section 3.7 of the regulations: plagiarism, ghostwriting, data falsification, and improper use of AI invalidate the thesis. Students are bound by the student AI guideline *Richtlinie zur Verwendung von KI durch Studierende* (FHR-5-004, on the eDesktop), which is stricter than the [general staff guideline](https://www.imc.ac.at/fileadmin-imckrems/user_upload/PDF/KI-Richtlinie_FHR-1-0092.pdf) |
-| **Library** | The campus library and its licensed databases are reached through the eDesktop; the [University for Continuing Education Krems library](https://www.donau-uni.ac.at/en/university/service/library.html) next door is open to the public |
+| **Good scientific practice and AI** | Section 3.7 of the regulations: plagiarism, ghostwriting, data falsification, and improper use of AI invalidate the thesis. Students are bound by the student AI guideline *Richtlinie zur Verwendung von KI durch Studierende* (FHR-5-004, on the eDesktop), which is in part stricter than the [general staff guideline](https://www.imc.ac.at/fileadmin-imckrems/user_upload/PDF/KI-Richtlinie_FHR-1-0092.pdf) |
+| **Library** | The [Campus Library](https://www.kl.ac.at/en/campus-library), run by the University for Continuing Education Krems and open to the public, serves IMC students; the databases IMC licenses are reached through the eDesktop |
 | **Appeals** | The assessment itself cannot be appealed, but a complaint about a defect in how a negatively assessed examination was conducted can be filed with the programme director within **two weeks**; you may inspect your assessment documents within six months of the grade being announced (regulations, sections 3.1 and 3.2; legal basis: [Fachhochschulgesetz](https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=10009895)) |
-| **LLM access for the linters** | Run the `--llm` linters against a local model or an endpoint your university provides; the Aalto gateway is not reachable from outside Aalto (see [Data handling](assets/linters/README.md)) |
+| **LLM access for the linters** | Run the `--llm` linters against a local model or an endpoint your university provides; the Aalto endpoints require an Aalto account (see [Data handling](assets/linters/README.md#data-handling)) |
 
 ### Other universities
 
@@ -365,8 +366,6 @@ Theses supervised earlier at TU Wien are listed in [theses.md](theses.md). If yo
 - A. Jung, *Machine Learning: The Basics*. Singapore: Springer, 2022. [[DOI]](https://doi.org/10.1007/978-981-16-8193-6)
 - A. Jung et al., "The Aalto Dictionary of Machine Learning," Aalto University. [[GitHub]](https://aaltodictionaryofml.github.io/)
 - S. Shalev-Shwartz and S. Ben-David, *Understanding Machine Learning: From Theory to Algorithms*. Cambridge University Press, 2014.
-- [Peer-Review Form — Machine Learning Course Project](material/CS_C3240_PeerReview.pdf)
-- [Peer-Review Form — Federated Learning Course Project](material/CS_E4740_PeerReview.pdf)
 
 ### Writing and Typesetting
 

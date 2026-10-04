@@ -1,10 +1,10 @@
 # Open Thesis Topics
 
-Open topics for a bachelor's, master's, or doctoral thesis supervised by [Alex Jung](https://machinelearningforall.github.io/about/), Associate Professor for Machine Learning. The topics are open to students at any of the universities I supervise at (currently Aalto University and IMC Krems); your own university's thesis regulations still apply — see [University-specific information](index.md#university-specific-information) in the thesis guide.
+Open topics for a bachelor's, master's, or doctoral thesis supervised by [Alex Jung](https://machinelearningforall.github.io/about/), Associate Professor for Machine Learning. The topics are open to students at any of the universities I supervise at (currently Aalto University and IMC Krems); your own university's thesis regulations still apply — see [University-specific information](README.md#university-specific-information) in the thesis guide.
 
-Each topic lists the thesis levels it suits (`BSc`, `MSc`, `PhD`). Most topics can be scoped up or down, so treat the level as a starting point and ask if you would like to do a listed topic at a different level. The topics in this catalog are only a subset of the possible topics: you are welcome to propose your own, ideally related to the [guidance on getting started](index.md#getting-started).
+Each topic lists the thesis levels it suits (`BSc`, `MSc`, `PhD`). Most topics can be scoped up or down, so treat the level as a starting point and ask if you would like to do a listed topic at a different level. The topics in this catalog are only a subset of the possible topics: you are welcome to propose your own, ideally related to the [guidance on getting started](README.md#getting-started).
 
-To discuss a topic or propose your own, get in touch — see the contact links in the [thesis guide](index.md#feedback-and-questions).
+To discuss a topic or propose your own, get in touch — see the contact links in the [thesis guide](README.md#feedback-and-questions).
 
 ## Distributed ML systems and AI policy
 
@@ -17,9 +17,9 @@ Today, powerful AI language models usually run inside the data centres of a few 
 **References**
 
 1. A. Borzunov et al., "Distributed Inference and Fine-tuning of Large Language Models Over the Internet," in *Proc. NeurIPS*, 2023. [Online]. Available: <https://arxiv.org/abs/2312.08361>
-2. European Commission, "AI Factories," *Shaping Europe's Digital Future*. [Online]. Available: <https://digital-strategy.ec.europa.eu/en/policies/ai-factories>
+2. European Commission, "AI Factories," *Shaping Europe's Digital Future*. [Online]. Available: <https://digital-strategy.ec.europa.eu/en/policies/ai-factories> (accessed Oct. 4, 2026)
 
-[Ask about this topic](mailto:alex.jung@aalto.fi?subject=Thesis%20topic:%20A%20National%20Inference%20Grid:%20Could%20a%20Country%20Run%20Its%20Own%20AI%20Beyond%20Big%20Tech?)
+[Ask about this topic](mailto:alex.jung@aalto.fi?subject=Thesis%20topic:%20A%20National%20Inference%20Grid%3A%20Could%20a%20Country%20Run%20Its%20Own%20AI%20Beyond%20Big%20Tech%3F)
 
 ## Political data science
 
@@ -47,4 +47,4 @@ An LLM can be viewed as a single unknown function: give it a context, it returns
 2. F. Tramèr, F. Zhang, A. Juels, M. K. Reiter, and T. Ristenpart, "Stealing machine learning models via prediction APIs," in *Proc. 25th USENIX Security Symp.*, 2016, pp. 601–618.
 3. N. Carlini et al., "Stealing part of a production language model," in *Proc. ICML*, 2024. [Online]. Available: <https://arxiv.org/abs/2403.06634>
 
-[Ask about this topic](mailto:alex.jung@aalto.fi?subject=Thesis%20topic:%20Compressed%20Sensing%20of%20LLMs:%20Query-Efficient%20Recovery%20of%20a%20Black-Box%20Next-Token%20Function)
+[Ask about this topic](mailto:alex.jung@aalto.fi?subject=Thesis%20topic:%20Compressed%20Sensing%20of%20LLMs%3A%20Query-Efficient%20Recovery%20of%20a%20Black-Box%20Next-Token%20Function)

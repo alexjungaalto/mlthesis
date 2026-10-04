@@ -49,7 +49,7 @@ theme:
     repo: fontawesome/brands/github
 
 nav:
-  - Thesis Guide: index.md
+  - Thesis Guide: README.md
   - Thesis Garage: Garage.md
   - Open Topics: Topics.md
   - Supervised Theses: theses.md

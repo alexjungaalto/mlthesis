@@ -142,6 +142,9 @@ def level_summary(theses: list[dict]) -> str:
         for k, v in LEVELS.items()
         if counts[k]
     ]
+    if len(parts) == 1:
+        label = LEVELS[next(k for k in LEVELS if counts[k])]["label"].lower()
+        return f"{len(theses)} theses in total, all of them {label.replace(' thesis', '')} theses."
     return f"{len(theses)} theses in total: {', '.join(parts)}."
 
 
