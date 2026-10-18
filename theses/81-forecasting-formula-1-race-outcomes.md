@@ -10,7 +10,7 @@ aaltodoc: "https://aaltodoc.aalto.fi/handle/123456789/122937"
 video: "https://youtu.be/q01GzbSDsSg"
 video_views: 574
 keywords: ["machine learning", "data science", "artificial neural networks", "random forest", "predictive model", "Formula 1"]
-area: sports-analytics
+area: time-series-forecasting
 framing: supervised
 confidence: high
 sources: [abstract, fulltext, video]
@@ -21,6 +21,8 @@ dictionary: [binclass, datapoint, featurevec, label, hypospace, logloss, randomf
 # Applying Machine Learning to Forecast Formula 1 Race Outcomes
 
 **L. García Tejada** — M.Sc. thesis, Aalto University, August 2023
+
+Part of [Time series and forecasting](../areas/time-series-forecasting.md).
 
 A pit stop is one of the few decisions in a Formula 1 race that a team fully controls, and
 getting the lap wrong can cost places that no amount of pace recovers. The question this

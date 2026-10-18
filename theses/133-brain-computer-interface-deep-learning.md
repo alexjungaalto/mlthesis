@@ -10,7 +10,7 @@ aaltodoc: "https://aaltodoc.aalto.fi/handle/123456789/46105"
 video: "https://youtu.be/IouXWsJsm0Q"
 video_views: 788
 keywords: ["brain-computer interfaces", "convolutional neural networks", "motor imagery", "deep learning", "transfer learning", "electroencephalography"]
-area: deep-learning-signals
+area: health-biosignals
 framing: supervised
 confidence: medium
 sources: [abstract, video]
@@ -26,6 +26,8 @@ dictionary: [datapoint, featurevec, label, hypospace, classification, ann, featl
 # Recognizing Thoughts from Bioelectric Patterns? A Brain-Computer Interface with Deep Learning
 
 **J. Laiho** — M.Sc. thesis, Aalto University, August 2020 (with Accenture Liquid Studio, NL)
+
+Part of [Health and biosignals](../areas/health-biosignals.md).
 
 A brain-computer interface reads electrical activity from the scalp and turns it into control
 signals, letting someone steer a wheelchair or a cursor by imagining a movement. The obstacle

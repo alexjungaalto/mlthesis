@@ -10,7 +10,7 @@ aaltodoc: "https://aaltodoc.aalto.fi/handle/123456789/46045"
 video: "https://youtu.be/4y6AsFaC9iQ"
 video_views: 428
 keywords: ["EV charging", "serviceability", "machine learning", "fault detection", "DBSCAN"]
-area: condition-monitoring
+area: ml-systems-engineering
 framing: supervised
 confidence: medium
 sources: [abstract, video]
@@ -27,6 +27,8 @@ dictionary: [datapoint, featurevec, label, hypospace, clustering, dataset, super
 # Diagnostic and Prognostic Analysis Optimization of Field Problems for EV Charging Stations
 
 **X. Zhang** — M.Sc. thesis, Aalto University, August 2020 (with ABB)
+
+Part of [ML systems and engineering](../areas/ml-systems-engineering.md).
 
 A DC fast charger is a distributed system of power cabinets, charger posts and five separate
 control boards communicating over a controller area network (CAN) bus. When one fails, a

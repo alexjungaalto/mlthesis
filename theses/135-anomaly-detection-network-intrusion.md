@@ -10,7 +10,7 @@ aaltodoc: "https://aaltodoc.aalto.fi/handle/123456789/46076"
 video: "https://youtu.be/Z_lBOjkaSPk"
 video_views: 426
 keywords: ["anomaly detection", "network intrusion detection", "neural networks", "autoencoders", "network-flow aggregation", "semi-supervised learning"]
-area: anomaly-detection
+area: anomaly-fraud-detection
 framing: anomaly-detection
 confidence: high
 sources: [abstract, fulltext, video]
@@ -21,6 +21,8 @@ dictionary: [datapoint, featurevec, label, hypospace, loss, autoencoder, gmm, pc
 # Anomaly Detection Algorithms and Techniques for Network Intrusion Detection Systems
 
 **M. Mishin** — M.Sc. thesis, Aalto University, August 2020 (with Ericsson)
+
+Part of [Anomaly, intrusion and fraud detection](../areas/anomaly-fraud-detection.md).
 
 An intrusion detection system has to flag attacks it has never seen, which rules out training
 a classifier on a catalogue of known ones. The standard move is to learn what normal traffic

@@ -10,7 +10,7 @@ aaltodoc: "https://urn.fi/URN:NBN:fi:aalto-202408255774"
 video: "https://youtu.be/c5Z6CwWmr6w"
 video_views: 403
 keywords: ["large language model", "transformer", "mental health", "GPT"]
-area: llm-applications
+area: llms-generative-ai
 framing: not-applicable
 confidence: medium
 sources: [abstract, video]
@@ -27,6 +27,8 @@ dictionary: [llm, transformer, attention, finetuning, pretraining]
 # Large Language Models in Mental Health Support
 
 **J. Rantanen** — M.Sc. thesis, Aalto University, August 2024
+
+Part of [Large language models and generative AI](../areas/llms-generative-ai.md).
 
 > **A note on this page.** Most theses in this directory are described through the three
 > components of a machine learning problem: the data, the model and the loss function.

@@ -53,6 +53,21 @@ nav:
   - Thesis Garage: Garage.md
   - Open Topics: Topics.md
   - Supervised Theses: theses.md
+  - Research Areas:
+      - Federated and distributed learning: areas/federated-learning.md
+      - Graphs and networked data: areas/graphs-networked-data.md
+      - Large language models and generative AI: areas/llms-generative-ai.md
+      - Trustworthy and explainable AI: areas/trustworthy-explainable-ai.md
+      - Anomaly, intrusion and fraud detection: areas/anomaly-fraud-detection.md
+      - Computer vision: areas/computer-vision.md
+      - Natural language processing and text mining: areas/nlp-text-mining.md
+      - Time series and forecasting: areas/time-series-forecasting.md
+      - Finance and business analytics: areas/finance-business-analytics.md
+      - Health and biosignals: areas/health-biosignals.md
+      - Reinforcement learning and control: areas/reinforcement-learning-control.md
+      - ML systems and engineering: areas/ml-systems-engineering.md
+      - Recommenders, personalisation and advertising: areas/recommenders-personalisation.md
+      - ML education and society: areas/ml-education-society.md
   - Thesis Linters: assets/linters/README.md
 
 # Per-thesis summary pages are reached from the Supervised Theses table, not

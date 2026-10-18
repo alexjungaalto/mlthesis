@@ -79,6 +79,9 @@ else
   echo "==> Skipping alexjung.at sync (no checkout at $ALEXJUNG_SITE_DIR)"
 fi
 
+echo "==> Regenerating research-area hub pages from theses.csv"
+python3 compile_theses.py --areas
+
 echo "==> Regenerating Topics.md from topics.csv"
 python3 compile_topics.py --markdown
 
@@ -99,6 +102,13 @@ cp theses.md   docs/theses.md
 if compgen -G "theses/*.md" >/dev/null; then
   mkdir -p docs/theses
   cp theses/*.md docs/theses/
+fi
+
+# Research-area hub pages, regenerated above from the theses.csv `area`
+# column. Build artifacts: areas/ is git-ignored.
+if compgen -G "areas/*.md" >/dev/null; then
+  mkdir -p docs/areas
+  cp areas/*.md docs/areas/
 fi
 cp -R material docs/material
 

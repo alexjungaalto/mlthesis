@@ -10,7 +10,7 @@ aaltodoc: "https://aaltodoc.aalto.fi/handle/123456789/102433"
 video: "https://youtu.be/TaYlv6MFoeU"
 video_views: 445
 keywords: ["supervised learning", "machine learning", "classification", "restaurant", "food"]
-area: nlp-text-classification
+area: nlp-text-mining
 framing: supervised
 confidence: high
 sources: [abstract, fulltext]
@@ -21,6 +21,8 @@ dictionary: [supervisedlearning, datapoint, feature, label, hypospace, svm, rand
 # Classifying Restaurant Menu Items with Supervised Learning
 
 **T. Kokkonen** — M.Sc. thesis, Aalto University, January 2021
+
+Part of [Natural language processing and text mining](../areas/nlp-text-mining.md).
 
 Food delivery platforms carry hundreds of thousands of dishes written as free text by
 restaurants, for humans. Nothing in "Tonnikalasalaatti" tells a search index that it is a

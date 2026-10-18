@@ -10,7 +10,7 @@ aaltodoc: "https://urn.fi/URN:NBN:fi:aalto-202406234904"
 video: "https://youtu.be/saahi0X6Di4"
 video_views: 368
 keywords: ["traffic safety", "deep learning", "neural network", "spatiotemporal prediction"]
-area: spatiotemporal-forecasting
+area: time-series-forecasting
 framing: supervised
 confidence: high
 sources: [abstract, fulltext]
@@ -21,6 +21,8 @@ dictionary: [datapoint, featurevec, label, hypospace, loss, ann, baseline, overf
 # Spatiotemporal Traffic Accident Prediction Using Deep Learning Models
 
 **A. Manninen** — M.Sc. thesis, Aalto University, June 2024
+
+Part of [Time series and forecasting](../areas/time-series-forecasting.md).
 
 The City of Helsinki has set a target of halving traffic deaths and serious injuries by 2030
 against a 2020 baseline, which is the premise the thesis takes as given. Meeting a target like that requires knowing *where* and *when* to intervene, which

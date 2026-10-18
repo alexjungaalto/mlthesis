@@ -30,6 +30,8 @@ dictionary: [reinforcementlearning, policy, reward, hypospace, baseline, hyperpa
 
 **Y. Sarcheshmehpour** — M.Sc. thesis, Aalto University, August 2023 (with ABB)
 
+Part of [Reinforcement learning and control](../areas/reinforcement-learning-control.md).
+
 The thesis opens from two figures it takes from the industrial setting: electric machines
 account for roughly half of world electricity use, and large manufacturers design thousands
 of motors a day, each to a different customer specification.

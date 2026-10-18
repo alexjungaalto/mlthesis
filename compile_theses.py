@@ -30,6 +30,8 @@ DEFAULT_MD = SCRIPT_DIR / "theses.md"
 # Per-thesis summary pages, one "<number>-<slug>.md" per thesis. Optional: a
 # thesis without a page keeps linking straight to its repository record.
 DEFAULT_PAGES_DIR = SCRIPT_DIR / "theses"
+# Generated research-area hub pages (build artifacts; regenerated each build).
+DEFAULT_AREAS_DIR = SCRIPT_DIR / "areas"
 DEFAULT_TEX = SCRIPT_DIR / "theses.tex"
 
 # Markers delimiting the generated thesis list on the alexjung.at supervision
@@ -40,6 +42,90 @@ SUPERVISION_BEGIN = (
     " `compile_theses.py --supervision`; do not edit by hand -->"
 )
 SUPERVISION_END = "<!-- theses:end -->"
+
+# Research areas used to group the thesis list into browsable hub pages, in
+# the order the hubs are listed. The CSV `area` column holds the slug; the
+# blurb is the hub page's standfirst. Keep slugs stable once published -- they
+# are URLs.
+AREAS = {
+    "federated-learning": (
+        "Federated and distributed learning",
+        "Training a shared model across many devices or institutions without "
+        "pooling their data. These theses cover client selection, "
+        "personalisation, robustness to malfunctioning or adversarial "
+        "participants, and the systems work of actually deploying a federation."),
+    "graphs-networked-data": (
+        "Graphs and networked data",
+        "Learning when the data points are related rather than independent: "
+        "signals on graphs, recovery from few measurements, and model "
+        "selection when the network structure is itself unknown."),
+    "llms-generative-ai": (
+        "Large language models and generative AI",
+        "Applications and evaluation of large language models -- retrieval-"
+        "augmented generation, LLM-as-a-judge, agents, and domain uses from "
+        "contract review to clinical coding -- alongside generative models "
+        "for other media."),
+    "trustworthy-explainable-ai": (
+        "Trustworthy and explainable AI",
+        "Making a model's behaviour inspectable and its use defensible: "
+        "explainability, privacy-preserving learning, adversarial robustness, "
+        "poisoning and backdoor attacks, unlearning, and design criteria for "
+        "high-stakes decisions."),
+    "anomaly-fraud-detection": (
+        "Anomaly, intrusion and fraud detection",
+        "Finding the rare event: network intrusion, fraudulent shops and "
+        "trades, money laundering, and anomalies in industrial and maritime "
+        "operational data. Mostly semi-supervised, because the interesting "
+        "cases are the ones nobody labelled."),
+    "computer-vision": (
+        "Computer vision",
+        "Detection, segmentation, tracking and similarity from images and "
+        "video, across medical imaging, industrial safety, aerial and drone "
+        "imagery, document understanding and the built environment."),
+    "nlp-text-mining": (
+        "Natural language processing and text mining",
+        "Turning free text into something a system can act on: classification "
+        "and tagging, semantic matching, sentiment, taxonomy induction and "
+        "extraction from structured documents."),
+    "time-series-forecasting": (
+        "Time series and forecasting",
+        "Predicting what happens next, from electricity load and traffic "
+        "accidents to retail demand, weather and race outcomes -- including "
+        "the recurring difficulties of seasonality, sparse events and "
+        "spatiotemporal structure."),
+    "finance-business-analytics": (
+        "Finance and business analytics",
+        "Pricing, risk and commercial decisions: derivative exposure, fund "
+        "flows, procurement, churn, record linkage and the question of how "
+        "much of a market is predictable at all."),
+    "health-biosignals": (
+        "Health and biosignals",
+        "Clinical prediction and physiological sensing -- survival and "
+        "comorbidity models, wearables, brain-computer interfaces and motility "
+        "classification -- where the cost of a wrong prediction is measured in "
+        "patient outcomes."),
+    "reinforcement-learning-control": (
+        "Reinforcement learning and control",
+        "Learning to act rather than to predict: building and lighting "
+        "control, engineering design search, contextual bandits for allocation "
+        "and advertising, and automated testing. Reward design is usually the "
+        "hard part."),
+    "ml-systems-engineering": (
+        "ML systems and engineering",
+        "The engineering around the model: data pipelines, MLOps, scheduling "
+        "and cloud workloads, telecommunication systems, process mining and "
+        "condition monitoring on deployed hardware."),
+    "recommenders-personalisation": (
+        "Recommenders, personalisation and advertising",
+        "Predicting what a particular person will engage with -- click-through, "
+        "preference profiles, news personalisation and recommendation from "
+        "multimodal signals -- and the editorial questions that follow."),
+    "ml-education-society": (
+        "ML education and society",
+        "How people learn, teach and judge machine learning, and how the field "
+        "reports on itself: comprehension studies, ethics in publications, and "
+        "the effect of generative AI on self-assessment."),
+}
 
 # Thesis levels, in the order they are listed when a university has several.
 # The CSV `level` column holds the short key; an empty level means MSc (the
@@ -151,8 +237,11 @@ def level_summary(theses: list[dict]) -> str:
     return f"{len(theses)} theses in total: {', '.join(parts)}."
 
 
-def thesis_pages(pages_dir: Path) -> dict[str, str]:
-    """{thesis number: published path} for every per-thesis summary page.
+def thesis_pages(pages_dir: Path) -> dict[tuple[str, str], str]:
+    """{(university, number): published path} for every per-thesis summary page.
+
+    Keyed on (university, number) because `number` restarts per university --
+    Aalto, TU Wien and IMC Krems each have a thesis #1.
 
     Pages are named "<number>-<slug>.md" and are copied to docs/theses/ by
     build_site.sh. The link target keeps the .md extension: MkDocs rewrites
@@ -163,9 +252,11 @@ def thesis_pages(pages_dir: Path) -> dict[str, str]:
         return {}
     found = {}
     for p in sorted(pages_dir.glob("*.md")):
-        number = p.stem.split("-", 1)[0]
-        if number.isdigit():
-            found[number] = f"theses/{p.stem}.md"
+        head = p.read_text(encoding="utf-8")[:1200]
+        number = re.search(r"^number:\s*\"?(\d+)", head, re.M)
+        uni = re.search(r"^university:\s*\"?([^\"\n]+)", head, re.M)
+        if number and uni:
+            found[(uni.group(1).strip(), number.group(1))] = f"theses/{p.stem}.md"
     return found
 
 
@@ -192,6 +283,22 @@ def generate_markdown(theses: list[dict], output_path: Path,
             f"`{k}` for a {v['label'].lower()}" for k, v in LEVELS.items()
         ) + ". Generated from `theses.csv`; do not edit this file by hand.",
         "",
+        "## Browse by research area",
+        "",
+    ]
+
+    counts = {}
+    for t in theses:
+        if t.get("area"):
+            counts[t["area"]] = counts.get(t["area"], 0) + 1
+    lines += [
+        f"- [{name}](areas/{slug}.md) ({counts[slug]})"
+        for slug, (name, _) in AREAS.items() if counts.get(slug)
+    ]
+    lines += [
+        "",
+        "The full list follows, grouped by host university.",
+        "",
     ]
 
     for uni, records in by_uni.items():
@@ -206,7 +313,7 @@ def generate_markdown(theses: list[dict], output_path: Path,
             lines.append("|---|-------|--------|-------|----------|-----------|")
             for i, t in enumerate(ongoing, 1):
                 rec = f"[video]({t['recording']})" if t.get("recording") else ""
-                page = pages.get(str(t["number"]))
+                page = pages.get((t["university"], str(t["number"])))
                 title = f"[{t['title']}]({page})" if page else t["title"]
                 lines.append(
                     f"| {i} | {t['level']} | {t['author']} | {title} "
@@ -219,7 +326,7 @@ def generate_markdown(theses: list[dict], output_path: Path,
             lines.append("| # | Level | Author | Title | Date | Industry | Recording |")
             lines.append("|---|-------|--------|-------|------|----------|-----------|")
             for i, t in enumerate(completed, 1):
-                target = pages.get(str(t["number"])) or t["url"]
+                target = pages.get((t["university"], str(t["number"]))) or t["url"]
                 title = f"[{t['title']}]({target})" if target else t["title"]
                 rec = f"[video]({t['recording']})" if t.get("recording") else ""
                 lines.append(
@@ -231,6 +338,55 @@ def generate_markdown(theses: list[dict], output_path: Path,
     with open(output_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
     print(f"Markdown written to {output_path}")
+
+
+def generate_areas(theses: list[dict], out_dir: Path,
+                   pages_dir: Path = DEFAULT_PAGES_DIR) -> None:
+    """Write one browsable hub page per research area into out_dir.
+
+    Each hub lists the theses whose `area` column matches, newest first, and
+    links to the per-thesis page where one exists. Theses with no area (new
+    roster entries are created without one) are reported, not silently
+    dropped."""
+    pages = thesis_pages(pages_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for stale in out_dir.glob("*.md"):
+        stale.unlink()
+
+    unclassified = [t for t in theses if not t.get("area")]
+    unknown = sorted({t["area"] for t in theses
+                      if t.get("area") and t["area"] not in AREAS})
+    if unknown:
+        raise SystemExit(f"abort: theses.csv uses areas absent from AREAS: {unknown}")
+
+    for slug, (name, blurb) in AREAS.items():
+        group = [t for t in theses if t.get("area") == slug]
+        if not group:
+            continue
+        group.sort(key=lambda t: (-thesis_year(t), t["author"]))
+        lines = [f"# {name}", "", blurb, "",
+                 f"{len(group)} supervised "
+                 f"{'thesis' if len(group) == 1 else 'theses'}. "
+                 "See [all supervised theses](../theses.md) for the full list, "
+                 "or [open topics](../Topics.md) if you are looking for one to "
+                 "take on.", "",
+                 "| Level | Author | Title | Date | Industry | Recording |",
+                 "|-------|--------|-------|------|----------|-----------|"]
+        for t in group:
+            page = pages.get((t["university"], str(t["number"])))
+            target = f"../{page}" if page else t["url"]
+            title = f"[{t['title']}]({target})" if target else t["title"]
+            rec = f"[video]({t['recording']})" if t.get("recording") else ""
+            date = t["date"] or "in progress"
+            lines.append(f"| {t['level']} | {t['author']} | {title} "
+                         f"| {date} | {t['industry']} | {rec} |")
+        lines.append("")
+        (out_dir / f"{slug}.md").write_text("\n".join(lines), encoding="utf-8")
+
+    print(f"{len(AREAS)} area pages written to {out_dir}")
+    if unclassified:
+        print(f"  note: {len(unclassified)} thesis/theses have no area and appear "
+              f"on no hub: " + ", ".join(f"#{t['number']}" for t in unclassified))
 
 
 def tex_escape(s: str) -> str:
@@ -494,6 +650,10 @@ def main():
         metavar="PAGE",
         help="Sync the thesis list into the alexjung.at supervision page (Jekyll .md)",
     )
+    parser.add_argument("--areas", action="store_true",
+                        help="Generate one hub page per research area")
+    parser.add_argument("--areas-output", type=Path, default=DEFAULT_AREAS_DIR,
+                        metavar="DIR", help="Area hub output directory")
     parser.add_argument("--stats", action="store_true", help="Print statistics")
     parser.add_argument(
         "--university", type=str, help="Filter by university key (e.g. Aalto, 'IMC Krems')"
@@ -523,6 +683,9 @@ def main():
 
     if args.markdown:
         generate_markdown(theses, args.output)
+
+    if args.areas:
+        generate_areas(theses, args.areas_output)
 
     if args.tex:
         generate_tex(theses, args.tex_output)

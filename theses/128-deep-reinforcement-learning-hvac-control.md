@@ -25,6 +25,8 @@ dictionary: [reinforcementlearning, policy, reward, datapoint, featurevec, hypos
 
 **I. Vikström** — M.Sc. thesis, Aalto University, December 2020 (with TietoEVRY)
 
+Part of [Reinforcement learning and control](../areas/reinforcement-learning-control.md).
+
 Heating, ventilation and air conditioning (HVAC) accounts for roughly a fifth of global
 energy consumption. There are two ways to reduce that: build machinery that draws less power,
 or control the existing machinery better. This thesis takes the second. Most HVAC plant is

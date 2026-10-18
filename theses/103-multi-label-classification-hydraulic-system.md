@@ -10,7 +10,7 @@ aaltodoc: "https://aaltodoc.aalto.fi/handle/123456789/116308"
 video: "https://youtu.be/1HTsaSqvsz0"
 video_views: 409
 keywords: ["multilabel classification", "monitoring", "hydraulic system", "supervised learning", "multiclass classification"]
-area: condition-monitoring
+area: ml-systems-engineering
 framing: supervised
 confidence: medium
 sources: [abstract, video]
@@ -25,6 +25,8 @@ dictionary: [supervisedlearning, datapoint, featurevec, label, classification, h
 # Multi-Label Classification of a Hydraulic System Using Machine Learning Methods
 
 **C. Molinero Ranera** — M.Sc. thesis, Aalto University, July 2022
+
+Part of [ML systems and engineering](../areas/ml-systems-engineering.md).
 
 Industrial hydraulic systems degrade component by component: a cooler loses efficiency, a
 valve responds more slowly, an accumulator loses pressure. Each failure has a different cost
