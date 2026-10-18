@@ -12,17 +12,14 @@ video_views: 642
 keywords: ["electrical machine design", "artificial intelligence", "reinforcement learning", "policy gradient method", "proximal policy optimization"]
 area: reinforcement-learning-control
 framing: reinforcement
-confidence: low
-sources: [video]
+confidence: high
+sources: [fulltext, video]
 review_status: draft
 review_notes: >-
-  LOWEST-CONFIDENCE DRAFT OF THE TEN. The Aaltodoc record carries no abstract, and the PDF
-  is a scan with no text layer, so this page rests entirely on auto-generated captions of
-  the defence. The captions garble domain terms badly ("air capital expensity" for what is
-  almost certainly air gap flux density, "classroom policy optimization" for proximal
-  policy optimization, "River/reform/divorce function" for reward function). Technical
-  specifics below are therefore reconstructions and MUST be checked against the thesis
-  before this page is published.
+  Technical detail verified against the thesis full text (supervisor's own copy; the
+  Aaltodoc record carries no abstract and its PDF is a scan without a text layer).
+  An earlier draft of this page reconstructed the design variables and flag semantics
+  from auto-captions and got them partly wrong; those are now quoted from the thesis.
 dictionary: [reinforcementlearning, policy, reward, hypospace, baseline, hyperparameter]
 ---
 
@@ -46,19 +43,25 @@ rather than the learning algorithm.
 **Experience.** No dataset. The agent interacts with a simulation of the motor design
 process, where each episode walks from a starting design towards a feasible one.
 
-**State.** A vector of *performance flags* plus the previous action. Each flag takes value
-−1, 0 or +1 according to whether the corresponding performance metric sits below, within, or
-above its required range. A design is feasible exactly when every flag is zero, which gives
-the agent an unambiguous termination condition. The underlying performance metrics include
-air gap flux density, starting current, starting torque and temperature rise.
+**State.** Mostly the values of the *performance flags*. There is one flag per performance
+value, taking a value in {−1, 0, 1}: zero if that value meets the requirements, otherwise
++1 or −1. A design is feasible exactly when every flag is zero, which gives the agent an
+unambiguous termination condition. The four performance values are airgap flux density,
+relative starting current, starting torque and stator temperature rise.
 
-**Actions.** Increment or decrement one design parameter, among them rotor length, number of
-coil turns and tooth height. The objective being minimised in the engineering sense is motor
-mass, subject to customer and manufacturing requirements expressed as equality and inequality
-constraints.
+The episode starts from a small base machine chosen to fit the stated requirements and
+manufacturing constraints, and ends at the smallest feasible machine meeting them. The
+thesis distinguishes two ending criteria: *simple*, stopping at the first all-zero-flag
+state, and *optimal*, stopping at the lowest-mass state among those.
 
-**Hypothesis space.** A [policy](https://dictionaryofml.org/terms/policy.html) trained with
-proximal policy optimization, a policy-gradient method.
+**Actions.** Decrease or increase one of three design variables: length of the motor, number
+of coil turns in the winding, and tooth tip height of the rotor slot. The objective being
+minimised in the engineering sense is motor mass, subject to customer-specific requirements
+and manufacturing constraints.
+
+**Hypothesis space.** A policy network trained with proximal policy optimization (PPO), a
+[policy](https://dictionaryofml.org/terms/policy.html)-gradient method, learning by trial
+and error to maximise cumulative reward over repeated episodes.
 
 **Reward.** This is the thesis's actual contribution, and it is developed in stages, each
 fixing a failure of the last — which makes it an unusually clear worked example of reward
@@ -83,10 +86,16 @@ diagnosable way, and the fix is motivated by that failure rather than by tuning.
 to an engineering design loop: a generic reward is easy to write, while the expert-informed
 one is what carries across machine types.
 
-*Quantitative results against the traditional design methods are reported in the thesis.
-They are not restated here: the Aaltodoc record carries no abstract and the full text is a
-scan without a text layer, leaving the recorded defence as the only public source, and its
-auto-captions garble the numbers.*
+On generalisation, 20% of cases were held out as a test set. The three-variable model
+beat the two-variable one: splitting the data raised training steps only from 13,000,000 to
+15,000,000, with PPO steps and optimal cases almost unchanged and no failures. The
+two-variable model failed to find a solution in two cases, with the agent trapped executing
+and reversing the same actions until it hit the iteration cap — the very failure mode the
+revisit penalty exists to prevent.
+
+The thesis reports improved computational efficiency against traditional optimization
+approaches, and is candid about the costs: heavy training requirements, sensitive
+hyperparameter tuning, and results that are hard for a designer to interpret.
 
 ## Watch the defence
 
