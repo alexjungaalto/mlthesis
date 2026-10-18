@@ -67,8 +67,9 @@ try:
 except ImportError:
     fitz = None
 
-from aalto_llm import (API_KEY_HELP, BASE_URL, BASE_URL_HELP,
-                       default_vision_model, extract_json, make_client)
+from aalto_llm import (API_KEY_HELP, BASE_URL_HELP,
+                       default_vision_base_url, default_vision_model,
+                       extract_json, make_client)
 
 # Require a real caption separator: a colon, or a period FOLLOWED BY
 # whitespace. Plain "[:.]" let the period inside a figure number act as the
@@ -152,14 +153,35 @@ def find_figures(doc) -> List[Figure]:
             continue
         img_infos = page.get_image_info()
         drawings = [d["rect"] for d in page.get_drawings()]
+        big_draws = [r for r in drawings if r.width > 20 and r.height > 20]
         for cap_rect, number, cap_text in captions:
             # Figure content: images/vector graphics ABOVE the caption
             # (standard placement), horizontally overlapping the caption
             # column. Fall back to the space between the previous text
             # block and the caption.
+            # Vector (TikZ/PGF) figures expose axis/tick/legend text as
+            # ordinary text blocks. Any text inside the vertical band the
+            # figure's drawings span (down to the caption) is figure-
+            # internal and must not bound the region from above.
+            col_probe = fitz.Rect(cap_rect.x0 - 24, 0,
+                                  cap_rect.x1 + 24, cap_rect.y0 + 8)
+            draws_above = [r for r in big_draws
+                           if r.y1 <= cap_rect.y0 + 8 and
+                           r.intersects(col_probe)]
+            fig_top = min((r.y0 for r in draws_above),
+                          default=cap_rect.y0)
             top = 0.0
             for b in blocks:
                 r = fitz.Rect(b["bbox"])
+                # Only blocks in the caption's own column may bound the
+                # figure region from above: in two-column layouts (IEEE
+                # conference/journal), text in the OTHER column would
+                # otherwise push `top` down to the caption and shrink the
+                # region to nothing, skipping every figure.
+                if r.x1 <= cap_rect.x0 + 4 or r.x0 >= cap_rect.x1 - 4:
+                    continue
+                if r.y0 >= fig_top - 10:
+                    continue
                 if b.get("type", 0) == 0 and r.y1 <= cap_rect.y0 - 4:
                     text = " ".join(sp.get("text", "")
                                     for ln in b.get("lines", [])
@@ -169,16 +191,22 @@ def find_figures(doc) -> List[Figure]:
                         top = max(top, r.y1)
             region = None
             dpis = []
+            # Same column-awareness for the figure content itself: only
+            # images/drawings horizontally overlapping the caption's column
+            # belong to this figure (wide figure* spans still overlap).
+            col_band = fitz.Rect(cap_rect.x0 - 24, top,
+                                 cap_rect.x1 + 24, cap_rect.y0)
             for info in img_infos:
                 r = fitz.Rect(info["bbox"])
                 if r.y1 <= cap_rect.y0 + 8 and r.y0 >= top - 30 and \
-                        r.intersects(fitz.Rect(0, top, pw, cap_rect.y0)):
+                        r.intersects(col_band):
                     region = r if region is None else region | r
                     if r.width > 8:
                         dpis.append(info["width"] / (r.width / 72.0))
             for r in drawings:
                 if r.y1 <= cap_rect.y0 + 8 and r.y0 >= top - 10 and \
-                        r.width > 20 and r.height > 20:
+                        r.width > 20 and r.height > 20 and \
+                        r.intersects(col_band):
                     region = r if region is None else region | r
             if region is None or region.width < 40 or region.height < 30:
                 region = fitz.Rect(36, max(top, 36), pw - 36,
@@ -296,7 +324,10 @@ def main(argv: List[str] = None) -> int:
         description="Visual figure-quality linter (pixel heuristics + "
                     "vision LLM).")
     ap.add_argument("pdf", help="Path to the thesis PDF.")
-    ap.add_argument("--base-url", default=BASE_URL, help=BASE_URL_HELP)
+    # image requests get their own endpoint default: the suite's text
+    # gateway has no dependable vision model (see default_vision_base_url).
+    ap.add_argument("--base-url", default=default_vision_base_url(),
+                    help=BASE_URL_HELP)
     ap.add_argument("--api-key", default=None, help=API_KEY_HELP)
     ap.add_argument("--model", default=None,
                     help="Vision model id (default depends on gateway).")

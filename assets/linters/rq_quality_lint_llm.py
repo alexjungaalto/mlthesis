@@ -25,6 +25,17 @@ follow authoritative university guidance:
 
 Per research question: verdict STRONG / ADEQUATE / WEAK with per-criterion
 flags and a suggested reformulation for anything less than STRONG.
+The self-containment criterion above is READER-POSITION: a term counts as
+defined if the paper defines it anywhere before the RQ. A second, STANDALONE
+pass (on by default; --no-standalone to skip) grades each extracted RQ the
+way abstract_selfcontained_lint_llm.py grades the abstract: against the
+ELEMENTARY vocabulary of the Aalto Dictionary of ML only, ignoring the rest
+of the paper. It catches the anaphora and own coinages that pass the
+reader-position test ('this platform', 'T4 (Decision Explainability)',
+'tamper-evident local attribution records') -- an RQ should be readable by
+someone who has seen nothing but the dictionary.
+  [WARN] NOT-STANDALONE   RQ graded POOR/FAIR standalone, with the gaps
+  [INFO] STANDALONE       RQ graded GOOD standalone
 Scope-level checks: research gap identified, delimitations stated,
 alignment between questions and stated objectives/contributions, and joint
 coverage of the thesis aim.
@@ -46,8 +57,49 @@ import sys
 from typing import List
 
 from aalto_llm import (API_KEY_HELP, BASE_URL, BASE_URL_HELP, default_model,
-                       extract_json, is_responses_api, make_client)
+                       default_strong_model, extract_json, is_responses_api,
+                       make_client)
 from lintutil import load_lines
+from abstract_selfcontained_lint_llm import (DEFAULT_DICT, _vocab_block,
+                                             load_dictionary)
+
+STANDALONE_PROMPT = (
+    "You assess whether each RESEARCH QUESTION below is SELF-CONTAINED for a "
+    "reader who knows only ELEMENTARY machine-learning concepts and NOTHING "
+    "about this paper -- not its title, abstract, platform, or taxonomy. "
+    "'Elementary' is defined precisely: the terms in the ELEMENTARY "
+    "VOCABULARY (the Aalto Dictionary of Machine Learning). A term in that "
+    "vocabulary (or an obvious standard synonym) may be used unexplained. "
+    "Any other technical term, label code, named entity, or multiword "
+    "construct must be either transparently built from elementary parts OR "
+    "defined inside the question itself; otherwise it is a gap.\n\n"
+    "Judge each question IN ISOLATION. Classify every technical term or "
+    "construct it uses:\n"
+    "  ELEMENTARY      -- in the vocabulary (or standard synonym). Do NOT "
+    "report.\n"
+    "  DEFINED-INLINE  -- unpacked inside the question. Do NOT report.\n"
+    "  UNDEFINED       -- not elementary, not defined in the question. "
+    "REPORT.\n"
+    "  AMBIGUOUS       -- a demonstrative or common word with no antecedent "
+    "inside the question ('this platform', 'the system', 'the mechanism', "
+    "a bare 'topology'). REPORT.\n"
+    "  COMPOUND-JARGON -- a coinage or label code that reads like a defined "
+    "term but is not ('T4 (Decision Explainability)', 'tamper-evident local "
+    "attribution records'). REPORT.\n\n"
+    "Be conservative: do not flag ordinary English or a term the question "
+    "glosses itself. For each gap give the term verbatim, the code, the "
+    "one-line question a first-time reader is left asking, whether it looks "
+    "like the paper's own coinage (true/false), and a minimal fix (an "
+    "inline gloss of <=12 words or an elementary replacement). Grade each "
+    "question GOOD (0-1 minor gaps), FAIR (2-3 gaps force guessing) or POOR "
+    "(the question presupposes the paper), with a one-sentence verdict "
+    "naming the worst offender.\n\n"
+    "Respond with STRICT JSON:\n"
+    '{"questions": [{"id": "RQ1", "grade": "GOOD|FAIR|POOR", "gaps": '
+    '[{"term": "...", "code": "UNDEFINED|AMBIGUOUS|COMPOUND-JARGON", '
+    '"question": "...", "coinage": true, "fix": "..."}], '
+    '"verdict": "..."}]}'
+)
 
 SYSTEM_PROMPT = (
     "You are an experienced examiner judging the QUALITY of the research "
@@ -146,6 +198,12 @@ def main(argv: List[str] = None) -> int:
     ap.add_argument("--profile", choices=["thesis", "paper"], default="thesis",
                     help="'paper' judges the problem statement + contributions "
                          "when no explicit research questions are stated.")
+    ap.add_argument("--no-standalone", action="store_true",
+                    help="Skip the dictionary-grounded STANDALONE "
+                         "self-containment pass on each extracted RQ.")
+    ap.add_argument("--dict", default=DEFAULT_DICT,
+                    help=f"Aalto Dictionary terms.txt for the standalone "
+                         f"pass (default {DEFAULT_DICT}).")
     args = ap.parse_args(argv)
 
     lines, mode = load_lines([args.pdf])
@@ -160,9 +218,7 @@ def main(argv: List[str] = None) -> int:
         chunks.append(t + "\n")
     text = "".join(chunks)[: args.max_chars]
 
-    model = args.model or ("gpt-5-2025-08-07"
-                           if is_responses_api(args.base_url)
-                           else default_model(args.base_url))
+    model = args.model or default_strong_model(args.base_url)
     client = make_client(args.base_url, args.api_key)
     print(f"[info] gateway={args.base_url}\n[info] model={model}  "
           f"chars={len(text)}", file=sys.stderr)
@@ -233,6 +289,77 @@ def main(argv: List[str] = None) -> int:
                 out.append(f"        reformulate: {reform}")
             out.append("")
 
+    # ---- STANDALONE self-containment pass (dictionary-grounded) ----------
+    # The main pass judges self-containment at the reader's position in the
+    # paper. This pass asks the stricter question an abstract is held to:
+    # can someone who has seen only the ELEMENTARY vocabulary read the RQ?
+    sa_usage = {}
+    if questions and not args.no_standalone:
+        vocab = load_dictionary(args.dict)
+        if not vocab:
+            print(f"[warn] dictionary snapshot not found at {args.dict}; "
+                  "standalone grounding reduced.", file=sys.stderr)
+        qlist = "\n".join(
+            f"{q.get('id', 'RQ?')} (p.{q.get('page', '?')}): "
+            f"{str(q.get('question', '')).strip()}" for q in questions)
+        sa_model = default_model(args.base_url) if args.model is None \
+            else args.model
+        sa_raw, sa_usage = client.complete(
+            model=sa_model, system=STANDALONE_PROMPT,
+            user=f"{_vocab_block(vocab)}\n\nRESEARCH QUESTIONS to assess, "
+                 f"each in isolation:\n\"\"\"\n{qlist}\n\"\"\"",
+            timeout=300, max_tokens=4000)
+        sa = extract_json(sa_raw) or {}
+        sa_q = {str(x.get("id", "")).strip(): x
+                for x in sa.get("questions", []) if isinstance(x, dict)}
+        if md:
+            out += ["## Standalone self-containment (Aalto Dictionary, "
+                    f"{len(vocab)} elementary terms)", ""]
+        else:
+            out.append("-- Standalone self-containment: each RQ read in "
+                       "isolation, elementary = Aalto Dictionary of ML "
+                       f"({len(vocab)} terms) --")
+        for q in questions:
+            rid = str(q.get("id", "RQ?"))
+            r = sa_q.get(rid, {})
+            grade = str(r.get("grade", "")).upper() or "UNCLEAR"
+            gaps = [g for g in r.get("gaps", []) if isinstance(g, dict)]
+            verdict = str(r.get("verdict", "")).strip()
+            bad = grade in ("POOR", "FAIR")
+            if bad:
+                n_warn += 1
+            lvl, code = ("WARN", "NOT-STANDALONE") if bad else \
+                ("INFO", "STANDALONE")
+            if md:
+                out.append(f"### {rid} — {grade} ({len(gaps)} gap(s))")
+                for g in gaps:
+                    out.append(f"- **[{str(g.get('code', '')).upper()}]** "
+                               f"`{g.get('term', '')}` — "
+                               f"{str(g.get('question', '')).strip()} "
+                               f"_fix:_ {str(g.get('fix', '')).strip()}")
+                if verdict:
+                    out.append(f"> {verdict}")
+                out.append("")
+            else:
+                out.append(f"[{lvl}] {code:<14} {rid}: grade {grade} "
+                           f"({len(gaps)} gap(s))")
+                for g in gaps:
+                    coin = g.get("coinage")
+                    coin_s = "own coinage" if coin is True else (
+                        "" if coin is None else "standard-ish")
+                    tag = f"[{str(g.get('code', '')).upper()}]"
+                    out.append(f"        {tag:<17} {g.get('term', '')}"
+                               + (f"   ({coin_s})" if coin_s else ""))
+                    qq = str(g.get("question", "")).strip()
+                    fx = str(g.get("fix", "")).strip()
+                    if qq:
+                        out.append(f"              reader asks: {qq}")
+                    if fx:
+                        out.append(f"              fix:         {fx}")
+                if verdict:
+                    out.append(f"        {verdict}")
+                out.append("")
+
     labels = [("gap_identified", "GAP-IDENTIFIED",
                "no explicit research-gap statement found"),
               ("delimitations_stated", "DELIMITATIONS",
@@ -258,7 +385,9 @@ def main(argv: List[str] = None) -> int:
     out += ["", f"{len(questions)} question(s): {n_strong} strong, "
                 f"{len(questions) - n_strong} adequate/weak; "
                 f"{n_warn} warning(s).  "
-                f"(tokens: {usage.get('total_tokens', '?')})"]
+                f"(tokens: {usage.get('total_tokens', '?')}"
+                + (f" + standalone {sa_usage.get('total_tokens', '?')}"
+                   if sa_usage else "") + ")"]
 
     report = "\n".join(out)
     if args.out:

@@ -49,7 +49,8 @@ except ImportError:
     fitz = None
 
 from aalto_llm import (API_KEY_HELP, BASE_URL, BASE_URL_HELP, default_model,
-                       extract_json, is_responses_api, make_client)
+                       default_strong_model, extract_json, is_responses_api,
+                       make_client)
 from lintutil import (Report, is_toc_line, load_lines,
                       paragraphs_from_lines, sentences)
 from section_intro_lint_llm import (SKIP_TITLES_RE, find_pos, load_outline,
@@ -178,9 +179,7 @@ def run_opener_check(args, rep: Report) -> Tuple[int, int]:
 
     # Subtle judgement (cf. section_intro_lint_llm.py): the mini tier
     # lets near-miss openers pass, so default to the full GPT-5 model.
-    model = args.model or ("gpt-5-2025-08-07"
-                           if is_responses_api(args.base_url)
-                           else default_model(args.base_url))
+    model = args.model or default_strong_model(args.base_url)
     client = make_client(args.base_url, args.api_key)
     print(f"[info] opener: model={model}  units={len(units)}",
           file=sys.stderr)

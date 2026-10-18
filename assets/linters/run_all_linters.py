@@ -57,8 +57,22 @@ def _dashboard_out_path(inputs, explicit):
     stem = Path(inputs[0]).stem or "thesis"
     return Path(f"{stem}_lint_dashboard.html")
 
-THESIS, PAPER = "thesis", "paper"
+THESIS, PAPER, WEB = "thesis", "paper", "web"
 BOTH = (THESIS, PAPER)
+ANY = (THESIS, PAPER, WEB)
+
+# Per-(profile, script) extra arguments. Lets a profile narrow a linter's own
+# check list without the linter needing to know the profile exists.
+PROFILE_ARGS = {
+    # A summary page cites its one source in a footer link, not inline, so the
+    # uncited-claim check fires on every factual sentence. Everything else in
+    # prose_lint_llm applies to web prose unchanged.
+    (WEB, "prose_lint_llm.py"): [
+        "--checks", "tense-drift,dangling-reference,vague-quantifier,jargon,"
+                    "synonym-switch,broken-idiom,informal-register,"
+                    "category-error,empty-buzzword,dead-metaphor,insider-term",
+    ],
+}
 
 # (script, pdf-mode, tex-mode, profiles, passes_profile)
 #   profiles       -- manuscript types this linter runs for
@@ -68,16 +82,17 @@ BOTH = (THESIS, PAPER)
 # ships without the reviewer-only linters).
 FAST = [
     ("structure_lint.py", True, True, BOTH, True),
-    ("unreferenced_entity_linter.py", True, True, BOTH, False),
+    ("unreferenced_entity_linter.py", True, True, ANY, False),
     ("crossref_forward_lint.py", True, False, BOTH, False),
     ("forward_ref_lint.py", True, False, BOTH, False),
-    ("acronym_lint.py", True, True, BOTH, False),
-    ("prose_lint.py", True, True, BOTH, False),
-    ("unresolved_reference_lint.py", True, True, BOTH, False),
-    ("terminology_lint.py", True, True, BOTH, False),
-    ("math_typeset_lint.py", False, True, BOTH, False),
+    ("acronym_lint.py", True, True, ANY, False),
+    ("prose_lint.py", True, True, ANY, False),
+    ("unresolved_reference_lint.py", True, True, ANY, False),
+    ("terminology_lint.py", True, True, ANY, False),
+    ("math_typeset_lint.py", False, True, ANY, False),
+    ("bertsekas_lint.py", False, True, ANY, False),
     ("citation_style_lint.py", True, True, BOTH, True),
-    ("caption_lint.py", True, True, BOTH, False),
+    ("caption_lint.py", True, True, ANY, False),
     ("ai_disclosure_lint.py", True, True, (THESIS,), False),
 ]
 LLM = [
@@ -90,11 +105,12 @@ LLM = [
     ("figure_lint_llm.py", True, False, BOTH, False),
     ("section_intro_lint_llm.py", True, False, BOTH, False),
     ("flow_lint_llm.py", True, False, BOTH, False),
-    ("prose_lint_llm.py", True, True, BOTH, False),
-    ("caption_lint_llm.py", True, True, BOTH, False),
+    ("prose_lint_llm.py", True, True, ANY, False),
+    ("caption_lint_llm.py", True, True, ANY, False),
     ("forward_ref_lint_llm.py", True, False, BOTH, False),
     ("type_consistency_lint_llm.py", True, False, BOTH, False),
     ("contribution_support_lint_llm.py", True, False, BOTH, False),
+    ("bertsekas_lint_llm.py", True, False, BOTH, False),
     # Aalto-Dictionary-grounded linters. own_work_relation_lint_llm.py is
     # reviewer-only and not shipped in the published subset; it is skipped
     # automatically wherever its file is absent (see _resolve).
@@ -136,10 +152,14 @@ def main(argv=None) -> int:
     status (0 clean, 1 any findings/error)."""
     ap = argparse.ArgumentParser(description="Run the full linter suite.")
     ap.add_argument("inputs", nargs="+", help="thesis.pdf or .tex files/dirs")
-    ap.add_argument("--profile", choices=[THESIS, PAPER], default=THESIS,
+    ap.add_argument("--profile", choices=[THESIS, PAPER, WEB], default=THESIS,
                     help="Manuscript type: 'thesis' (default, ml-theses.org "
-                         "rubric) or 'paper' (IEEE/ACM conference/journal "
-                         "draft; skips thesis-only checks, adapts the rest).")
+                         "rubric), 'paper' (IEEE/ACM conference/journal "
+                         "draft; skips thesis-only checks, adapts the rest), "
+                         "or 'web' (short standalone pages such as the "
+                         "ml-theses.org thesis summaries: prose, acronym and "
+                         "Aalto-Dictionary terminology checks only, dropping "
+                         "every check that presumes a full manuscript).")
     ap.add_argument("--llm", action="store_true",
                     help="Also run the LLM linters (Aalto AI API).")
     ap.add_argument("--annotations", default=None, metavar="PDF_OR_JSON",
@@ -220,6 +240,7 @@ def main(argv=None) -> int:
         if resolved is None:
             continue  # registered but not shipped in this layout -- skip.
         extra = [f"--profile={args.profile}"] if passes else []
+        extra += PROFILE_ARGS.get((args.profile, script), [])
         emit(f"\n{'=' * 74}\n>>> {script}\n{'=' * 74}")
         cmd = [sys.executable, str(resolved), *args.inputs, *extra]
         if capture:

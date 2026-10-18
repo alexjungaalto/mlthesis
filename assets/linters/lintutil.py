@@ -27,6 +27,36 @@ Line = Tuple[str, str]  # (location, text)
 # ---------------------------------------------------------------------------
 # PDF extraction (pdftotext -layout preferred, PyMuPDF fallback)
 # ---------------------------------------------------------------------------
+_MARGIN_NUM_RE = re.compile(r"^\s*(\d{3})(?=\s|$)")
+_MARGIN_ONLY_RE = re.compile(r"^\s*\d{3}\s*$")
+
+
+def strip_margin_numbers(lines: List[str]) -> List[str]:
+    """Remove the per-line margin numbers that review layouts print
+    (ICLR, NeurIPS: 000, 001, ... down every page). They come out of every
+    extractor interleaved with the prose — as a leading "069" token on a
+    text line, or as a line of their own — and poison the regex linters
+    (a "number" inside every sentence) and pad the LLM prompts. Detected
+    when at least a third of the non-empty lines carry such a token, so a
+    camera-ready PDF is untouched. A number-only line is dropped (never
+    turned into a blank line: with -layout the number often lands on its
+    own line in the middle of a wrapped sentence, and a blank there would
+    split the paragraph); text lines lose the leading token. Added
+    2026-09-17 for the ICLR 2027 draft."""
+    nonempty = [ln for ln in lines if ln.strip()]
+    if not nonempty:
+        return lines
+    hits = sum(1 for ln in nonempty if _MARGIN_NUM_RE.match(ln))
+    if hits < len(nonempty) / 3:
+        return lines
+    out: List[str] = []
+    for ln in lines:
+        if _MARGIN_ONLY_RE.match(ln):
+            continue
+        out.append(_MARGIN_NUM_RE.sub(lambda m: " " * len(m.group(0)), ln))
+    return out
+
+
 def pdf_lines(path: str) -> List[Line]:
     """Extract a PDF as ``(page-location, line)`` pairs. Tries the
     ``pdftotext -layout`` command first and falls back to PyMuPDF (``fitz``);
@@ -43,7 +73,7 @@ def pdf_lines(path: str) -> List[Line]:
         pages = text.split("\f")
         out: List[Line] = []
         for pno, page in enumerate(pages, start=1):
-            for ln in page.splitlines():
+            for ln in strip_margin_numbers(page.splitlines()):
                 out.append((f"p{pno}", ln))
             # Emit a blank line at every page break so paragraph grouping does
             # not merge the last paragraph of one page with the first of the
@@ -58,7 +88,7 @@ def pdf_lines(path: str) -> List[Line]:
     doc = fitz.open(path)
     lines: List[Line] = []
     for pno in range(len(doc)):
-        for ln in doc[pno].get_text().splitlines():
+        for ln in strip_margin_numbers(doc[pno].get_text().splitlines()):
             lines.append((f"p{pno + 1}", ln))
         lines.append((f"p{pno + 1}", ""))   # page-break separator (see above)
     doc.close()

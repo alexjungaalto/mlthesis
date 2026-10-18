@@ -33,8 +33,38 @@ Screens the thesis in chunks and reports, per finding category:
   empty-buzzword      an inflated/hype word carrying no specific meaning
                       in context ("framework" with no clear referent,
                       "leverage"/"utilize" for "use", unearned "robust"/
-                      "novel"/"seamless"); NOT flagged when it names a
-                      real, defined thing (the FACT framework)
+                      "novel"/"seamless", rhetorical intensifiers such as
+                      "genuinely"/"materially"/"truly"); NOT flagged when
+                      it names a real, defined thing (the FACT framework)
+  dead-metaphor       figurative language standing in for a literal,
+                      measurable statement ("blast radius", "silicon
+                      boundary", "paving the last mile", "the landscape
+                      of", "posture", "journey", "hook point", "shed
+                      light", "bridge the gap"); NOT flagged for an
+                      established term of art whose metaphorical origin
+                      is dead and whose meaning is fixed (bottleneck,
+                      backbone network, dropout, gradient descent,
+                      pipeline naming a concrete data pipeline)
+  insider-term        vocabulary a reader outside the author's niche
+                      cannot decode from the chunk: a hyphenated coinage
+                      ("data-sovereign", "production-adjacent",
+                      "fault-containing"), a stacked noun phrase of three
+                      or more nouns ("service-layer scalability ceiling
+                      analysis"), a vendor/tool/community word used as a
+                      concept ("GitOps", "substrate", "sovereignty
+                      boundary", "SuperLink"), or an acronym, with no
+                      plain-words definition in the chunk
+
+Calibration (sharpened 2026-10-05, tightened 2026-10-06): the jargon
+family is deliberately strict. Every occurrence is reported (not one per
+chunk); the default severity is medium; "low" is allowed ONLY for a term
+of art under an explicit carve-out, never because a usage is common,
+borderline, or defensible. A buzzword, metaphor, insider term, or
+undefined property word in the title, abstract, a research question, a
+contribution statement, a heading, a caption, or next to a claim about
+the paper's own results is "high". The test for every finding is the
+plain-reader test: would a first-year ML graduate student have to guess
+what the words mean, or could the words be deleted with no loss?
 
 Findings are heuristic LLM judgements — review them; they are reported as
 WARN and the exit status is 1 when any are found.
@@ -63,7 +93,8 @@ from lintutil import Report, is_toc_line, load_lines, paragraphs_from_lines
 CHECKS = ["uncited-claim", "tense-drift", "dangling-reference",
           "vague-quantifier", "jargon", "synonym-switch",
           "unmotivated-section", "broken-idiom", "informal-register",
-          "category-error", "empty-buzzword"]
+          "category-error", "empty-buzzword", "dead-metaphor",
+          "insider-term"]
 
 SYSTEM_PROMPT = (
     "You are a meticulous copy-editor doing the 'self-editing pass' of the "
@@ -83,10 +114,17 @@ SYSTEM_PROMPT = (
     "etc. with no number, percentage, or statistical test anywhere near.\n"
     "  jargon: an evaluative or colloquial claim that asserts a PROPERTY "
     "(smoothness, stability, speed of convergence, importance, salience, "
-    "robustness, expressiveness) which is never DEFINED or MEASURED in the "
-    "chunk — e.g. 'smoothest convergence', 'the model struggles', "
-    "'training is stable', 'degrades gracefully', 'performs well', "
-    "'important coordinates', 'salient overlap'. Also flag a technical "
+    "robustness, expressiveness, resilience, trustworthiness, honesty, "
+    "scalability, viability, simplicity, strength, maturity, "
+    "'production-grade', 'real-time', 'large-scale', 'heterogeneous', "
+    "'lightweight', 'meaningful', 'substantial') which is never DEFINED or "
+    "MEASURED in the chunk — e.g. 'smoothest convergence', 'the model "
+    "struggles', 'training is stable', 'degrades gracefully', 'performs "
+    "well', 'important coordinates', 'salient overlap', 'a resilient "
+    "platform', 'the honest claim', 'viable at production scale'. Also "
+    "flag a product, tool, or vendor name used as if it were a defined "
+    "concept ('a Flower pipeline', 'the Frigate detector') when the "
+    "chunk never says what the thing does. Also flag a technical "
     "term misused in an informal sense (in the Aalto Dictionary of ML "
     "'smooth' means differentiable, so 'smooth convergence' for a "
     "low-noise curve misuses it). Two hard gates — flag ONLY if BOTH "
@@ -98,6 +136,48 @@ SYSTEM_PROMPT = (
     "would earn the claim. Distinct from empty-buzzword: jargon makes a "
     "measurable CLAIM with no metric; a buzzword is a word with no "
     "content at all.\n"
+    "  dead-metaphor: ANY figurative wording in a sentence that makes a "
+    "technical statement, stock phrase or not — 'blast radius' (for: "
+    "which components fail), 'silicon boundary', 'paving the last mile', "
+    "'the landscape of X', 'posture', 'journey', 'hook point', 'north "
+    "star', 'low-hanging fruit', 'silver bullet', 'under the hood', 'shed "
+    "light on', 'bridge/close the gap', 'pave the way', 'unlock', "
+    "'harness', 'weave', 'lens', 'umbrella', 'pillar', 'cornerstone', "
+    "'deep dive', 'in the wild', 'battle-tested', 'shuttled', 'surface' "
+    "as a verb, 'lean on', 'the bar', 'headroom', 'ceiling', 'operating "
+    "envelope', 'migration/scaling path', 'path forward', 'escape(d)' "
+    "for a fault that was not detected, 'absorb', 'tighten' a rule, "
+    "'anchor', 'fabric', 'substrate', 'glue', 'knob', 'lever', 'heavy "
+    "lifting', 'moving parts', 'friction', 'pain point', 'ripple', "
+    "'snowball', 'spin up', 'tear down', 'roadmap', 'toolbox', "
+    "'first-class citizen', 'out of the box', 'plug-and-play', 'big "
+    "picture', 'takeaway', 'boils down', 'in a nutshell', 'sprawl', "
+    "'scaffold', 'muscle', 'DNA', 'footgun'. A figurative VERB counts "
+    "('the service shrugs off', 'the budget bleeds', 'the audit escapes'). "
+    "The replacement is the literal statement. Do NOT flag an established "
+    "term of art whose metaphorical origin is dead and whose meaning is "
+    "fixed in the field: bottleneck, backbone (network), dropout, gradient "
+    "descent, pipeline when it names a concrete sequence of components, "
+    "orchestration in the Kubernetes sense, memory footprint, overhead, "
+    "noise, cascading failure, heartbeat (as a protocol message), "
+    "configuration drift. The test: would a translator have to choose "
+    "between a literal and a figurative rendering? If yes, flag it, even "
+    "when the figure is mild and the meaning is clear.\n"
+    "  insider-term: vocabulary a reader OUTSIDE the author's niche cannot "
+    "decode from the chunk, used as if it were a defined concept: (a) a "
+    "hyphenated coinage — 'data-sovereign', 'production-adjacent', "
+    "'fault-containing', 'cloud-native', 'edge-native', 'X-aware', "
+    "'X-driven', 'X-centric', 'X-first', 'X-grade'; (b) a stacked noun "
+    "phrase of three or more nouns/modifiers ('service-layer scalability "
+    "ceiling analysis', 'round-to-checkpoint correlation'); (c) a vendor, "
+    "tool, or community word used as a concept — 'GitOps', 'substrate', "
+    "'sovereignty boundary', 'SuperLink', 'reconciliation loop', 'a "
+    "Flower pipeline' — when the chunk never says in plain words what the "
+    "thing is or does; (d) an acronym never expanded in the chunk. Do NOT "
+    "flag a term that is defined in the same chunk, or that is in the "
+    "Aalto Dictionary of ML (loss, gradient, feature, label, hypothesis, "
+    "empirical risk, ...). The replacement is the plain-words definition "
+    "or the expanded form.\n"
     "  synonym-switch: within this chunk, two different terms are used "
     "for the SAME concept (e.g. 'data point' vs 'sample', 'label' vs "
     "'target', 'loss' vs 'cost').\n"
@@ -132,38 +212,87 @@ SYSTEM_PROMPT = (
     "State the expected category vs. the one used in the explanation.\n"
     "  empty-buzzword: an inflated or hype word that survives the DELETION "
     "TEST — cross it out (or swap for the plain word) and the sentence "
-    "loses no information a reader could act on. Two families: (a) "
+    "loses no information a reader could act on. Three families: (a) "
     "content-free nouns — 'framework', 'solution', 'ecosystem', "
-    "'landscape', 'paradigm', 'synergy', 'pipeline', 'mechanism' with no "
-    "concrete referent; (b) unearned praise / inflation — "
-    "'novel', 'robust', 'seamless', 'holistic', 'cutting-edge', "
-    "'state-of-the-art', 'powerful', 'efficient', 'lightweight', "
-    "'scalable', 'principled', 'comprehensive' asserted without a "
-    "definition, metric, or result that earns it; and 'leverage', "
-    "'utilize', 'employ', 'facilitate', 'in order to' for plain "
-    "'use'/'to'. Do NOT flag when the word names a real, defined thing "
+    "'landscape', 'paradigm', 'synergy', 'pipeline', 'mechanism', "
+    "'artefact', 'substrate', 'posture', 'approach', 'strategy', "
+    "'insights', 'capabilities', 'enabler' with no concrete referent; "
+    "(b) unearned praise / inflation — 'novel', 'robust', 'seamless', "
+    "'holistic', 'cutting-edge', 'state-of-the-art', 'powerful', "
+    "'efficient', 'lightweight', 'scalable', 'principled', "
+    "'comprehensive', 'rigorous', 'systematic', 'actionable', "
+    "'transformative', 'next-generation', 'end-to-end', 'real-world', "
+    "'production-ready', 'honest', 'trustworthy', 'resilient', 'smart', "
+    "'intelligent', 'advanced', 'sophisticated', 'enhanced', 'optimal', "
+    "'optimised', 'effective', 'flexible', 'modular', 'unified', "
+    "'integrated', 'dynamic', 'adaptive', 'innovative', 'promising', "
+    "'emerging', 'key', 'critical', 'essential', 'vital', 'crucial', "
+    "'meaningful', 'nontrivial', 'informative', 'practical', 'mature', "
+    "'proper', 'rich', 'powerful', 'elegant', 'sovereign', "
+    "'operationalised', 'commodity', 'compact', 'inherent', 'complete', "
+    "'canonical', 'natural (fit)', 'acceptable', 'appropriate', "
+    "'suitable' asserted without a definition, metric, or result that "
+    "earns it; (c) "
+    "rhetorical intensifiers and hedges that add emphasis, not "
+    "information — 'genuinely', 'truly', 'actually', 'materially', "
+    "'substantially', 'essentially', 'effectively', 'fundamentally', "
+    "'arguably', 'clearly', 'obviously', 'importantly', 'notably', "
+    "'interestingly', 'crucially', 'of course', 'it is worth noting', "
+    "'it should be noted', 'the fact that', 'in the context of', 'plays "
+    "a (key/crucial/vital) role', 'a wide range of', 'various', "
+    "'numerous', 'we argue', 'in our view'; and 'leverage', 'utilize', "
+    "'employ', 'facilitate', 'delve', 'showcase', 'underscore', "
+    "'operationalise', 'in order to' for plain 'use'/'to'/'show'. Do NOT "
+    "flag when the word names a real, "
+    "defined thing "
     "(the FACT framework, a theoretical framework, an optimization "
     "problem's 'solution', an estimator PROVEN robust, a method MEASURED "
     "as efficient) or is an established term of art. The replacement is "
     "the plain word, or '(delete)' if the sentence reads cleanly without "
     "it.\n\n"
     "SEVERITY: rate every finding high | medium | low. high = a genuine "
-    "defect a careful editor would certainly cut (content-free buzzword "
-    "adjacent to an unearned claim; a category-error; jargon whose "
-    "undefined property is load-bearing for a contribution). medium = "
-    "worth fixing but defensible. low = borderline / stylistic. Be "
-    "conservative — when unsure whether it is a defect at all, use low or "
-    "omit it.\n"
+    "defect a careful editor would certainly cut (content-free buzzword, "
+    "metaphor, insider term, or undefined property word in the paper's "
+    "title, in the abstract, in a contribution statement, in a research "
+    "question, in a section heading, in a figure/table caption, or "
+    "adjacent to a claim about the paper's own results; a "
+    "category-error). medium = the DEFAULT for every other buzzword, "
+    "metaphor, insider term, intensifier, or undefined property word; it "
+    "is a defect even if defensible. low = ONLY a term of art under an "
+    "explicit carve-out above that you still think the author should "
+    "reconsider. HARD RULES: (1) if your explanation would contain "
+    "'borderline', 'common in the field', 'widely used', 'defensible', "
+    "'arguably a term of art', 'mild', or 'keep low', the severity is "
+    "medium, not low — common jargon is still jargon; (2) NEVER emit a "
+    "non-finding (no 'not a defect', 'disregard', 'no finding', "
+    "'duplicate of', 'omitted', 'recorded only to confirm'): if it is not "
+    "a defect, leave it out of the JSON entirely; (3) one finding per "
+    "distinct span per chunk, with a '×N' repeat count in the "
+    "explanation; (4) the plain-reader test decides: would a "
+    "first-year ML graduate student have to guess what the words mean, "
+    "or could the words be deleted with no loss? Either answer 'yes' is "
+    "a finding.\n"
     "PRECEDENCE (report each span under ONE category only): "
-    "category-error > jargon > empty-buzzword > vague-quantifier > "
-    "informal-register. E.g. 'leverage a robust framework' → one "
-    "empty-buzzword finding, not three; 'the model struggles' → jargon, "
-    "not informal-register.\n"
-    "Be precise and conservative: only report defects a human editor "
-    "would definitely mark, and prefer FEWER, sharper findings over a long "
-    "noisy list. Each finding needs an exact short quote (<=25 words) from "
-    "the text, the plainer REPLACEMENT (or '(delete)'), and a severity. "
-    "Respond with STRICT JSON:\n"
+    "category-error > jargon > insider-term > dead-metaphor > "
+    "empty-buzzword > vague-quantifier > informal-register. E.g. "
+    "'leverage a robust framework' → one empty-buzzword finding, not "
+    "three; 'the model struggles' → jargon, not informal-register; "
+    "'blast-radius containment' → dead-metaphor, not empty-buzzword; "
+    "'data-sovereign edge cluster' → insider-term, not empty-buzzword.\n"
+    "Within the requested categories report each DISTINCT offending span "
+    "once per chunk (if the same wording recurs, append '×N' to the "
+    "explanation), including spans in headings, captions, and the "
+    "paper's own title. Return AT MOST 30 findings per chunk — the 30 most "
+    "severe, high before medium — and then STOP; never pad the list. "
+    "Each finding needs an exact short quote "
+    "(<=12 words) from the text, the plainer REPLACEMENT (<=8 words, or "
+    "'(delete)'), a severity, and an explanation of AT MOST 15 words that "
+    "names the offending word and the property/plain word that would "
+    "replace it — no essays, no 'keep'/'consider' advice, no restating the "
+    "rule. Do NOT flag ordinary technical nouns that name a concrete thing "
+    "in context (requirement, mitigation, component, service, cluster, "
+    "interval, parameter) or an adjective whose value is given in the "
+    "same sentence. Respond with STRICT JSON:\n"
     '{"findings": [{"category": "...", "severity": "high|medium|low", '
     '"quote": "...", "replacement": "...", "explanation": "..."}]}'
 )
@@ -220,9 +349,12 @@ def main(argv: List[str] = None) -> int:
                     help="Drop findings below this model-assigned severity "
                          "(high->ERROR, medium->WARN, low->INFO). Default low "
                          "(keep all). Use 'medium' for a sharper, terser list.")
-    ap.add_argument("--chunk-chars", type=int, default=9000,
-                    help="Approximate characters per LLM call "
-                         "(default 9000).")
+    ap.add_argument("--chunk-chars", type=int, default=4000,
+                    help="Approximate characters per LLM call (default "
+                         "4000; was 9000 until 2026-10-06 — the exhaustive "
+                         "jargon family makes GLM-5.3-Flash answers long "
+                         "enough that 9000-char chunks overran the 32k "
+                         "token ceiling and were silently dropped).")
     ap.add_argument("--concurrency", type=int, default=3,
                     help="Concurrent LLM calls (default 3).")
     ap.add_argument("--limit", type=int, default=None,
@@ -271,8 +403,11 @@ def main(argv: List[str] = None) -> int:
         where, text = chunk
         user = (f"requested categories: {json.dumps(checks)}\n\n"
                 f"text chunk (starts at {where}):\n\"\"\"\n{text}\n\"\"\"")
+        # 16k initial budget (escalates to 64k): the exhaustive jargon
+        # family returns many findings per chunk (2026-10-06).
         raw, usage = client.complete(model=model, system=SYSTEM_PROMPT,
-                                     user=user, timeout=300)
+                                     user=user, timeout=600,
+                                     max_tokens=16000)
         parsed = extract_json(raw) or {}
         finds = parsed.get("findings", [])
         return where, finds if isinstance(finds, list) else [], usage
@@ -281,7 +416,7 @@ def main(argv: List[str] = None) -> int:
                  " ".join(args.inputs),
                  about="LLM self-editing pass: uncited claims, tense drift, "
                        "jargon, informal register, category errors, empty "
-                       "buzzwords, and more.")
+                       "buzzwords, dead metaphors, and more.")
     # Model severity -> shared report tag; --min-severity gates on the rank.
     SEV_TAG = {"high": "ERROR", "medium": "WARN", "low": "INFO"}
     SEV_RANK = {"high": 2, "medium": 1, "low": 0}

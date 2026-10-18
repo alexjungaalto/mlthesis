@@ -47,7 +47,8 @@ import sys
 from typing import List, Optional, Tuple
 
 from aalto_llm import (API_KEY_HELP, BASE_URL, BASE_URL_HELP, default_model,
-                       extract_json, is_responses_api, make_client)
+                       default_strong_model, extract_json, is_responses_api,
+                       make_client)
 from lintutil import Report, is_toc_line, load_lines, tex_files
 
 CRITERIA = ["states-what-shown", "defines-quantities", "self-contained",
@@ -196,9 +197,7 @@ def main(argv: List[str] = None) -> int:
         print("ERROR: no captions found.", file=sys.stderr)
         return 2
 
-    model = args.model or ("gpt-5-2025-08-07"
-                           if is_responses_api(args.base_url)
-                           else default_model(args.base_url))
+    model = args.model or default_strong_model(args.base_url)
     client = make_client(args.base_url, args.api_key)
     batches = build_batches(caps, max(1, args.per_batch))
     print(f"[info] gateway={args.base_url}\n"

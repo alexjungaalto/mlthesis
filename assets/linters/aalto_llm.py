@@ -1,14 +1,49 @@
 #!/usr/bin/env python3
 """Shared LLM client for the thesis linters.
 
-Default gateway: the Aalto AI API (Azure OpenAI gateway; Responses API at
-AALTO_AZURE_URL, Ocp-Apim-Subscription-Key auth from $AALTO_API_KEY,
-GPT-5-family models with dated IDs; Aalto network/VPN only). Alternatives
-via base_url: the self-hosted Aalto LLM Gateway (LLMGW_BASE_URL below;
-OpenAI-style chat completions, Bearer $AALTO_LLM_KEY, Qwen models such as
-Qwen/Qwen3-30B-A3B-Instruct-2507-FP8; models scale to zero and answer 503
-while spinning up) and any OpenAI-style endpoint such as OpenRouter
-($OPENROUTER_API_KEY). LLMClient picks protocol and key from the URL.
+Default gateway: the Aalto LLM Gateway (LLMGW_BASE_URL below; OpenAI-style
+chat completions, ``Authorization: Bearer $AALTO_LLM_KEY``; Aalto
+network/VPN only; default model ``zai-org/GLM-5.3-Flash``). Switched
+2026-09-22, the day Aalto Scientific Computing announced GLM-5.3-Flash on
+the gateway: the models run on Aalto hardware, nothing but token counts is
+logged, the service is free, and GLM-5.3-Flash stays warm and honors JSON
+mode — the best fit for an unpublished draft. Caveat: the gateway is a
+PILOT until 2026-10-15, so its quota and model list can change at any time.
+
+Every alternative stays one ``--base-url`` / ``LLM_BASE_URL`` away, and
+LLMClient picks protocol and key from the URL: the Aalto AI API v2
+(AIAPI_V2_URL; chat completions, Bearer $AALTO_API_KEY, gemini-2.5-flash,
+multimodal — the suite default 2026-09-17 to 2026-09-22 and the fallback
+if the pilot ends), the Responses API of that endpoint (AIAPI_V2_URL +
+"/responses"; the GPT-5 family), the deprecating Azure gateway
+(AALTO_AZURE_URL, Ocp-Apim-Subscription-Key auth) and any OpenAI-style
+endpoint such as OpenRouter ($OPENROUTER_API_KEY).
+
+TWO THINGS MAKE A PAPER-SIZED PROMPT WORK ON THIS ENDPOINT, both measured
+on 2026-09-22 against a 99k-char linter prompt that otherwise failed:
+
+* Chat-completions requests are STREAMED. The model can go quiet for
+  minutes on a long prompt, and the gateway's ingress then kills the idle
+  connection with a 504 — every retry died the same way. An SSE response
+  keeps bytes moving and the request survives. ``_read_sse`` reassembles
+  the deltas into the shape a non-streamed answer has, so callers see no
+  difference. This also covers the v2 gateway's matching 504 on a long
+  gemini-2.5-pro call (2026-09-17).
+* The reasoning pass is OFF by default for THINKING_MODELS (see
+  ``_thinking_on``). On a 61k-char paper GLM-5.3-Flash streamed ~8.7k
+  reasoning deltas in 65s and spent its whole 9k-token budget without
+  emitting one character of answer. With thinking off the same linter
+  finishes in ~9s with sound, specific findings. ``LLM_THINKING=on``
+  restores it for short prompts, where it does converge.
+
+A CUT-OFF answer is still re-requested with a larger budget: a reasoning
+model's thinking tokens count against max_tokens (on ai-api-v2 a 50-token
+smoke test already returned finish_reason "length"), so a long JSON report
+can be truncated and become unparseable. With thinking on, models in
+THINKING_MODELS get a fixed headroom on top of the caller's budget the way
+the Responses branch does for the GPT-5 family, and complete() retries with
+twice, then four times the budget and says so on stderr (ported from the
+dictionary suite's llm_client, fb15e37).
 
 Every ``*_llm`` linter builds its client with ``make_client()`` and picks a
 model with ``default_model()`` / ``default_vision_model()`` from this one
@@ -16,10 +51,18 @@ module, so a user configures the whole suite through a small set of
 environment variables (each can also be overridden by a CLI flag):
 
   LLM_BASE_URL      which endpoint to talk to; decides everything below.
-                    Unset -> the Aalto AI API (AALTO_AZURE_URL).
+                    Unset -> the Aalto LLM Gateway (LLMGW_BASE_URL).
   LLM_MODEL         text model id; unset -> a per-endpoint default.
   LLM_VISION_MODEL  model id for image requests (figure_lint_llm.py).
-  AALTO_API_KEY     key for the default Aalto AI API (also accepts
+  LLM_VISION_BASE_URL  endpoint for image requests; unset -> the Aalto AI
+                    API v2, because the gateway's vision pod is unreliable
+                    (see default_vision_base_url).
+  LLM_THINKING      "on"/"off" for a reasoning model's thinking pass on the
+                    chat-completions protocol. Unset -> off for
+                    THINKING_MODELS (it does not converge on a linter-sized
+                    prompt; see above).
+  AALTO_API_KEY     key for the Aalto AI API, v2 (default) and the
+                    deprecating Azure gateway (also accepts
                     AALTO_OPENAI_API_KEY).
   AALTO_LLM_KEY     key for the Aalto LLM Gateway.
   OPENROUTER_API_KEY  key for any other OpenAI-style endpoint.
@@ -33,34 +76,53 @@ CHANGING THE MODEL. Pass a model id with ``--model`` on any linter (or
 / ``LLM_VISION_MODEL`` sets the model figure_lint_llm.py uses for images. The
 valid ids depend on the endpoint (``--base-url`` / ``LLM_BASE_URL``). Which ids
 each Aalto service offers changes over time — these are the authoritative
-sources, and the values below were current in Aug 2026:
+sources, and the values below were verified on 2026-09-22 (gateway) and
+2026-09-17 (AI API v2):
 
-  * Aalto AI API (default endpoint). GPT-5 family, dated ids:
-    ``gpt-5-2025-08-07``, ``gpt-5-mini-2025-08-07`` (the suite default),
-    ``gpt-5-nano-2025-08-07``. Catalogue + keys (Aalto login):
-    https://www.aalto.fi/en/services/aalto-ai-apis
-  * Aalto LLM Gateway (``--base-url https://llm-gateway.k8s.aalto.fi/api/v1``).
-    Open-weight models served on Aalto hardware; the live list is a GET on
-    ``/models`` (the id string is what you pass to ``--model``). Aug-2026 set:
-    ``RedHatAI/gemma-4-31B-it-FP8-Dynamic`` (recommended starter),
-    ``openai/gpt-oss-120b``, ``Qwen/Qwen3-30B-A3B-Instruct-2507-FP8``,
+  * Aalto LLM Gateway (default endpoint,
+    ``https://llm-gateway.k8s.aalto.fi/api/v1``). Open-weight models served
+    on Aalto hardware; the live list is a GET on ``/models`` (the id string
+    is what you pass to ``--model``). Sep-2026 set:
+    ``zai-org/GLM-5.3-Flash`` (the suite default: strongest of the set, and
+    the one kept warm), ``Qwen/Qwen3.8-27B-FP8``, ``openai/gpt-oss-120b``,
+    ``RedHatAI/gemma-4-31B-it-FP8-Dynamic``,
+    ``Qwen/Qwen3-30B-A3B-Instruct-2507-FP8``,
     ``Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8``,
-    ``Qwen/Qwen3-VL-30B-A3B-Instruct-FP8`` (vision),
-    ``Qwen/Qwen3-VL-30B-A3B-Thinking-FP8``, ``Qwen/Qwen3.8-27B-FP8``,
-    ``google/gemma-4-E4B-it``, ``google/codegemma-7b-it``. Docs + key
-    self-service UI (Aalto VPN): https://scicomp.aalto.fi/aalto/llm-web-apis/
+    ``Qwen/Qwen3-VL-30B-A3B-Instruct-FP8`` (vision, the suite's vision
+    default here), ``Qwen/Qwen3-VL-30B-A3B-Thinking-FP8``,
+    ``google/gemma-4-E4B-it``, ``google/codegemma-7b-it``. Everything but
+    GLM-5.3-Flash scales to zero and answers 503 while its pod spins up —
+    the client retries those. Docs + key self-service UI (Aalto VPN):
+    https://scicomp.aalto.fi/aalto/llm-web-apis/
+  * Aalto AI API v2 (``--base-url`` AIAPI_V2_URL,
+    ``https://ai-api-v2.aalto.fi/v1``).
+    Chat completions serve the Gemini family — ``gemini-2.5-flash`` (the
+    suite default, text and vision), ``gemini-2.5-pro``,
+    ``gemini-3.x-flash`` ids — plus ``gpt-4.1-*`` dated ids; a GET on
+    ``/models`` lists the live set (verified 2026-09-17). The GPT-5 family
+    sits behind ``/responses`` and was 429 quota-blocked at migration.
+    Catalogue + keys (Aalto login):
+    https://www.aalto.fi/en/services/aalto-ai-apis
+  * Aalto AI API, old Azure gateway (``--base-url`` AALTO_AZURE_URL;
+    deprecating). GPT-5 family, dated ids: ``gpt-5-2025-08-07``,
+    ``gpt-5-mini-2025-08-07``, ``gpt-5-nano-2025-08-07``.
 
-Both Aalto services require the Aalto network / VPN. Example — run the whole
-suite through the gateway's Gemma model:
+Both Aalto services require the Aalto network / VPN. Nothing beyond a key is
+needed for the default endpoint:
 
   export AALTO_LLM_KEY=...    # made at https://llm-gateway.k8s.aalto.fi/
+  python3 run_all_linters.py thesis.pdf --llm
+
+Example — fall back to the Aalto AI API v2 (e.g. once the pilot ends):
+
+  export AALTO_API_KEY=...    # https://www.aalto.fi/en/services/aalto-ai-apis
   python3 run_all_linters.py thesis.pdf --llm \
-      --base-url https://llm-gateway.k8s.aalto.fi/api/v1 \
-      --model RedHatAI/gemma-4-31B-it-FP8-Dynamic
+      --base-url https://ai-api-v2.aalto.fi/v1 --model gemini-2.5-flash
 
 Stdlib urllib only — no SDK needed.
 """
 
+import http.client
 import json
 import os
 import re
@@ -71,17 +133,28 @@ import urllib.parse
 import urllib.request
 from typing import Dict, Optional, Tuple
 
-AALTO_AZURE_URL = "https://aalto-openai-apigw.azure-api.net/v1/openai/responses"
-LLMGW_BASE_URL = "https://llm-gateway.k8s.aalto.fi/api/v1"
-BASE_URL = os.environ.get("LLM_BASE_URL", AALTO_AZURE_URL)
+LLMGW_BASE_URL = "https://llm-gateway.k8s.aalto.fi/api/v1"  # default: Aalto-hosted open weights
+AIAPI_V2_URL = "https://ai-api-v2.aalto.fi/v1"   # chat completions; + "/responses" for GPT-5 / gpt-oss
+AALTO_AZURE_URL = "https://aalto-openai-apigw.azure-api.net/v1/openai/responses"  # deprecating
+BASE_URL = os.environ.get("LLM_BASE_URL", LLMGW_BASE_URL)
 
-BASE_URL_HELP = ("LLM endpoint (default: the Aalto AI API, "
-                 f"{AALTO_AZURE_URL}). Alternatives: the Aalto LLM Gateway "
-                 f"({LLMGW_BASE_URL}) or any OpenAI-style endpoint such as "
-                 "https://openrouter.ai/api/v1.")
-API_KEY_HELP = ("API key (default: $AALTO_API_KEY for the Aalto AI API, "
-                "$AALTO_LLM_KEY for the Aalto LLM gateway, "
-                "$OPENROUTER_API_KEY otherwise).")
+BASE_URL_HELP = ("LLM endpoint (default: the Aalto LLM Gateway, "
+                 f"{LLMGW_BASE_URL}). Alternatives: the Aalto AI API v2 "
+                 f"({AIAPI_V2_URL}), its Responses API "
+                 f"({AIAPI_V2_URL}/responses, GPT-5 family), the deprecating "
+                 f"Azure gateway ({AALTO_AZURE_URL}) or any OpenAI-style "
+                 "endpoint such as https://openrouter.ai/api/v1.")
+API_KEY_HELP = ("API key (default: $AALTO_LLM_KEY for the Aalto LLM Gateway, "
+                "$AALTO_API_KEY for the Aalto AI API v2 and the old Azure "
+                "gateway, $OPENROUTER_API_KEY otherwise).")
+
+# Models that reason before answering on the chat-completions protocol, where
+# those thinking tokens are billed against max_tokens (unlike the Responses
+# API, which budgets them separately). They get THINKING_HEADROOM extra tokens
+# so a report-sized JSON answer is not truncated before the model starts
+# writing it; complete()'s escalation loop still covers the rest.
+THINKING_MODELS = ("GLM-", "Qwen3-VL-30B-A3B-Thinking", "gpt-oss")
+THINKING_HEADROOM = 8000
 
 
 _ANNOT_CACHE: Optional[str] = None
@@ -184,34 +257,82 @@ def is_local_endpoint(base_url: str) -> bool:
 def is_aalto_endpoint(base_url: str) -> bool:
     """True for endpoints that keep thesis text off public third-party
     services: the Aalto-hosted gateways that keep it within Aalto's tenant
-    (the Aalto AI API and the Aalto LLM Gateway), plus a local on-device
+    (the Aalto AI API v2, its deprecating Azure predecessor and the Aalto
+    LLM Gateway), plus a local on-device
     server (see is_local_endpoint). These are the only endpoints suitable
     for unpublished manuscripts; anything else is a public third-party
     service."""
     return ("aalto-openai-apigw" in base_url
+            or "ai-api-v2.aalto.fi" in base_url
             or "llm-gateway.k8s.aalto.fi" in base_url
             or is_local_endpoint(base_url))
 
 
 def default_model(base_url: str = BASE_URL) -> str:
     """Text model id to use: ``$LLM_MODEL`` if set, otherwise a sensible
-    default for the given endpoint (GPT-5-mini on the Aalto AI API, Qwen3 on
-    the Aalto LLM Gateway, Gemini Flash elsewhere). Override per run with
-    ``--model`` / ``$LLM_MODEL``; see the module docstring for the current
-    valid ids on each Aalto endpoint."""
+    default for the given endpoint (GLM-5.3-Flash on the Aalto LLM Gateway,
+    Gemini 2.5 Flash on the Aalto AI API v2, GPT-5-mini on the old Azure
+    gateway, Gemini Flash elsewhere). Override per run with ``--model`` /
+    ``$LLM_MODEL``; see the module docstring for the current valid ids on
+    each Aalto endpoint."""
     if os.environ.get("LLM_MODEL"):
         return os.environ["LLM_MODEL"]
-    if is_responses_api(base_url):
-        return "gpt-5-mini-2025-08-07"
     if "llm-gateway" in base_url:
-        return "Qwen/Qwen3-30B-A3B-Instruct-2507-FP8"
+        # the strongest model of the gateway set, and the one kept warm;
+        # everything else there scales to zero and 503s while spinning up
+        return "zai-org/GLM-5.3-Flash"
+    if "ai-api-v2.aalto.fi" in base_url:
+        return "gemini-2.5-flash"       # both protocols of the v2 endpoint
+    if is_responses_api(base_url):
+        return "gpt-5-mini-2025-08-07"  # the old Azure gateway
     return "google/gemini-2.5-flash"
 
 
+def default_strong_model(base_url: str = BASE_URL) -> str:
+    """The endpoint's stronger text model, for the linters whose judgment
+    is subtler than most (section intros, captions, flow, RQ quality, the
+    Bertsekas composition review): the mini/flash tier lets near-misses
+    pass. ``$LLM_MODEL`` still wins. gemini-2.5-pro on the Aalto AI API
+    v2, gpt-5 on the old Azure gateway, else the endpoint default. On the
+    Aalto LLM Gateway there is no stronger tier to reach for: GLM-5.3-Flash
+    is both the default and the strongest model hosted there, and it is a
+    reasoning model, so it already deliberates on these calls."""
+    if os.environ.get("LLM_MODEL"):
+        return os.environ["LLM_MODEL"]
+    if "ai-api-v2.aalto.fi" in base_url and not is_responses_api(base_url):
+        return "gemini-2.5-pro"
+    if is_responses_api(base_url):
+        return "gpt-5-2025-08-07"
+    return default_model(base_url)
+
+
+def default_vision_base_url(base_url: str = BASE_URL) -> str:
+    """Endpoint for requests that attach images — NOT necessarily the text
+    endpoint. The Aalto LLM Gateway (the text default) hosts Qwen3-VL, but
+    that pod scales to zero and would not come back up at all on 2026-09-22:
+    twelve minutes of demand returned an unbroken run of
+    ``503 Model not available yet``, which is longer than the client's retry
+    window and far longer than a figure lint can wait. So image requests go
+    to the Aalto AI API v2 instead, where gemini-2.5-flash is multimodal and
+    always warm. Still an Aalto-hosted tenant, so the privacy property the
+    suite relies on is unchanged; it just needs $AALTO_API_KEY alongside
+    $AALTO_LLM_KEY. Override with $LLM_VISION_BASE_URL (point it back at the
+    gateway once the vision pod is dependable), or per run with
+    figure_lint_llm.py --base-url."""
+    if os.environ.get("LLM_VISION_BASE_URL"):
+        return os.environ["LLM_VISION_BASE_URL"]
+    if "llm-gateway" in base_url:
+        return AIAPI_V2_URL
+    return base_url
+
+
 def default_vision_model(base_url: str = BASE_URL) -> str:
-    """Model for requests that attach images. On the Aalto AI API the
-    GPT-5 family is multimodal; the Aalto LLM Gateway hosts a separate
-    vision model."""
+    """Model for requests that attach images, given the VISION endpoint
+    (see default_vision_base_url — by default that is the AI API v2, not the
+    text default). gemini-2.5-flash is itself multimodal on the v2 endpoint,
+    as is the GPT-5 family on the old gateway; on the Aalto LLM Gateway,
+    where GLM-5.3-Flash is text-only, this names the separate Qwen3-VL model
+    (which scales to zero — see default_vision_base_url)."""
     if os.environ.get("LLM_VISION_MODEL"):
         return os.environ["LLM_VISION_MODEL"]
     if "llm-gateway" in base_url:
@@ -240,6 +361,38 @@ def _key_from_shell_profile(*names: str) -> Optional[str]:
     return None
 
 
+def _thinking_on(model: str) -> bool:
+    """Whether to let the model reason before answering, on the chat
+    completions protocol. $LLM_THINKING decides when set ("on"/"off"); with
+    it unset the answer is NO for THINKING_MODELS and irrelevant for the
+    rest, which do not reason anyway.
+
+    Off by default because on a linter-sized prompt the reasoning pass does
+    not converge: measured 2026-09-22 against the gateway, GLM-5.3-Flash on
+    a 61k-char paper streamed ~8.7k reasoning deltas in 65s and spent the
+    whole 9k-token budget without emitting one character of answer, and the
+    same linter run non-streamed drew repeated 504s from the gateway's
+    ingress while it thought. With thinking off the run finishes in seconds
+    and the findings are sound. Set LLM_THINKING=on to get it back on a
+    short prompt, where it does converge and does sharpen the judgment."""
+    v = os.environ.get("LLM_THINKING", "").strip().lower()
+    if v in ("off", "0", "false", "no", "none"):
+        return False
+    if v in ("on", "1", "true", "yes"):
+        return True
+    return not any(tag in model for tag in THINKING_MODELS)
+
+
+def _thinking_budget(model: str, max_tokens: int) -> int:
+    """Token budget for a chat-completions request. A reasoning model spends
+    its thinking tokens out of max_tokens on this protocol, so when thinking
+    is on give the ones we know about a fixed headroom (THINKING_HEADROOM)
+    rather than let the report be truncated and force a re-request."""
+    if _thinking_on(model) and any(tag in model for tag in THINKING_MODELS):
+        return max_tokens + THINKING_HEADROOM
+    return max_tokens
+
+
 def default_api_key(base_url: str = BASE_URL) -> Optional[str]:
     """Pick the API key that matches the endpoint: AALTO_LLM_KEY for the
     Aalto LLM Gateway, AALTO_API_KEY (or AALTO_OPENAI_API_KEY) for the Aalto
@@ -248,7 +401,8 @@ def default_api_key(base_url: str = BASE_URL) -> Optional[str]:
     if "llm-gateway" in base_url:              # Aalto LLM Gateway
         return (os.environ.get("AALTO_LLM_KEY")
                 or _key_from_shell_profile("AALTO_LLM_KEY"))
-    if is_responses_api(base_url):             # Aalto AI API (Azure gateway)
+    if "ai-api-v2.aalto.fi" in base_url or is_responses_api(base_url):
+        # Aalto AI API: v2 (either protocol) or the old Azure gateway
         return (os.environ.get("AALTO_API_KEY")
                 or os.environ.get("AALTO_OPENAI_API_KEY")
                 or _key_from_shell_profile("AALTO_API_KEY",
@@ -272,7 +426,36 @@ class LLMClient:
                  images: Optional[list] = None) -> Tuple[str, dict]:
         """Returns (raw_text, usage_dict). Raises RuntimeError on failure.
         `images` is an optional list of PNG bytes attached to the user
-        message (use a vision-capable model, see default_vision_model)."""
+        message (use a vision-capable model, see default_vision_model).
+
+        The token budget is ESCALATED when the answer is cut off: on the
+        Aalto AI API v2 a reasoning model's thinking tokens count against
+        max_tokens, so a long JSON report can be truncated (finish_reason
+        "length" / status "incomplete") and fail to parse. A cut-off answer
+        whose text is not complete JSON is re-requested with twice, then
+        four times the budget, and the escalation is printed on stderr so a
+        slow linter says why (ported from the dictionary suite's
+        llm_client, 2026-09-17)."""
+        usage_total = {"prompt_tokens": 0, "completion_tokens": 0,
+                       "total_tokens": 0}
+        for budget in (max_tokens, 2 * max_tokens, 4 * max_tokens):
+            text, usage, cut_off = self._complete_once(
+                model, system, user, timeout, budget, images)
+            for k in usage_total:
+                usage_total[k] += usage.get(k, 0)
+            if not cut_off or extract_json(text) is not None:
+                return text, usage_total
+            if budget == 4 * max_tokens:
+                break
+            print(f"[llm] answer cut off at {budget} tokens (reasoning "
+                  f"counts against the budget) — retrying with "
+                  f"{2 * budget}", file=sys.stderr)
+        return text, usage_total
+
+    def _complete_once(self, model: str, system: str, user: str,
+                       timeout: float, max_tokens: int,
+                       images: Optional[list]) -> Tuple[str, dict, bool]:
+        """One request. Returns (raw_text, usage_dict, cut_off)."""
         import base64
         # Fold in reviewer annotations (no-op unless $LINT_ANNOTATIONS_FILE set).
         system = system + annotation_context()
@@ -292,8 +475,12 @@ class LLMClient:
             }
             fmt_key = "text"
             url = self.base_url
-            headers = {"Ocp-Apim-Subscription-Key": self.api_key,
-                       "Content-Type": "application/json"}
+            # the deprecating Azure APIM gateway wants its subscription
+            # header; the v2 endpoint (and any other) uses Bearer auth
+            auth = ({"Ocp-Apim-Subscription-Key": self.api_key}
+                    if "aalto-openai-apigw" in self.base_url
+                    else {"Authorization": f"Bearer {self.api_key}"})
+            headers = {**auth, "Content-Type": "application/json"}
         else:
             if images:
                 content = [{"type": "text", "text": user}]
@@ -307,12 +494,26 @@ class LLMClient:
                 content = user
             body = {
                 "model": model,
-                "max_tokens": max_tokens,
+                "max_tokens": _thinking_budget(model, max_tokens),
                 "temperature": 0,
                 "messages": [{"role": "system", "content": system},
                              {"role": "user", "content": content}],
                 "response_format": {"type": "json_object"},
             }
+            if not _thinking_on(model):
+                # vLLM-style switch (GLM, Qwen) plus the OpenAI-style one;
+                # a server that knows neither ignores both.
+                body["chat_template_kwargs"] = {"enable_thinking": False}
+                body["reasoning_effort"] = "none"
+            # STREAM. Not for show: a long prompt makes the model go quiet
+            # for minutes (reasoning, or just a slow prefill) and the Aalto
+            # gateway's ingress cuts the idle connection with a 504 —
+            # reproduced 2026-09-22 on a 99k-char linter prompt, where every
+            # retry died the same way. An SSE response keeps bytes moving,
+            # so the request survives; it also covers the v2 gateway's
+            # matching 504 on a long gemini-2.5-pro call (2026-09-17).
+            body["stream"] = True
+            body["stream_options"] = {"include_usage": True}
             fmt_key = "response_format"
             url = self.base_url.rstrip("/") + "/chat/completions"
             headers = {"Authorization": f"Bearer {self.api_key}",
@@ -325,7 +526,8 @@ class LLMClient:
                 url, data=json.dumps(body).encode("utf-8"), headers=headers)
             try:
                 with urllib.request.urlopen(req, timeout=timeout) as resp:
-                    data = json.loads(resp.read().decode("utf-8"))
+                    data = (_read_sse(resp) if body.get("stream")
+                            else json.loads(resp.read().decode("utf-8")))
                 break
             except urllib.error.HTTPError as e:
                 detail = e.read().decode("utf-8", errors="replace")[:400]
@@ -336,12 +538,19 @@ class LLMClient:
                         "/ --api-key.") from e
                 if e.code == 400 and fmt_key in body:
                     # Endpoint rejects the JSON-mode format: drop it and
-                    # retry (the system prompt demands bare JSON anyway).
+                    # retry (the system prompt demands bare JSON anyway),
+                    # and SAY so — a silent drop leaves the caller to
+                    # report an unparseable answer with no hint of the cause.
+                    print(f"[llm] gateway rejected the JSON response format "
+                          f"({detail[:120]}) — retrying without it",
+                          file=sys.stderr)
                     body.pop(fmt_key)
                     continue
-                if e.code in (503, 429) and attempt < 10:
+                if e.code in (502, 503, 504, 429) and attempt < 10:
                     # The Aalto LLM gateway scales models to zero; a cold
-                    # model answers 503 while its pod spins up.
+                    # model answers 503 while its pod spins up. ai-api-v2
+                    # answers 504 when a long gemini-2.5-pro call outlives
+                    # its upstream timeout (seen 2026-09-17).
                     wait = 45
                     print(f"[llm] {e.code} from gateway ({detail[:80]}) — "
                           f"retrying in {wait}s ({attempt + 1}/10)",
@@ -349,11 +558,14 @@ class LLMClient:
                     time.sleep(wait)
                     continue
                 raise RuntimeError(f"LLM gateway error {e.code}: {detail}") from e
-            except (TimeoutError, urllib.error.URLError) as e:
-                # Transient network/read timeout — common on large vision
-                # payloads or slow reasoning. Retry with backoff instead of
-                # aborting the whole linter run. (HTTPError is a URLError
-                # subclass but is handled above, so it never reaches here.)
+            except (TimeoutError, urllib.error.URLError, ConnectionError,
+                    http.client.HTTPException) as e:
+                # Transient network/read timeout, or the gateway closing
+                # the connection without a response (RemoteDisconnected,
+                # seen 2026-09-17 on a 99k-char prompt) — common on large
+                # vision payloads or slow reasoning. Retry with backoff
+                # instead of aborting the whole linter run. (HTTPError is a
+                # URLError subclass but is handled above.)
                 reason = getattr(e, "reason", e)
                 if attempt < 10:
                     wait = 15
@@ -377,13 +589,59 @@ class LLMClient:
             usage = {"prompt_tokens": u.get("input_tokens", 0),
                      "completion_tokens": u.get("output_tokens", 0),
                      "total_tokens": u.get("total_tokens", 0)}
+            cut_off = (data.get("status") == "incomplete"
+                       and (data.get("incomplete_details") or {}).get(
+                           "reason") == "max_output_tokens")
         else:
-            text = data["choices"][0]["message"]["content"] or ""
+            choices = data.get("choices") or [{}]
+            choice = choices[0] or {}
+            # a budget spent entirely on reasoning comes back with no
+            # message at all on ai-api-v2 (seen 2026-09-17 at 20 tokens)
+            msg = choice.get("message") or {}
+            text = msg.get("content") or ""
             u = data.get("usage", {}) or {}
             usage = {"prompt_tokens": u.get("prompt_tokens", 0),
                      "completion_tokens": u.get("completion_tokens", 0),
                      "total_tokens": u.get("total_tokens", 0)}
-        return text, usage
+            cut_off = choice.get("finish_reason") == "length"
+        return text, usage, cut_off
+
+
+def _read_sse(resp) -> dict:
+    """Collect a streamed chat-completions response into the same dict shape
+    the non-streamed call returns, so the caller sees no difference.
+
+    Deltas arrive as ``data: {...}`` lines terminated by ``data: [DONE]``.
+    Only ``delta.content`` is kept: a reasoning model also streams
+    ``reasoning_content`` (GLM-5.3-Flash emitted ~8.7k such deltas and no
+    content at all on a 61k-char prompt, 2026-09-22), which is not part of
+    the answer. usage arrives in a final chunk with an empty choices list,
+    courtesy of stream_options.include_usage."""
+    parts, finish, usage = [], None, {}
+    for raw in resp:
+        line = raw.decode("utf-8", errors="replace").strip()
+        if not line.startswith("data:"):
+            continue
+        payload = line[5:].strip()
+        if payload == "[DONE]":
+            break
+        try:
+            chunk = json.loads(payload)
+        except ValueError:                 # keep-alive or partial frame
+            continue
+        if isinstance(chunk.get("error"), dict) and chunk["error"]:
+            return {"error": chunk["error"]}
+        if chunk.get("usage"):
+            usage = chunk["usage"]
+        for ch in chunk.get("choices") or []:
+            piece = (ch.get("delta") or {}).get("content")
+            if piece:
+                parts.append(piece)
+            if ch.get("finish_reason"):
+                finish = ch["finish_reason"]
+    return {"choices": [{"message": {"content": "".join(parts)},
+                         "finish_reason": finish}],
+            "usage": usage}
 
 
 def make_client(base_url: str = BASE_URL,
@@ -395,7 +653,7 @@ def make_client(base_url: str = BASE_URL,
     key = api_key or default_api_key(base_url)
     if not key:
         raise RuntimeError(
-            "No API key — set AALTO_API_KEY (Aalto AI API, the default "
+            "No API key — set AALTO_API_KEY (Aalto AI API v2, the default "
             "gateway) or AALTO_LLM_KEY / OPENROUTER_API_KEY (with "
             "--base-url), or pass --api-key.")
     if not is_aalto_endpoint(base_url):

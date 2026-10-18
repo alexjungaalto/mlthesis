@@ -46,7 +46,8 @@ except ImportError:
     fitz = None
 
 from aalto_llm import (API_KEY_HELP, BASE_URL, BASE_URL_HELP, default_model,
-                       extract_json, is_responses_api, make_client)
+                       default_strong_model, extract_json, is_responses_api,
+                       make_client)
 
 MAX_INTRO_CHARS = 2600
 MAX_SNIPPET_CHARS = 220
@@ -239,9 +240,7 @@ def main(argv: List[str] = None) -> int:
     # This judgement is subtler than most linters': the mini tier lets
     # near-miss intros pass, so default to the full GPT-5 model on the
     # Aalto AI API.
-    model = args.model or ("gpt-5-2025-08-07"
-                           if is_responses_api(args.base_url)
-                           else default_model(args.base_url))
+    model = args.model or default_strong_model(args.base_url)
     client = make_client(args.base_url, args.api_key)
     print(f"[info] gateway={args.base_url}\n[info] model={model}  "
           f"units={len(units)}", file=sys.stderr)
