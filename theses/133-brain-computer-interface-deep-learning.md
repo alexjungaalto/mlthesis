@@ -62,8 +62,8 @@ the temporal and spatial structure across electrodes. A second variant adds
 frozen, so fewer parameters need fitting and calibration time drops.
 
 **Loss function.** *Not confirmed.* The full text is only available as a scanned PDF without a
-text layer, and neither the abstract nor the defence states the training objective. See the
-review note in this page's front matter before publishing.
+text layer, and neither the abstract nor the recorded defence states the training objective,
+so it is left unstated here rather than guessed.
 
 ## What it found
 

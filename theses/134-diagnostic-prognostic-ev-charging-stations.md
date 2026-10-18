@@ -63,8 +63,8 @@ own account of why the session ended. That gives a
 **Hypothesis space.** The defence describes a supervised classification setup over these five
 features; the Aaltodoc keywords also list DBSCAN (density-based spatial clustering of applications
 with noise), a [clustering](https://dictionaryofml.org/terms/clustering.html) method, which
-suggests an unsupervised component alongside it. See the review note above: the relationship
-between the two is not clear from the public sources.
+suggests an unsupervised component alongside it. How the two fit together is not clear from
+the public sources, the thesis itself not being open access.
 
 **Loss function.** Not stated in the available sources.
 

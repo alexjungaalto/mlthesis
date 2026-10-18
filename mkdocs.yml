@@ -55,6 +55,12 @@ nav:
   - Supervised Theses: theses.md
   - Thesis Linters: assets/linters/README.md
 
+# Per-thesis summary pages are reached from the Supervised Theses table, not
+# from the nav bar (there are too many for a menu). Listing them here keeps
+# `mkdocs build --strict` from failing them as pages missing from the nav.
+not_in_nav: |
+  /theses/*.md
+
 extra_css:
   - stylesheets/extra.css
 

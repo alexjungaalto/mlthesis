@@ -92,6 +92,14 @@ cp README.md   docs/README.md   # MkDocs renders README.md as index.html; keeps 
 cp Garage.md   docs/Garage.md
 cp Topics.md   docs/Topics.md
 cp theses.md   docs/theses.md
+
+# Per-thesis summary pages (theses/<number>-<slug>.md), linked from the
+# Supervised Theses table. Optional: the glob simply matches nothing until
+# the first page exists.
+if compgen -G "theses/*.md" >/dev/null; then
+  mkdir -p docs/theses
+  cp theses/*.md docs/theses/
+fi
 cp -R material docs/material
 
 # Strip files that should not be published with the materials.

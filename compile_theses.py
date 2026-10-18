@@ -27,6 +27,9 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_CSV = SCRIPT_DIR / "theses.csv"
 DEFAULT_MD = SCRIPT_DIR / "theses.md"
+# Per-thesis summary pages, one "<number>-<slug>.md" per thesis. Optional: a
+# thesis without a page keeps linking straight to its repository record.
+DEFAULT_PAGES_DIR = SCRIPT_DIR / "theses"
 DEFAULT_TEX = SCRIPT_DIR / "theses.tex"
 
 # Markers delimiting the generated thesis list on the alexjung.at supervision
@@ -148,8 +151,32 @@ def level_summary(theses: list[dict]) -> str:
     return f"{len(theses)} theses in total: {', '.join(parts)}."
 
 
-def generate_markdown(theses: list[dict], output_path: Path) -> None:
-    """Write a Markdown file with thesis tables grouped by university."""
+def thesis_pages(pages_dir: Path) -> dict[str, str]:
+    """{thesis number: published path} for every per-thesis summary page.
+
+    Pages are named "<number>-<slug>.md" and are copied to docs/theses/ by
+    build_site.sh. The link target keeps the .md extension: MkDocs rewrites
+    it to the published URL, and it also resolves in the GitHub repo view of
+    theses.md. Linking straight to .html fails `mkdocs build --strict`.
+    """
+    if not pages_dir.is_dir():
+        return {}
+    found = {}
+    for p in sorted(pages_dir.glob("*.md")):
+        number = p.stem.split("-", 1)[0]
+        if number.isdigit():
+            found[number] = f"theses/{p.stem}.md"
+    return found
+
+
+def generate_markdown(theses: list[dict], output_path: Path,
+                      pages_dir: Path = DEFAULT_PAGES_DIR) -> None:
+    """Write a Markdown file with thesis tables grouped by university.
+
+    Where a thesis has its own summary page, the title links there rather
+    than to the repository record; the page itself links on to the record.
+    """
+    pages = thesis_pages(pages_dir)
     by_uni = {}
     for t in theses:
         by_uni.setdefault(t["university"], []).append(t)
@@ -179,8 +206,10 @@ def generate_markdown(theses: list[dict], output_path: Path) -> None:
             lines.append("|---|-------|--------|-------|----------|-----------|")
             for i, t in enumerate(ongoing, 1):
                 rec = f"[video]({t['recording']})" if t.get("recording") else ""
+                page = pages.get(str(t["number"]))
+                title = f"[{t['title']}]({page})" if page else t["title"]
                 lines.append(
-                    f"| {i} | {t['level']} | {t['author']} | {t['title']} "
+                    f"| {i} | {t['level']} | {t['author']} | {title} "
                     f"| {t['industry']} | {rec} |"
                 )
             lines.append("")
@@ -190,7 +219,8 @@ def generate_markdown(theses: list[dict], output_path: Path) -> None:
             lines.append("| # | Level | Author | Title | Date | Industry | Recording |")
             lines.append("|---|-------|--------|-------|------|----------|-----------|")
             for i, t in enumerate(completed, 1):
-                title = f"[{t['title']}]({t['url']})" if t["url"] else t["title"]
+                target = pages.get(str(t["number"])) or t["url"]
+                title = f"[{t['title']}]({target})" if target else t["title"]
                 rec = f"[video]({t['recording']})" if t.get("recording") else ""
                 lines.append(
                     f"| {i} | {t['level']} | {t['author']} | {title} "

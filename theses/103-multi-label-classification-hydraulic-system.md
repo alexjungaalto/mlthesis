@@ -67,8 +67,8 @@ questions.
 recurrent [network](https://dictionaryofml.org/terms/ann.html). The last was chosen to
 exploit the three-dimensional representation, which the other models cannot use.
 
-**Loss function.** Not stated in the available sources. See the review note in this page's
-front matter.
+**Loss function.** Not stated in either public source for this page, the Aaltodoc abstract
+or the recorded defence. The thesis itself is not open access.
 
 ## What it found
 

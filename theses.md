@@ -61,12 +61,12 @@ The **Level** column uses `PhD` for a doctoral thesis, `MSc` for a master's thes
 | 35 | BSc | P. Frank | [Explainable empirical risk minimization in high-stakes decision making](https://urn.fi/URN:NBN:fi:aalto-202410226804) | Sept. 2024 |  |  |
 | 36 | MSc | A. Rodimov | [Security system based on object tracking by video stream](https://urn.fi/URN:NBN:fi:aalto-202408265859) | Aug. 2024 |  | [video](https://youtu.be/E-n7yLNdv58) |
 | 37 | MSc | A. Shuianova | [Kinship verification between two people by photos](https://urn.fi/URN:NBN:fi:aalto-202408265860) | Aug. 2024 |  |  |
-| 38 | MSc | J. Rantanen | [Large Language Models in Mental Health Support](https://urn.fi/URN:NBN:fi:aalto-202408255774) | Aug. 2024 |  | [video](https://youtu.be/c5Z6CwWmr6w) |
+| 38 | MSc | J. Rantanen | [Large Language Models in Mental Health Support](theses/47-large-language-models-mental-health-support.md) | Aug. 2024 |  | [video](https://youtu.be/c5Z6CwWmr6w) |
 | 39 | MSc | R. Mård | [Backdoor attacks on large transformer-based regression model](https://urn.fi/URN:NBN:fi:aalto-202408255769) | Aug. 2024 |  | [video](https://youtu.be/K2HcwgvErZw) |
 | 40 | MSc | K. Nguyen | [Image Similarity Assessment for Product Quality Assurance](https://urn.fi/URN:NBN:fi:aalto-202408255659) | Aug. 2024 |  |  |
 | 41 | MSc | A. Ghazal | [Zero-shot Machine Unlearning using GANs](https://urn.fi/URN:NBN:fi:aalto-202406305007) | July 2024 | Nokia |  |
 | 42 | MSc | D. Suman | [Deep Learning Methods for Demand Time Series Forecasting](https://urn.fi/URN:NBN:fi:aalto-202406234851) | June 2024 | Zalando |  |
-| 43 | MSc | A. Manninen | [Spatiotemporal Traffic Accident Prediction Using Deep Learning Models](https://urn.fi/URN:NBN:fi:aalto-202406234904) | June 2024 |  | [video](https://youtu.be/saahi0X6Di4) |
+| 43 | MSc | A. Manninen | [Spatiotemporal Traffic Accident Prediction Using Deep Learning Models](theses/52-spatiotemporal-traffic-accident-prediction.md) | June 2024 |  | [video](https://youtu.be/saahi0X6Di4) |
 | 44 | MSc | S. Hirvonen | [Comparison of data-driven models for building energy load forecasting](https://urn.fi/URN:NBN:fi:aalto-202405263697) | May 2024 | VTT |  |
 | 45 | MSc | L. Ban | [Neural Motif Counting in Uncertain Graphs](https://urn.fi/URN:NBN:fi:aalto-202405263699) | May 2024 |  |  |
 | 46 | MSc | R. Virtanen | [Explainable AI Techniques in Trustworthy Object Detection](https://urn.fi/URN:NBN:fi:aalto-202405263770) | May 2024 | TietoEVRY Oyj | [video](https://youtu.be/hyl5bJzA_1Y) |
@@ -94,8 +94,8 @@ The **Level** column uses `PhD` for a doctoral thesis, `MSc` for a master's thes
 | 68 | MSc | M. Bogdanova | [Contextual bandits for staffing in consulting companies: An exploration of personalized decision making](https://aaltodoc.aalto.fi/items/041f9210-3920-43fa-b4b7-dda5de9079f7) | Oct. 2023 |  |  |
 | 69 | BSc | H. Kivijärvi | [Weather forecasting with deep learning methods](https://urn.fi/URN:NBN:fi:aalto-202309266062) | Sept. 2023 |  |  |
 | 70 | MSc | Z. Zhou | [Building information modeling connection recommendation based on machine learning using multimodal information](https://aaltodoc.aalto.fi/items/38769eb0-f6f4-4392-9ca0-a4cfab7e031f) | Aug. 2023 |  | [video](https://youtu.be/8lOAhhuWqr0) |
-| 71 | MSc | Y. Sarcheshmehpour | [Application of reinforcement learning in electrical machine design](https://aaltodoc.aalto.fi/handle/123456789/122863) | Aug. 2023 | ABB | [video](https://youtu.be/a6RJawYzyJM) |
-| 72 | MSc | L. Garcia Tejada | [Applying machine learning to forecast Formula 1 race outcomes](https://aaltodoc.aalto.fi/handle/123456789/122937) | Aug. 2023 |  | [video](https://youtu.be/q01GzbSDsSg) |
+| 71 | MSc | Y. Sarcheshmehpour | [Application of reinforcement learning in electrical machine design](theses/80-reinforcement-learning-electrical-machine-design.md) | Aug. 2023 | ABB | [video](https://youtu.be/a6RJawYzyJM) |
+| 72 | MSc | L. Garcia Tejada | [Applying machine learning to forecast Formula 1 race outcomes](theses/81-forecasting-formula-1-race-outcomes.md) | Aug. 2023 |  | [video](https://youtu.be/q01GzbSDsSg) |
 | 73 | MSc | C. Segercrantz | [Experimental evaluation of record linkage algorithms in a secure banking environment](https://aaltodoc.aalto.fi/handle/123456789/123205) | Aug. 2023 | Nordea Bank Oyj |  |
 | 74 | MSc | H. Wang | [Material capture and generative rendering with phenomenological reflectance models](https://aaltodoc.aalto.fi/handle/123456789/122900) | Aug. 2023 | Huawei |  |
 | 75 | MSc | G. Jiang | [Parallel training of neural networks in 6G L1](https://aaltodoc.aalto.fi/handle/123456789/122835) | Aug. 2023 | Nokia |  |
@@ -117,7 +117,7 @@ The **Level** column uses `PhD` for a doctoral thesis, `MSc` for a master's thes
 | 91 | MSc | T. Gyabaah | [Artificial intelligence to support NFTs creation: Comparison of machine learning algorithms to detect fraud in artwork](https://aaltodoc.aalto.fi/handle/123456789/116504) | Aug. 2022 |  |  |
 | 92 | MSc | Á. C. Barcsa-Szabó | [Feature-based approaches for ethical news personalisation](https://aaltodoc.aalto.fi/handle/123456789/116478) | Aug. 2022 | Sanoma Media |  |
 | 93 | MSc | J. Lillfors | [Networked federated learning](https://aaltodoc.aalto.fi/handle/123456789/116275) | July 2022 |  |  |
-| 94 | MSc | C. Molinero Ranera | [Multi-label classification of a hydraulic system using machine learning methods](https://aaltodoc.aalto.fi/handle/123456789/116308) | July 2022 |  | [video](https://youtu.be/1HTsaSqvsz0) |
+| 94 | MSc | C. Molinero Ranera | [Multi-label classification of a hydraulic system using machine learning methods](theses/103-multi-label-classification-hydraulic-system.md) | July 2022 |  | [video](https://youtu.be/1HTsaSqvsz0) |
 | 95 | MSc | P. Truong | [Crown-of-Thorns Starfish Detection by state-of-the-art YOLOv5](https://aaltodoc.aalto.fi/handle/123456789/116281) | July 2022 |  |  |
 | 96 | BSc | S. Rachidi | [Explainable machine learning in the prediction of breast cancer](https://urn.fi/URN:NBN:fi:aalto-202208164866) | July 2022 |  |  |
 | 97 | MSc | Y. Huang | [Text analysis of novel coronavirus pneumonia based on federal deep learning](https://aaltodoc.aalto.fi/handle/123456789/115546) | June 2022 |  |  |
@@ -140,16 +140,16 @@ The **Level** column uses `PhD` for a doctoral thesis, `MSc` for a master's thes
 | 114 | MSc | Z. Mohammadi | [Better utilization of relational data in machine learning](https://aaltodoc.aalto.fi/handle/123456789/107604) | May 2021 | Lamia Oy |  |
 | 115 | BSc | E. Hiitola | [Predicting level of care requirements and mortality of SARS-CoV-2 cases based on patient comorbidities and characteristics](https://urn.fi/URN:NBN:fi:aalto-202106017103) | May 2021 |  |  |
 | 116 | MSc | T. Nguyen | [Applying machine learning to develop black-box control model of active double-skin facade](https://aaltodoc.aalto.fi/handle/123456789/102547) | Jan. 2021 |  |  |
-| 117 | MSc | T. Kokkonen | [Classifying restaurant menu items with supervised learning](https://aaltodoc.aalto.fi/handle/123456789/102433) | Jan. 2021 |  | [video](https://youtu.be/TaYlv6MFoeU) |
+| 117 | MSc | T. Kokkonen | [Classifying restaurant menu items with supervised learning](theses/126-classifying-restaurant-menu-items.md) | Jan. 2021 |  | [video](https://youtu.be/TaYlv6MFoeU) |
 | 118 | MSc | J. Seppälä | [Application of machine learning to link click predictions in Facebook Family of Apps advertising](https://aaltodoc.aalto.fi/handle/123456789/106829) | 2021 |  |  |
-| 119 | MSc | I. Vikström | [Deep reinforcement learning approach for HVAC control](https://aaltodoc.aalto.fi/handle/123456789/97613) | Dec. 2020 | TietoEVRY Oyj | [video](https://youtu.be/OSL8CkWd-as) |
+| 119 | MSc | I. Vikström | [Deep reinforcement learning approach for HVAC control](theses/128-deep-reinforcement-learning-hvac-control.md) | Dec. 2020 | TietoEVRY Oyj | [video](https://youtu.be/OSL8CkWd-as) |
 | 120 | PhD | T. Lehto | [Process Mining Based Influence Analysis for Analyzing and Improving Business Processes](https://urn.fi/URN:ISBN:978-952-64-0138-6) | Nov. 2020 |  |  |
 | 121 | PhD | M. Hinkka | [Machine Learning and Distributed Computing Techniques for Process Mining](https://urn.fi/URN:ISBN:978-952-64-0053-2) | Nov. 2020 |  |  |
 | 122 | MSc | D. Tokmurzina | [Road marking condition monitoring and classification using deep learning for city of Helsinki](https://aaltodoc.aalto.fi/handle/123456789/47388) | Oct. 2020 |  |  |
 | 123 | MSc | C. Dikmen | [Application of contextual bandits models in a supervised learning setting](https://aaltodoc.aalto.fi/handle/123456789/46314) | Aug. 2020 |  |  |
-| 124 | MSc | J. Laiho | [Recognizing thoughts from bioelectric patterns? A brain-computer interface with deep learning](https://aaltodoc.aalto.fi/handle/123456789/46105) | Aug. 2020 | Accenture Liquid Studio (NL) | [video](https://youtu.be/IouXWsJsm0Q) |
-| 125 | MSc | X. Zhang | [Diagnostic and prognostic analysis optimization of field problems for EV charging stations](https://aaltodoc.aalto.fi/handle/123456789/46045) | Aug. 2020 | ABB | [video](https://youtu.be/4y6AsFaC9iQ) |
-| 126 | MSc | M. Mishin | [Anomaly detection algorithms and techniques for network intrusion detection systems](https://aaltodoc.aalto.fi/handle/123456789/46076) | Aug. 2020 | Ericsson | [video](https://youtu.be/Z_lBOjkaSPk) |
+| 124 | MSc | J. Laiho | [Recognizing thoughts from bioelectric patterns? A brain-computer interface with deep learning](theses/133-brain-computer-interface-deep-learning.md) | Aug. 2020 | Accenture Liquid Studio (NL) | [video](https://youtu.be/IouXWsJsm0Q) |
+| 125 | MSc | X. Zhang | [Diagnostic and prognostic analysis optimization of field problems for EV charging stations](theses/134-diagnostic-prognostic-ev-charging-stations.md) | Aug. 2020 | ABB | [video](https://youtu.be/4y6AsFaC9iQ) |
+| 126 | MSc | M. Mishin | [Anomaly detection algorithms and techniques for network intrusion detection systems](theses/135-anomaly-detection-network-intrusion.md) | Aug. 2020 | Ericsson | [video](https://youtu.be/Z_lBOjkaSPk) |
 | 127 | MSc | K. Klemets | [Forecasting hourly parking occupancy with multiple seasonalities](https://aaltodoc.aalto.fi/handle/123456789/45990) | Aug. 2020 | City of Helsinki |  |
 | 128 | MSc | T. Valentijn | [The practical applicability of a CNN for automated building damage assessment](https://aaltodoc.aalto.fi/handle/123456789/44991) | June 2020 | Red Cross NL |  |
 | 129 | MSc | T. Hämmäinen | [Clustering IoT devices for network intrusion detection systems](https://aaltodoc.aalto.fi/handle/123456789/44266) | May 2020 | Ericsson |  |

@@ -81,9 +81,10 @@ diagnosable way, and the fix is motivated by that failure rather than by tuning.
 to an engineering design loop: a generic reward is easy to write, while the expert-informed
 one is what carries across machine types.
 
-*Quantitative results against the traditional design methods are reported in the thesis; the
-caption quality of the recording is not good enough to restate them reliably here. See the
-review note above.*
+*Quantitative results against the traditional design methods are reported in the thesis.
+They are not restated here: the Aaltodoc record carries no abstract and the full text is a
+scan without a text layer, leaving the recorded defence as the only public source, and its
+auto-captions garble the numbers.*
 
 ## Watch the defence
 
