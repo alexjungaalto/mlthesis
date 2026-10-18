@@ -12,13 +12,12 @@ video_views: 409
 keywords: ["multilabel classification", "monitoring", "hydraulic system", "supervised learning", "multiclass classification"]
 area: ml-systems-engineering
 framing: supervised
-confidence: medium
-sources: [abstract, video]
+confidence: high
+sources: [fulltext, abstract, video]
 review_status: draft
 review_notes: >-
-  Closed-access thesis, so this rests on the abstract and the recorded defence. The training
-  objectives of the individual classifiers are not stated in either source and are left
-  unstated below. Confirm the sensor count and cycle count against the thesis.
+  Verified against the thesis full text (supervisor's copy; the thesis is not open access).
+  The loss functions, unstated in the public sources, are taken from it.
 dictionary: [supervisedlearning, datapoint, featurevec, label, classification, hypospace, logreg, decisiontree, randomforest, ann, dataset]
 ---
 
@@ -69,8 +68,11 @@ questions.
 recurrent [network](https://dictionaryofml.org/terms/ann.html). The last was chosen to
 exploit the three-dimensional representation, which the other models cannot use.
 
-**Loss function.** Not stated in either public source for this page, the Aaltodoc abstract
-or the recorded defence. The thesis itself is not open access.
+**Loss function.** Two, one per framing. The multi-class networks minimise *sparse
+categorical cross-entropy*, the sparse variant because the class labels are integers rather
+than one-hot vectors. The multi-label networks minimise *binary cross-entropy*, since there
+the outputs are binarised and each label is its own yes/no decision. Optimisers differ too:
+Adam for multi-class, RMSprop for multi-label, both over 100 epochs.
 
 ## What it found
 

@@ -11,16 +11,15 @@ video: "https://youtu.be/4y6AsFaC9iQ"
 video_views: 428
 keywords: ["EV charging", "serviceability", "machine learning", "fault detection", "DBSCAN"]
 area: ml-systems-engineering
-framing: supervised
-confidence: medium
-sources: [abstract, video]
+framing: unsupervised
+confidence: high
+sources: [fulltext, abstract, video]
 review_status: draft
 review_notes: >-
-  Closed-access thesis; built from the abstract and the recorded defence. The defence
-  describes a supervised framing (labels derived from charging-session stop reasons) while
-  the Aaltodoc keywords list DBSCAN, suggesting an unsupervised clustering component too.
-  Check how the two fit together before publishing — the page currently presents the
-  supervised framing as primary, which may understate the clustering work.
+  Verified against the thesis full text (supervisor's copy; the thesis is not open access).
+  An earlier draft presented this as supervised classification with DBSCAN as a possible
+  side component. That was backwards: DBSCAN is the method, the setup is unsupervised, and
+  the labels are used only to evaluate it.
 dictionary: [datapoint, featurevec, label, hypospace, clustering, dataset, supervisedlearning]
 ---
 
@@ -53,22 +52,28 @@ timestamp, parsed against ABB's design documentation.
 single *charging session* of one charger.
 
 **Features.** Five, extracted from the CAN trace: charging current, charging voltage, fault
-resistance, board humidity and board temperature. Each is summarised by its maximum, minimum
+resistance, board humidity and board temperature. The per-feature normalisation is concrete:
+charging current is divided by 150 A, the expected operating range; voltage by its own
+maximum, since it stabilises quickly; fault resistance is measured as deviation from its
+expected 2500 kΩ. Each is summarised by its maximum, minimum
 and average over the session, and normalised to [0, 1]. The normalisation method is chosen
 per feature rather than globally, so that each signal keeps its own minimum, maximum and
 spread, and the pipeline does not depend on specific hardware or software.
 
-**Labels.** Derived from the *stop reason* recorded for each charging session, the charger's
-own account of why the session ended. That gives a
-[label](https://dictionaryofml.org/terms/label.html) without manual annotation.
+**Labels.** There are none at training time. The thesis works through the supervised,
+semi-supervised and unsupervised anomaly-detection setups and argues for the last: a
+supervised detector only finds faults whose signature is known in advance, which is the
+wrong assumption for a complex charger where novel faults appear. Labels derived from each
+session's *stop reason* are used only to evaluate the result.
 
-**Hypothesis space.** The defence describes a supervised classification setup over these five
-features; the Aaltodoc keywords also list DBSCAN (density-based spatial clustering of applications
-with noise), a [clustering](https://dictionaryofml.org/terms/clustering.html) method, which
-suggests an unsupervised component alongside it. How the two fit together is not clear from
-the public sources, the thesis itself not being open access.
+**Hypothesis space.** DBSCAN — density-based spatial clustering of applications with noise —
+over the five normalised features. Points falling outside any dense region are the suspected
+faults. Performance was best at ε = 0.10 and MinPts = 4, chosen over five experiments
+fine-tuning those two parameters.
 
-**Loss function.** Not stated in the available sources.
+**Objective.** No [loss](https://dictionaryofml.org/terms/loss.html) is minimised: DBSCAN
+fits nothing. Results are scored against the stop-reason labels on five metrics, precision
+and recall among them.
 
 ## What it found
 

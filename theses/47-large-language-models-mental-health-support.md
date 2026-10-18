@@ -12,15 +12,16 @@ video_views: 403
 keywords: ["large language model", "transformer", "mental health", "GPT"]
 area: llms-generative-ai
 framing: not-applicable
-confidence: medium
-sources: [abstract, video]
+confidence: high
+sources: [fulltext, abstract, video]
 review_status: draft
 review_notes: >-
   This is a LITERATURE REVIEW — it trains no model and has no dataset, hypothesis space or
   loss function, so the model/data/loss template is deliberately not used here. This page
   is the worked example of the fallback structure for non-modelling theses.
-  Separately: the defence audio garbles cited author names, so systems below are named
-  without attribution. Add citations from the thesis bibliography before publishing.
+  System names and the count of case studies are taken from the thesis full text
+  (supervisor's copy); an earlier draft, built from defence captions that garbled them,
+  described four unnamed systems.
 dictionary: [llm, transformer, attention, finetuning, pretraining]
 ---
 
@@ -52,22 +53,23 @@ constraints on deployment.
 
 The review builds on the [transformer](https://dictionaryofml.org/terms/transformer.html)
 architecture and its [attention](https://dictionaryofml.org/terms/attention.html) mechanism,
-then works through a set of representative systems. Four recur:
+then works through thirteen case studies. Four of them carry most of the argument:
 
-- **A psychological counseling framework** combining a pre-trained LLM with professional Q&A
+- **Psy-LLM**, combining a pre-trained LLM with professional Q&A
   and curated psychological articles, intended as a front-end tool for healthcare
   professionals and a screening aid for urgent cases. Evaluated by perplexity (a language-model fit score) and human
   assessment; judged coherent and relevant, but short of human-level performance.
-- **A counseling chatbot** [fine-tuned](https://dictionaryofml.org/terms/finetuning.html) on
-  real client–psychologist dialogue — roughly 260 hour-long interviews, distilled into
-  query–answer pairs and used for instruction tuning. It surpassed open-source baselines and
+- **ChatCounselor** (Liu et al., 2023),
+  [fine-tuned](https://dictionaryofml.org/terms/finetuning.html) on real
+  client–psychologist dialogue: 260 hour-long interviews distilled into the Psych8k
+  query–answer set and used for instruction tuning of a Vicuna base model. It surpassed open-source baselines and
   approached commercial-model performance, which the review reads as evidence that
   domain-specific fine-tuning of a modest base model beats a larger general one.
-- **A structured prompting method** that decomposes clinical reasoning into subjective
+- **Diagnosis of Thought prompting**, which decomposes clinical reasoning into subjective
   assessment, contrastive reasoning to surface cognitive distortions, and schema analysis.
   It improved cognitive-distortion detection and, notably, produced rationales human
   evaluators found interpretable.
-- **A journalling application** with an AI-driven conversational interface and a clinician
+- **MindfulDiary**, a journalling application with an AI-driven interface and a clinician
   dashboard, tested in a four-week field study with 28 patients with major depressive
   disorder and five psychiatrists — one of the few clinical evaluations in the set.
 
