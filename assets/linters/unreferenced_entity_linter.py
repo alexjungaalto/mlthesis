@@ -207,6 +207,14 @@ NUM = r"[A-Z]?\d+(?:\.\d+)?"
 # these layers:" and then reporting that non-existent float as unreferenced.
 CAPTION_DEF_RE = re.compile(
     rf"^\s*(Figure|Fig\.|Table|Algorithm|Listing)\s+({NUM})\s*(?::|\.(?=\s|$))")
+# Springer/Nature ("sn-*") captions carry no separator after the number:
+# "Fig. 1 Overview of the proposed ...", "Table 2 Point imputation accuracy".
+# Recognised only as a FALLBACK when the strict form finds no float at all,
+# since a body sentence starting "Figure 3 Panel (a) ..." would also match;
+# requiring a capitalised word after the number keeps "Table 5 reports ..."
+# out.
+CAPTION_DEF_LOOSE_RE = re.compile(
+    rf"^\s*(Figure|Fig\.|Table|Algorithm|Listing)\s+({NUM})\s+(?=[A-Z])")
 EQ_DEF_RE = re.compile(rf"(?:\s{{2,}}|^\s*)\(({NUM})\)\s*$")
 FLOAT_MENTION_RE = re.compile(
     rf"\b(Figures?|Figs?\.|Tables?|Algorithms?|Listings?)\s+"
@@ -267,6 +275,35 @@ def scan_pdf(path: Path, bare_eq_refs=True):
     of findings. See the module docstring for the detection heuristics.
     """
     pages = extract_pdf_pages(path)
+    defs, mentions = _collect(pages, CAPTION_DEF_RE, bare_eq_refs)
+    if not any(k != "equation" for k, _ in defs):
+        # No "Figure N:" / "Table N." caption anywhere: try the separator-less
+        # Springer caption form instead (see CAPTION_DEF_LOOSE_RE).
+        loose_defs, loose_mentions = _collect(pages, CAPTION_DEF_LOOSE_RE,
+                                              bare_eq_refs)
+        if any(k != "equation" for k, _ in loose_defs):
+            defs, mentions = loose_defs, loose_mentions
+
+    findings = 0
+    for (kind, num), page in sorted(defs.items(), key=lambda kv: sort_key(kv[0])):
+        if (kind, num) not in mentions:
+            label = f"({num})" if kind == "equation" else f"{kind.capitalize()} {num}"
+            print(f"{path}: UNREFERENCED {kind} {label} "
+                  f"(defined on PDF page {page}) is never mentioned in the text")
+            findings += 1
+
+    n_eq = sum(1 for k, _ in defs if k == "equation")
+    print(f"\n[pdf] {path.name}: {len(defs)} numbered entit(ies) found "
+          f"({n_eq} equations, {len(defs) - n_eq} floats), "
+          f"{findings} finding(s)"
+          + ("" if bare_eq_refs else "  [bare '(N)' not counted as references]"))
+    return findings
+
+
+def _collect(pages, caption_re, bare_eq_refs):
+    """Scan the extracted pages once with the given caption regex. Returns
+    ``(defs, mentions)``: definitions as ``{(kind, number): first page}`` and
+    mentions as a set of ``(kind, number)``."""
     defs = {}      # (kind, number) -> first page of definition
     mentions = set()  # (kind, number)
 
@@ -276,7 +313,7 @@ def scan_pdf(path: Path, bare_eq_refs=True):
             if DOT_LEADER_RE.search(line):
                 continue  # table-of-contents / list-of-figures entry
 
-            cap = CAPTION_DEF_RE.match(line)
+            cap = caption_re.match(line)
             if cap:
                 kind = FLOAT_WORDS[cap.group(1).lower()]
                 defs.setdefault((kind, cap.group(2)), pageno)
@@ -302,6 +339,10 @@ def scan_pdf(path: Path, bare_eq_refs=True):
                 if eq and bares and bares[-1].start() >= eq.start():
                     bares = bares[:-1]  # last one is the definition itself
                 for m in bares:
+                    # "Econometrica 78(3), 1093" / "circulation 101(23)": a
+                    # volume(issue) number in the reference list, not Eq. (3).
+                    if m.start() > 0 and line[m.start() - 1].isdigit():
+                        continue
                     mentions.add(("equation", m.group(1)))
 
             # A mention split across a line break, including a HYPHENATED
@@ -322,20 +363,7 @@ def scan_pdf(path: Path, bare_eq_refs=True):
                     for n in expand_number_list(m.group(1)):
                         mentions.add(("equation", n))
 
-    findings = 0
-    for (kind, num), page in sorted(defs.items(), key=lambda kv: sort_key(kv[0])):
-        if (kind, num) not in mentions:
-            label = f"({num})" if kind == "equation" else f"{kind.capitalize()} {num}"
-            print(f"{path}: UNREFERENCED {kind} {label} "
-                  f"(defined on PDF page {page}) is never mentioned in the text")
-            findings += 1
-
-    n_eq = sum(1 for k, _ in defs if k == "equation")
-    print(f"\n[pdf] {path.name}: {len(defs)} numbered entit(ies) found "
-          f"({n_eq} equations, {len(defs) - n_eq} floats), "
-          f"{findings} finding(s)"
-          + ("" if bare_eq_refs else "  [bare '(N)' not counted as references]"))
-    return findings
+    return defs, mentions
 
 
 # --------------------------------------------------------------------------

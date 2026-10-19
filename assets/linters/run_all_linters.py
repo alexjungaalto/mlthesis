@@ -181,7 +181,7 @@ def main(argv=None) -> int:
                          "per-endpoint default in aalto_llm.py).")
     ap.add_argument("--bib", action="store_true",
                     help="Also run the bibliography existence check "
-                         "(network queries to Crossref/arXiv/DBLP).")
+                         "(network queries to OpenAlex/Crossref/arXiv/DBLP).")
     ap.add_argument("--dashboard", action="store_true",
                     help="Also render the run as a self-contained HTML "
                          "dashboard and open it in the default browser.")
