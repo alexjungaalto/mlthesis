@@ -1,3 +1,9 @@
+---
+title: Thesis Guide
+description: A practical guide to planning, conducting, writing, and completing a bachelor's, master's, or doctoral thesis in applied machine learning.
+edit_url: edit/main/README.md
+---
+
 # Doing a Thesis in Applied Machine Learning
 
 This repository contains guidance for students doing a **bachelor's, master's, or doctoral thesis** in applied machine learning supervised by [Alex Jung](https://machinelearningforall.github.io/about/). It applies regardless of where you are enrolled. The guide currently covers students at **Aalto University** (Finland) and **IMC Krems University of Applied Sciences** (Austria); everything that depends on your university or degree level is collected in [Thesis Levels](#thesis-levels-bachelors-masters-doctoral) and [University-Specific Information](#university-specific-information), so the rest of the guide reads the same for everyone.
@@ -9,29 +15,6 @@ This repository contains guidance for students doing a **bachelor's, master's, o
 
 ---
 
-## Table of Contents
-
-1. [What to Expect from Your Supervisor](#what-to-expect-from-your-supervisor)
-2. [What Is Expected from You](#what-is-expected-from-you)
-3. [Thesis Levels: Bachelor's, Master's, Doctoral](#thesis-levels-bachelors-masters-doctoral)
-4. [Getting Started](#getting-started)
-5. [Typical Timeline](#typical-timeline)
-6. [Recommended Development Environment](#recommended-development-environment)
-7. [Responsible Use of AI](#responsible-use-of-ai)
-8. [Practical Workflow](#practical-workflow)
-9. [Thesis Manuscript Preparation](#thesis-manuscript-preparation)
-10. [Typesetting Mathematical Texts](#typesetting-mathematical-texts)
-11. [Iterative Writing Process](#iterative-writing-process)
-12. [Self-Editing Pass (Prose Linter)](#self-editing-pass-prose-linter)
-13. [Final Thesis Checklist](#final-thesis-checklist)
-14. [Thesis Presentation and Self-Assessment](#thesis-presentation-and-self-assessment)
-15. [Thesis Evaluation, Decision, and Appeals](#thesis-evaluation-decision-and-appeals)
-16. [University-Specific Information](#university-specific-information)
-17. [References](#references)
-18. [Feedback and Questions](#feedback-and-questions)
-
----
-
 ## What to Expect from Your Supervisor
 
 As your supervisor, you can expect me to:
@@ -39,12 +22,13 @@ As your supervisor, you can expect me to:
 - Help you clearly define your ML problem.
 - Advise on suitable ML methods, tools, and resources.
 - **Be available in the weekly [Thesis Garage](Garage.md)** during the teaching term (dates on the Garage page), where you can present your progress and get feedback on work in progress.
-- Guide you through thesis writing and evaluation.
-- Give feedback on **complete, polished drafts** and on your self-assessment.
-- Offer the opportunity to discuss your self-assessment before submission.
+- Guide you through thesis writing.
+- Give feedback on **complete, polished drafts**.
 - Know, or find out with you, which rules of your university apply to your thesis — but the formal process (forms, deadlines, submission system) is run by your programme, not by me.
 
 > **Please note:** I do not review early-stage or partial drafts — for example, a single rough chapter, an unedited first attempt, or notes that have not yet been through your own self-editing pass. I give detailed feedback only once you have a **full draft that you consider finished** and have run through the [self-editing pass](#self-editing-pass-prose-linter) below. Sending work earlier than that does not speed things up; it means feedback gets spent on issues you could have caught yourself. (For a doctoral thesis, "full draft" applies to each article and to the summary separately; see [Thesis Levels](#thesis-levels-bachelors-masters-doctoral).)
+>
+> This is a choice about *where* supervision happens, not a reduction of it. The thesis regulations oblige a supervisor to examine the **submitted** thesis; feedback during the work is a recommendation, not a prescribed number of written review rounds. The guidance channel is the weekly garage, and it is open every week of the teaching term.
 
 ## What Is Expected from You
 
@@ -106,7 +90,7 @@ A thesis moves through the same phases at every level; the phases are shorter an
 | **Modeling** | Implement and train ML models; run baseline experiments |
 | **Evaluation & Diagnosis** | Benchmarks, sensitivity analysis, error analysis |
 | **Writing** | Draft chapters iteratively; incorporate feedback |
-| **Self-Assessment & Presentation** | Write your self-assessment (see [Thesis Presentation and Self-Assessment](#thesis-presentation-and-self-assessment)); prepare and deliver the thesis presentation or defence |
+| **Presentation** | Prepare and deliver the thesis presentation or defence (see [Thesis Presentation](#thesis-presentation)) |
 
 Plan with the nominal duration your study programme sets for the thesis (for a master's thesis typically about six months full-time; for a doctoral thesis 3–5 years; see [Thesis Levels](#thesis-levels-bachelors-masters-doctoral)). Your programme's deadlines, not these estimates, are binding.
 
@@ -277,44 +261,18 @@ Before submitting, verify each item below. Links point to the relevant section o
 - [ ] Figure text is legible at print size and in grayscale
 - [ ] The AI-use statement is included, naming tools and versions (also if no AI tools were used)
 - [ ] The thesis uses your university's official template and meets its formal requirements (see [University-Specific Information](#university-specific-information))
-- [ ] Your self-assessment is written (Aalto master's students: fill in the School of Science [assessment statement template](material/Statement_template_CCIS.docx); see [below](#thesis-presentation-and-self-assessment))
 
 ---
 
-## Thesis Presentation and Self-Assessment
+## Thesis Presentation
 
-After completing the thesis manuscript:
-
-- Write a self-assessment with explicit references to sections of your thesis. Aalto master's students fill in the School of Science [assessment statement template](material/Statement_template_CCIS.docx) — the form examiners use — as their self-assessment; this is my practice, not a programme requirement. Students elsewhere write a one-page self-assessment along the same lines. It is the basis for our discussion in any case.
-- Read the grading criteria of your programme before submission so you know what a high-quality thesis looks like in your examiners' eyes. For Aalto master's theses this is the School of Science [grade characterisation PDF](material/GradeCharact.pdf); for other programmes see [University-Specific Information](#university-specific-information).
-- Optionally, request a meeting to discuss your self-assessment before submission.
-- Prepare your thesis presentation — either live during a garage session or as a recorded video ([see examples](https://youtube.com/playlist?list=PLrbn2dGrLJK8xt7j0tvaL0uMCdrtQ7JY2)). Where your programme requires a formal presentation or oral defence (for example the *kommissionelle Gesamtprüfung* at IMC Krems or a doctoral defence), the garage is a good place to rehearse it.
+After completing the thesis manuscript, prepare your thesis presentation — either live during a garage session or as a recorded video ([see examples](https://youtube.com/playlist?list=PLrbn2dGrLJK8xt7j0tvaL0uMCdrtQ7JY2)). Where your programme requires a formal presentation or oral defence (for example the *kommissionelle Gesamtprüfung* at IMC Krems or a doctoral defence), the garage is a good place to rehearse it.
 
 ---
 
-## Thesis Evaluation, Decision, and Appeals
+## Thesis Evaluation
 
-[YouTube overview](https://youtu.be/HWHWAy9sOFk?si=-6sPplFx0Gvj0SFJ) (recorded for Aalto master's students; the principles are the same elsewhere)
-
-### How the grade is decided
-
-- Your thesis is evaluated against the **official criteria of your programme and university**, not against this guide. This guide tells you how to meet those criteria.
-- I prepare a written evaluation and, where the procedure provides for one, a **grade proposal** based on these criteria.
-- The **final decision is made by your programme or school** following its formal procedure (a degree committee, a programme director, an examination board).
-- Study your programme's grading criteria carefully before submission (links under [University-Specific Information](#university-specific-information)).
-
-### Transparency and feedback
-
-- You have the right to **see the evaluation criteria** applied to your thesis and to receive the written evaluation.
-- You may request clarification on how your thesis was assessed and how the grade was formed.
-- Your **self-assessment** is an important part of this process.
-
-### Appealing a grading decision
-
-- If you believe an error occurred, you can **request a review** of the decision. The exact instrument differs by country: at Aalto it is a request for rectification of the grade, at IMC Krems a complaint about a defect in how a negatively assessed examination was conducted. The deadlines are short — **two weeks** at both universities — so act promptly.
-- The formal procedures are linked under [University-Specific Information](#university-specific-information).
-
-**Practical advice:** If unsure whether an appeal is appropriate, discuss the evaluation with your supervisor first. Many issues can be resolved without a formal appeal.
+Your thesis is evaluated by your programme following its own formal procedure; this guide tells you how to write a good thesis, it does not describe that procedure. Everything about submission, evaluation, and the decision is documented by your programme — for Aalto master's students in the [SCI Master's Thesis Guide on MyCourses](https://mycourses.aalto.fi/course/view.php?id=41665) — and your programme's documentation always takes precedence over anything here.
 
 ---
 
@@ -328,14 +286,13 @@ Theses are supervised in the Department of Computer Science (School of Science, 
 
 | | Where to look |
 |---|---|
-| **Bachelor's thesis** | Instructions and the evaluation rubric on the programme's [thesis page](https://www.aalto.fi/en/programmes/aalto-bachelors-programme-in-science-and-technology/thesis); templates and the seminar schedule on the JOIN.bsc course page in MyCourses; past theses in [Aaltodoc](https://libguides.aalto.fi/c.php?g=410698&p=2797875) |
-| **Master's thesis** | [SCI Master's Thesis Guide on MyCourses](https://mycourses.aalto.fi/course/view.php?id=41665) — templates, forms, evaluation rules; start with the "Get oriented" section |
+| **Bachelor's thesis** | Instructions on the programme's [thesis page](https://www.aalto.fi/en/programmes/aalto-bachelors-programme-in-science-and-technology/thesis); templates and the seminar schedule in the JOIN.bsc seminar workspace in MyCourses; past theses in [Aaltodoc](https://libguides.aalto.fi/c.php?g=410698&p=2797875) |
+| **Master's thesis** | [SCI Master's Thesis Guide on MyCourses](https://mycourses.aalto.fi/course/view.php?id=41665) — templates, forms, and the whole formal process from registration to graduation; start with the "Get oriented" section |
 | **Doctoral thesis** | [Doctoral thesis in the Aalto Doctoral Programme in Science](https://www.aalto.fi/en/programmes/aalto-doctoral-programme-in-science/doctoral-thesis) — article-based vs monograph, pre-examination, defence; general information at [Aalto Doctoral Education](https://www.aalto.fi/en/doctoral-education) |
-| **Grading criteria (MSc)** | The School of Science (SCI) [grade characterisation](material/GradeCharact.pdf), which assumes a six-month target time for the thesis process, and the [assessment statement template](material/Statement_template_CCIS.docx) examiners use, which I ask you to fill in as your self-assessment |
 | **Peer-review forms** | Review forms from my Aalto courses, useful as a model for reviewing your own draft: [Machine Learning project](material/CS_C3240_PeerReview.pdf), [Federated Learning project](material/CS_E4740_PeerReview.pdf) |
 | **Responsible AI use** | [Tips for using AI for students](https://www.aalto.fi/en/services/tips-for-using-artificial-intelligence-for-students); for doctoral students also [Responsible use of generative AI in the research process](https://www.aalto.fi/en/services/responsible-use-of-generative-artificial-intelligence-in-the-research-process), which is written for researchers |
 | **Library** | [Aalto University Library (Primo)](https://primo.aalto.fi/nde/search?vid=358AALTO_INST:MAIN&lang=en); the Finnish [JUFO](https://jfp.csc.fi/jufoportal) ranking for publication quality |
-| **Appeals** | [Academic appeals at Aalto University](https://www.aalto.fi/en/applications-instructions-and-guidelines/academic-appeals): a request for rectification must be submitted within **14 days** of being notified of the grade |
+| **After approval (MSc)** | An approved thesis cannot be resubmitted. Errors found afterwards are corrected with an **errata page** that the supervisor approves and you upload to Aaltodoc, where it is published alongside the archived thesis ([Regulations concerning approved thesis](https://mycourses.aalto.fi/mod/page/view.php?id=1074119)) |
 | **LLM access for the linters** | The [linter suite](assets/linters/README.md) defaults to the Aalto AI API / LLM Gateway (Aalto network or VPN) |
 
 ### IMC Krems University of Applied Sciences
@@ -344,13 +301,12 @@ IMC Krems (IMC Fachhochschule Krems, Austria) offers bachelor's and master's pro
 
 | | Where to look |
 |---|---|
-| **Regulations** | [Satzungsteil Studien- und Prüfungsordnung](https://www.imc.ac.at/fileadmin-imckrems/user_upload/Downloads/DE/Rectorate/studien-und-pruefungsordnung.pdf) (German; FHR-5-0035). Bachelor's theses: section 3.8; master's theses: section 3.9 |
+| **Regulations** | [Satzungsteil Studien- und Prüfungsordnung](https://www.imc.ac.at/fileadmin-imckrems/user_upload/Downloads/DE/Rectorate/studien-und-pruefungsordnung.pdf) (German; FHR-5-0035, version 11 / revision 07 of 19 November 2025). Bachelor's theses: section 3.8; master's theses: section 3.9 |
 | **Thesis guides** | *Leitfaden für Bachelorarbeiten und Bachelorprüfungen* (FHM-5-0008), *Leitfaden für Masterarbeiten und Masterprüfungen* (FHR-5-0009), and the formatting guide *Leitfaden für die formale Gestaltung schriftlicher/wissenschaftlicher Arbeiten* (FHM-5-0003) — all on the eDesktop; ask your programme's study services if you cannot find them |
 | **Process** | The topic and the written proposal (*Exposé*) must be approved by the programme director; approval is a prerequisite for submitting the thesis, and surveys or data collection may only begin after it (following the IMC IT policy and data-protection rules). A master's thesis can be submitted for approval at the earliest three months after the proposal was approved; topics involving ethics-relevant data additionally need ethics-committee approval, which the student applies for |
-| **Assessment** | The supervisors write a moderated assessment report (*Gutachten*), which is handed to you together with the grade. A master's thesis that is not approved can be returned for revision at most twice. The thesis is followed by a presentation and oral examination (*kommissionelle Gesamtprüfung*) |
+| **Supervision and drafts** | Sections 3.8 and 3.9 regulate proposal approval and submission — they say nothing about interim drafts. Any programme-level expectation on reviewing drafts would be in the *Leitfaden für Bachelor-/Masterarbeiten* on the eDesktop; if yours states something I should do, send it to me |
 | **Good scientific practice and AI** | Section 3.7 of the regulations: plagiarism, ghostwriting, data falsification, and improper use of AI invalidate the thesis. Students are bound by the student AI guideline *Richtlinie zur Verwendung von KI durch Studierende* (FHR-5-004, on the eDesktop), which is in part stricter than the [general staff guideline](https://www.imc.ac.at/fileadmin-imckrems/user_upload/PDF/KI-Richtlinie_FHR-1-0092.pdf) |
 | **Library** | The [Campus Library](https://www.kl.ac.at/en/campus-library), run by the University for Continuing Education Krems and open to the public, serves IMC students; the databases IMC licenses are reached through the eDesktop |
-| **Appeals** | The assessment itself cannot be appealed, but a complaint about a defect in how a negatively assessed examination was conducted can be filed with the programme director within **two weeks**; you may inspect your assessment documents within six months of the grade being announced (regulations, sections 3.1 and 3.2; legal basis: [Fachhochschulgesetz](https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=10009895)) |
 | **LLM access for the linters** | Run the `--llm` linters against a local model or an endpoint your university provides; the Aalto endpoints require an Aalto account (see [Data handling](assets/linters/README.md#data-handling)) |
 
 ### Other universities

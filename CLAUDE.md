@@ -6,7 +6,8 @@ This is a **public GitHub repository** (published as ml-theses.org) providing gu
 
 ## Repository Structure
 
-- `README.md` — Main guide: supervisor/student expectations, thesis levels, getting started, timeline, writing conventions, evaluation process, and a **University-Specific Information** section (one subsection per university: Aalto, IMC Krems). Keep the general sections university-neutral; anything that depends on a university's rules goes into its subsection.
+- `index.md` — Task-oriented website landing page for students who are starting, already writing, or looking for a topic.
+- `README.md` — Main guide, published as `Guide.html`: supervisor/student expectations, thesis levels, getting started, timeline, writing conventions, presentation, and a **University-Specific Information** section (one subsection per university: Aalto, IMC Krems). Keep the general sections university-neutral; anything that depends on a university's rules goes into its subsection.
 - `Garage.md` — The weekly online Thesis Garage (open to all levels and universities)
 - `topics.csv` — **Source of truth** for available thesis topic proposals. Hand-edit this file.
 - `compile_topics.py` — Python script to compile and filter the topic catalog
@@ -14,16 +15,16 @@ This is a **public GitHub repository** (published as ml-theses.org) providing gu
 - `theses.csv` — **Source of truth** for all supervised theses, every level and university (Aalto, IMC Krems, TU Wien). Hand-edit this file.
 - `compile_theses.py` — Python script to compile, filter, and export the thesis list
 - `theses.md` — **Auto-generated** from `theses.csv` via `compile_theses.py` (do not edit directly)
-- `material/` — PDFs and templates (grade characterization, self-assessment form, peer-review forms)
+- `material/` — PDFs and templates (peer-review forms, figure-caption tips)
 - `material/creategraphtex.py` — Utility to extract LaTeX document structure as a graph
-- `mkdocs.yml`, `build_site.sh`, `requirements-docs.txt` — Static website (ml-theses.org) build config; see `DEPLOY.md`
+- `mkdocs.yml`, `build_site.sh`, `requirements-docs.txt` — Static website (ml-theses.org) build config; see `DEPLOY.md`. The build copies `README.md` to `docs/Guide.md` because MkDocs reserves `README.md` as an alternative homepage.
 - `topics/<slug>/` — Optional full proposal for a topic (`proposal.tex`, `references.bib`, `proposal.pdf`). The PDF is published to the website and linked from the catalog via the topic's `url`.
 - `docs/`, `site/` — **Generated** by `build_site.sh` (git-ignored build artifacts; never edit by hand). `docs/` is the assembled MkDocs input; `site/` is the final static website.
 
 ## Key Conventions
 
 - **Audience**: All content is student-facing. Write clearly, accessibly, and actionably.
-- **Level- and university-neutral by default**: do not write "master's thesis" where "thesis" is meant, and do not assume Aalto rules, services, or links in general sections. University-specific facts (regulations, forms, templates, AI policies, libraries, appeal deadlines) belong in the README's University-Specific Information section; cite the official document (and section number) they come from. IMC Krems is a university of applied sciences and has no doctoral programmes.
+- **Level- and university-neutral by default**: do not write "master's thesis" where "thesis" is meant, and do not assume Aalto rules, services, or links in general sections. University-specific facts (regulations, forms, templates, AI policies, libraries) belong in the README's University-Specific Information section; cite the official document (and section number) they come from. IMC Krems is a university of applied sciences and has no doctoral programmes.
 - **Terminology**: Use the [Aalto Dictionary of ML](https://aaltodictionaryofml.github.io/) for ML terms.
 - **References**: Format citations per IEEE guidelines.
 - **AI disclosure**: AI tool usage disclosures go in a dedicated statement, NOT in the Methods section (which is reserved for research methods).
@@ -64,4 +65,5 @@ This is a **public GitHub repository** (published as ml-theses.org) providing gu
 
 - Do not use emojis in README.md or the topic catalog.
 - Keep markdown well-structured with a table of contents for long documents.
-- Link to Aalto's official policies (responsible AI use, academic appeals) rather than paraphrasing them extensively.
+- Link to Aalto's official policies (e.g. responsible AI use) rather than paraphrasing them extensively.
+- **No grading or appeals content, no self-assessment.** The guide does not describe grading criteria, grade characterisations, evaluation statements, evaluation timelines, or appeal procedures, and does not ask students for a self-assessment or a discussion of it (dropped November 2026). For the formal process, Aalto students are pointed only to the SCI Master's Thesis Guide on MyCourses; do not add links to individual grading or appeals documents.
