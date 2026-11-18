@@ -1,12 +1,13 @@
 # Deploying ml-theses.org
 
 The site (ml-theses.org — the thesis guide for all levels and host universities, built from the `alexjungaalto/mlthesis` repo) is a **static** MkDocs Material build. The repo's source-of-truth
-files (`README.md`, `Topics.md`, `theses.csv`) are assembled by
+files (`index.md`, `README.md`, `Topics.md`, `theses.csv`) are assembled by
 [`build_site.sh`](build_site.sh) into `site/`, which is served by nginx on a
 Hetzner VPS. Every push to `main` rebuilds and deploys via GitHub Actions.
 
 ```
 theses.csv ─┐
+index.md   ─┤
 README.md  ─┼─► build_site.sh ─► site/ ─► (rsync over SSH) ─► Hetzner nginx ─► https://ml-theses.org
 Topics.md  ─┘        ▲
                 MkDocs Material
@@ -22,7 +23,7 @@ pip install -r requirements-docs.txt
 ./build_site.sh              # one-off build into site/
 ```
 
-You normally only ever hand-edit `theses.csv`, `README.md`, or `Topics.md`.
+You normally only ever hand-edit `index.md`, `theses.csv`, `README.md`, or `topics.csv`.
 `docs/` and `site/` are regenerated and git-ignored. `theses.md` is also
 regenerated from the CSV, but stays committed so the README's link to it
 works in the GitHub repo view.

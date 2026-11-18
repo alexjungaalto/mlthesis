@@ -273,6 +273,11 @@ def generate_markdown(theses: list[dict], output_path: Path,
         by_uni.setdefault(t["university"], []).append(t)
 
     lines = [
+        "---",
+        "title: Supervised Theses",
+        "description: A directory of bachelor's, master's, and doctoral theses supervised or co-supervised by Alex Jung.",
+        "---",
+        "",
         "# Supervised Theses",
         "",
         "Bachelor's, master's, and doctoral theses supervised or co-supervised by "
@@ -359,12 +364,28 @@ def generate_areas(theses: list[dict], out_dir: Path,
     if unknown:
         raise SystemExit(f"abort: theses.csv uses areas absent from AREAS: {unknown}")
 
+    index_lines = [
+        "---",
+        "title: Research Areas",
+        "description: Browse supervised applied machine learning theses by research area.",
+        "---",
+        "",
+        "# Research areas",
+        "",
+        "Explore supervised theses by application area and methodology. Each area page includes completed and ongoing work, links to available thesis records, and presentation recordings where available.",
+        "",
+        '<div class="area-grid" markdown>',
+        "",
+    ]
+
     for slug, (name, blurb) in AREAS.items():
         group = [t for t in theses if t.get("area") == slug]
         if not group:
             continue
         group.sort(key=lambda t: (-thesis_year(t), t["author"]))
-        lines = [f"# {name}", "", blurb, "",
+        lines = ["---", f"title: {name}",
+                 f"description: {blurb}", "---", "",
+                 f"# {name}", "", blurb, "",
                  f"{len(group)} supervised "
                  f"{'thesis' if len(group) == 1 else 'theses'}. "
                  "See [all supervised theses](../theses.md) for the full list, "
@@ -382,6 +403,22 @@ def generate_areas(theses: list[dict], out_dir: Path,
                          f"| {date} | {t['industry']} | {rec} |")
         lines.append("")
         (out_dir / f"{slug}.md").write_text("\n".join(lines), encoding="utf-8")
+
+        index_lines += [
+            '<div class="area-card" markdown>',
+            "",
+            f"## [{name}]({slug}.md)",
+            "",
+            blurb,
+            "",
+            f"**{len(group)} supervised {'thesis' if len(group) == 1 else 'theses'}**",
+            "",
+            "</div>",
+            "",
+        ]
+
+    index_lines += ["</div>", ""]
+    (out_dir / "index.md").write_text("\n".join(index_lines), encoding="utf-8")
 
     print(f"{len(AREAS)} area pages written to {out_dir}")
     if unclassified:

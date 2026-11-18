@@ -1,3 +1,8 @@
+---
+title: Weekly Thesis Garage
+description: Times, joining information, and guidance for the weekly online thesis drop-in session with Alex Jung.
+---
+
 # The Thesis Garage
 
 The **Thesis Garage** is a weekly, online, drop-in session for everyone writing a thesis with Alex Jung — bachelor's, master's, and doctoral students alike, whichever university you are enrolled at. Think of it as an open workshop: you stop by when you need to, stay for as long as you need, and leave when your question is answered.

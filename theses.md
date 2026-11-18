@@ -1,3 +1,8 @@
+---
+title: Supervised Theses
+description: A directory of bachelor's, master's, and doctoral theses supervised or co-supervised by Alex Jung.
+---
+
 # Supervised Theses
 
 Bachelor's, master's, and doctoral theses supervised or co-supervised by [Alex Jung](https://machinelearningforall.github.io/about/), grouped by host university. 163 theses in total: 4 doctoral, 137 master's, 22 bachelor's.

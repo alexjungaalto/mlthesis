@@ -2,7 +2,7 @@
 #
 # Assemble and build the ml-theses.org static site.
 #
-# The repo's source-of-truth files (README.md, Topics.md, theses.csv) stay at
+# The repo's source-of-truth files (index.md, README.md, Topics.md, theses.csv) stay at
 # the repository root. This script regenerates theses.md from the CSV, copies
 # the relevant files into a clean docs/ directory, and runs MkDocs to produce
 # the static site in site/.
@@ -91,7 +91,8 @@ mkdir -p docs
 
 # README is the landing page; its internal links to Topics.md / theses.md /
 # material/* resolve unchanged once those files sit alongside it.
-cp README.md   docs/README.md   # MkDocs renders README.md as index.html; keeps 'Edit this page' pointing at the real file
+cp index.md    docs/index.md
+cp README.md   docs/Guide.md
 cp Garage.md   docs/Garage.md
 cp Topics.md   docs/Topics.md
 cp theses.md   docs/theses.md
@@ -136,6 +137,12 @@ if [[ -d assets ]]; then
   mkdir -p docs/assets
   cp -R assets/. docs/assets/
 fi
+
+# README.md is the conventional guide filename in the repository, but MkDocs
+# reserves README.md as an alternative homepage and excludes it when index.md
+# exists. Publish the guide as Guide.md, and rewrite repository-relative guide
+# links only in the assembled docs tree. Source links remain valid on GitHub.
+find docs -type f -name '*.md' -exec perl -pi -e 's/\(README\.md/\(Guide.md/g' {} +
 
 # The linter README doubles as a nav page (mkdocs.yml: "Thesis Linters").
 # Page-scoped style: keep the first (instruction) column of the 3-column

@@ -1,3 +1,8 @@
+---
+title: Open Thesis Topics
+description: Available bachelor's, master's, and doctoral thesis topics in applied machine learning supervised by Alex Jung.
+---
+
 # Open Thesis Topics
 
 Open topics for a bachelor's, master's, or doctoral thesis supervised by [Alex Jung](https://machinelearningforall.github.io/about/), Associate Professor for Machine Learning. The topics are open to students at any of the universities I supervise at (currently Aalto University and IMC Krems); your own university's thesis regulations still apply — see [University-specific information](README.md#university-specific-information) in the thesis guide.

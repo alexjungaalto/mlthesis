@@ -1,5 +1,59 @@
 /* Custom tweaks for ml-theses.org (copied into docs/stylesheets by build_site.sh). */
 
+/* Task-oriented landing page and research-area directory. */
+.home-grid,
+.area-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.home-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 1.5rem 0 2rem;
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.1rem 1.2rem;
+  border: 0.05rem solid var(--md-default-fg-color--lightest);
+  border-radius: 0.4rem;
+  background: var(--md-default-bg-color);
+  box-shadow: var(--md-shadow-z1);
+}
+
+.home-card h2,
+.area-card h2 {
+  margin-top: 0;
+}
+
+.home-card p:last-child {
+  margin-top: auto;
+}
+
+.area-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.area-card {
+  padding: 0.8rem 1rem;
+  border-left: 0.2rem solid var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+}
+
+@media screen and (max-width: 59.984375em) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 44.984375em) {
+  .area-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Supervised-theses table: fit all columns (including Recording) within the
    content width so nothing is hidden behind a horizontal scrollbar. */
 .md-typeset table:not([class]) {

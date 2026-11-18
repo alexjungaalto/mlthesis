@@ -109,6 +109,11 @@ def generate_markdown(topics: list[dict], output_path: Path) -> None:
         by_area.setdefault(t["area"] or "Other", []).append(t)
 
     lines = [
+        "---",
+        "title: Open Thesis Topics",
+        "description: Available bachelor's, master's, and doctoral thesis topics in applied machine learning supervised by Alex Jung.",
+        "---",
+        "",
         "# Open Thesis Topics",
         "",
         "Open topics for a bachelor's, master's, or doctoral thesis supervised by "
